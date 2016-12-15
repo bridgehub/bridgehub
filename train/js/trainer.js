@@ -34,6 +34,7 @@ function getURLParameter(sParam) {
 			var ALL = $("#ALL");
 			var buttonStart = $("#buttonStart");
 			var biddingBox = $("#biddingBox");
+			var msg = $("#msg");
 
 			function startClicked() {
 				var items = "";
@@ -60,7 +61,7 @@ function getURLParameter(sParam) {
 				// msg += "KEY: " + k + " => " + bid[k] + "\n";
 				// }
 				var text = bid.text();
-				alert("You Bid: " + text);
+				msg.text(text);
 			}
 
 			var bidDenoms = //
