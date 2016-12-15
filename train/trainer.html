@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+</head>
+<body style='background-color: white;'>
+	<div id="startPage" style="display: none;">
+		Välj sektioner att budträna:
+		<hr />
+		<input type="checkbox" id="ALL"> <b>Alla:</b></input><br />
+		<div id="sectionSelect"></div>
+		<hr />
+		<input type="button" id="buttonStart" value="Starta"><br />
+	</div>
+	<div id="trainPage" style="display: none;">
+		<table>
+			<tr>
+				<td>.</td>
+				<td id="north">North</td>
+				<td>.</td>
+			</tr>
+			<tr>
+				<td id="west">West</td>
+				<td>.</td>
+				<td id="east">East</td>
+			</tr>
+			<tr>
+				<td>.</td>
+				<td id="south">South</td>
+				<td>.</td>
+			</tr>
+		</table>
+		<hr />
+		<table id="biddingBox" border="1" cellspacing="0"></table>
+	</div>
+	<script src="js/jquery-3.1.1.min.js"></script>
+	<script src="js/trainer.js" charset="UTF-8"></script>
+</body>
+</html>
