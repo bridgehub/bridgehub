@@ -21,32 +21,71 @@ function getURLParameter(sParam) {
 	return "";
 }
 
-// IIFE - Immediately Invoked Function Expression
+var startPage = $("#startPage");
+var trainPage = $("#trainPage");
+var ALL = $("#ALL");
+var buttonStart = $("#buttonStart");
+var biddingBox = $("#biddingBox");
+var msg = $("#msg");
+var data = $("#data");
+var topMsg = $("#topMsg");
+
+var sectionKeys = [];
+
+var sectionData = {};
+
+var storage = {};
+
+function saveStorage() {
+	localStorage.setItem('storage', storage);
+}
+
+function loadStorage() {
+	storage = localStorage.getItem('storage');
+}
+
+function checkStorage() {
+	if (typeof (localStorage) !== "undefined") {
+		return true;
+	} else {
+		topMsg
+				.html("<br />&nbsp; <b>ERROR: Your browser does not support HTML5 localStorage. "
+						+ "Cannot continue. </b><br /><br />");
+		return false;
+	}
+}
+
 (function(yourcode) {
-	// The global jQuery object is passed as a parameter
 	yourcode(window.jQuery, window, document);
 
 }
 		(function($, window, document) {
 
-			var startPage = $("#startPage");
-			var trainPage = $("#trainPage");
-			var ALL = $("#ALL");
-			var buttonStart = $("#buttonStart");
-			var biddingBox = $("#biddingBox");
-			var msg = $("#msg");
-			var data = $("#data");
+			if (!checkStorage()) {
+				return;
+			}
 
-			function startClicked() {
-				var items = "";
-				$(".sectionBox").each(function() {
-					if ($(this).prop('checked')) {
-						items += this.id + " ";
+			function loadSection(sectionKey) {
+				$.ajax({
+					url : 'data/' + sectionKey + '.json',
+					type : 'get',
+					async : true,
+					success : function(json) {
+						processData(sectionKey, json);
 					}
 				});
-				// alert("ITEM = " + items);
-				startPage.hide();
-				trainPage.show();
+			}
+
+			function startClicked() {
+				$(".sectionBox").each(function() {
+					if ($(this).prop('checked')) {
+						var section = this.id;
+						sectionKeys.push(section);
+					}
+				});
+				$.each(sectionKeys, loadSection(this));
+				// startPage.hide();
+				// trainPage.show();
 			}
 
 			function allClicked() {
@@ -92,8 +131,10 @@ function getURLParameter(sParam) {
 				})
 			}
 
-			function processData(text) {
-				data.text(text);
+			function processData(sectionKey, json) {
+				alert('typeof: ' + typeof (json));
+				data.text(json);
+				sectionData.put(sectionKey, json);
 			}
 
 			function main() {
@@ -119,15 +160,6 @@ function getURLParameter(sParam) {
 
 				ALL.trigger('click');
 				startPage.show();
-
-				$.ajax({
-					url : 'data/data.txt',
-					type : 'get',
-					async : true,
-					success : function(text) {
-						processData(text);
-					}
-				});
 			}
 
 			$(function() {
