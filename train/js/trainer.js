@@ -35,6 +35,7 @@ function getURLParameter(sParam) {
 			var buttonStart = $("#buttonStart");
 			var biddingBox = $("#biddingBox");
 			var msg = $("#msg");
+			var data = $("#data");
 
 			function startClicked() {
 				var items = "";
@@ -91,6 +92,10 @@ function getURLParameter(sParam) {
 				})
 			}
 
+			function processData(text) {
+				data.text(text);
+			}
+
 			function main() {
 				for (var i = 0; i < sectionList.length; i++) {
 					var id = sectionList[i]["id"];
@@ -114,12 +119,18 @@ function getURLParameter(sParam) {
 
 				ALL.trigger('click');
 				startPage.show();
+
+				$.ajax({
+					url : 'data/data.txt',
+					type : 'get',
+					async : true,
+					success : function(text) {
+						processData(text);
+					}
+				});
 			}
 
 			$(function() {
-
 				main();
-
 			});
-
 		}));
