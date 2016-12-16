@@ -65,12 +65,13 @@ function checkStorage() {
 			}
 
 			function loadSection(sectionKey) {
-				alert('Start AJAX:');
+				alert('Start AJAX: ' + 'data/' + sectionKey + '.json');
 				$.ajax({
 					url : 'data/' + sectionKey + '.json',
 					type : 'get',
 					async : true,
 					success : function(json) {
+						alert('success: ' + json + ' ' + typeof (json));
 						processData(sectionKey, json);
 					}
 				});
