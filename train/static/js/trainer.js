@@ -149,12 +149,13 @@ function checkStorage() {
 				})
 			}
 
+			var deals = [];
 			function initTrainer() {
-				loadedSections++;
-				if (loadedSections < requiredSections) {
-					return;
+				deals = [];
+				for ( var sectionKey in sectionData) {
+					deals.push(sectionData[sectionKey]);
 				}
-				msg4.append("OK ");
+				msg3.append(deals.length);
 			}
 
 			function processSection(sectionKey, json) {
@@ -162,7 +163,10 @@ function checkStorage() {
 				data.text(json);
 				sectionData[sectionKey] = json;
 				msg4.append(sectionKey + " ");
-				initTrainer();
+				loadedSections++;
+				if (loadedSections >= requiredSections) {
+					initTrainer();
+				}
 			}
 
 			function main() {
