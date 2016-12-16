@@ -156,21 +156,34 @@ function checkStorage() {
 			}
 
 			var deals = [];
+			var N = 0;
+			var L = 0;
+			var currentDeal;
 
 			function initTrainer() {
 				deals = [];
 				for ( var sectionKey in sectionData) {
 					deals = deals.concat(sectionData[sectionKey]);
 				}
-				var L = deals.length;
-				for (var i = 0; i < deals.length; i++) {
+				L = deals.length;
+				for (var i = 0; i < L; i++) {
 					var r = randomInt(0, L);
 					msg4.append('' + r + ' ');
 					var t = deals[i];
 					deals[i] = deals[r];
 					deals[r] = t;
 				}
-				msg3.append(deals.length);
+				msg3.append('' + L);
+				for (var i = 0; i < L; i++) {
+					var cards = deals[i]['cards'];
+					msg1.append('' + cards + '<br />');
+				}
+				N = 0;
+				loadDeal();
+			}
+
+			function loadDeal() {
+				var currentDeal = deals[N];
 			}
 
 			function processSection(sectionKey, json) {
