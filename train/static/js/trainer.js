@@ -188,7 +188,7 @@ function checkStorage() {
 				var result = {}
 				var hand = {};
 
-				var suits = h.split(':')[1].split('.');
+				var suits = h['cards'].split(':')[1].split('.');
 				hand[0] = suits[1];
 				hand[1] = suits[2];
 				hand[2] = suits[3];
