@@ -33,6 +33,8 @@ var ALL = $("#ALL");
 var buttonStart = $("#buttonStart");
 var biddingBox = $("#biddingBox");
 
+var south = $("#south");
+
 var msg = $("#msg");
 var msg1 = $("#msg1");
 var msg2 = $("#msg2");
@@ -182,8 +184,26 @@ function checkStorage() {
 				loadDeal();
 			}
 
+			function parseDeal(h) {
+				var result = {}
+				var hand = {};
+
+				var suits = h.split(':')[1].split('.');
+				hand[0] = suits[1];
+				hand[1] = suits[2];
+				hand[2] = suits[3];
+				hand[3] = suits[4];
+
+				result[0] = hand;
+				return result;
+			}
+
 			function loadDeal() {
 				var currentDeal = deals[N];
+				var deal = parseDeal(currentDeal);
+				for (var i = 0; i < 4; i++) {
+					south.append(deal[0][i] + '<br />');
+				}
 			}
 
 			function processSection(sectionKey, json) {
