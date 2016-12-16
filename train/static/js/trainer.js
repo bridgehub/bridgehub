@@ -180,7 +180,6 @@ function checkStorage() {
 					deals[r] = t;
 				}
 				msg3.append('' + L);
-				south.html('');
 				for (var i = 0; i < L; i++) {
 					var cards = deals[i]['cards'];
 					msg1.append('' + suitSym[i] + ' ' + cards + '<br />');
@@ -204,8 +203,9 @@ function checkStorage() {
 			function loadDeal() {
 				var currentDeal = deals[N];
 				var deal = parseDeal(currentDeal);
+				south.html('');
 				for (var i = 0; i < 4; i++) {
-					south.append(deal[0][i] + '<br />');
+					south.append('' + suitSym[i] + ' ' + cards + '<br />');
 				}
 			}
 
