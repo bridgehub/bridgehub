@@ -65,13 +65,13 @@ function checkStorage() {
 			}
 
 			function loadSection(sectionKey) {
-				alert('Start AJAX: ' + 'data/' + sectionKey + '.json');
+				// alert('Start AJAX: ' + 'data/' + sectionKey + '.json');
 				$.ajax({
 					url : 'data/' + sectionKey + '.json',
 					type : 'get',
 					async : true,
 					success : function(json) {
-						alert('success: ' + json + ' ' + typeof (json));
+						// alert('success: ' + json + ' ' + typeof (json));
 						processData(sectionKey, json);
 					}
 				});
@@ -82,14 +82,14 @@ function checkStorage() {
 					if ($(this).prop('checked')) {
 						var section = this.id;
 						sectionKeys.push(section);
-						alert('x: ' + section + ' ' + typeof (section));
+						// alert('x: ' + section + ' ' + typeof (section));
 					}
 				});
 				$.each(sectionKeys, function(ix, val) {
 					loadSection(val);
 				});
-				// startPage.hide();
-				// trainPage.show();
+				startPage.hide();
+				trainPage.show();
 			}
 
 			function allClicked() {
@@ -136,7 +136,7 @@ function checkStorage() {
 			}
 
 			function processData(sectionKey, json) {
-				alert('typeof: ' + typeof (json));
+				// alert('typeof: ' + typeof (json));
 				data.text(json);
 				sectionData[sectionKey] = json;
 			}
