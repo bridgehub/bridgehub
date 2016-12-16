@@ -153,7 +153,7 @@ function checkStorage() {
 			function initTrainer() {
 				deals = [];
 				for ( var sectionKey in sectionData) {
-					deals.concat(sectionData[sectionKey]);
+					deals = deals.concat(sectionData[sectionKey]);
 				}
 				msg3.append(deals.length);
 			}
