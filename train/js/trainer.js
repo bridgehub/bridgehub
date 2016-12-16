@@ -138,7 +138,7 @@ function checkStorage() {
 			function processData(sectionKey, json) {
 				alert('typeof: ' + typeof (json));
 				data.text(json);
-				sectionData.put(sectionKey, json);
+				sectionData[sectionKey] = json;
 			}
 
 			function main() {
