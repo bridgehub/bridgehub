@@ -26,7 +26,13 @@ var trainPage = $("#trainPage");
 var ALL = $("#ALL");
 var buttonStart = $("#buttonStart");
 var biddingBox = $("#biddingBox");
+
 var msg = $("#msg");
+var msg1 = $("#msg1");
+var msg2 = $("#msg2");
+var msg3 = $("#msg3");
+var msg4 = $("#msg4");
+
 var data = $("#data");
 var topMsg = $("#topMsg");
 
@@ -72,7 +78,7 @@ function checkStorage() {
 					async : true,
 					success : function(json) {
 						// alert('success: ' + json + ' ' + typeof (json));
-						processData(sectionKey, json);
+						processSection(sectionKey, json);
 					}
 				});
 			}
@@ -135,10 +141,11 @@ function checkStorage() {
 				})
 			}
 
-			function processData(sectionKey, json) {
+			function processSection(sectionKey, json) {
 				// alert('typeof: ' + typeof (json));
 				data.text(json);
 				sectionData[sectionKey] = json;
+				msg4.append(sectionKey + " ");
 			}
 
 			function main() {
