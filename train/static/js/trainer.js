@@ -205,6 +205,7 @@ function checkStorage() {
 				var deal = parseDeal(currentDeal);
 				south.html('');
 				for (var i = 0; i < 4; i++) {
+					var cards = deals[i]['cards'];
 					south.append('' + suitSym[i] + ' ' + cards + '<br />');
 				}
 			}
