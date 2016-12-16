@@ -57,7 +57,6 @@ function checkStorage() {
 
 (function(yourcode) {
 	yourcode(window.jQuery, window, document);
-
 }
 		(function($, window, document) {
 
@@ -66,6 +65,7 @@ function checkStorage() {
 			}
 
 			function loadSection(sectionKey) {
+				alert('Start AJAX:');
 				$.ajax({
 					url : 'data/' + sectionKey + '.json',
 					type : 'get',
@@ -84,7 +84,7 @@ function checkStorage() {
 						alert('x: ' + section + ' ' + typeof (section));
 					}
 				});
-				$.each(sectionKeys, loadSection(this));
+				$.each($(sectionKeys), loadSection(this));
 				// startPage.hide();
 				// trainPage.show();
 			}
