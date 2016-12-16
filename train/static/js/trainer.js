@@ -21,6 +21,12 @@ function getURLParameter(sParam) {
 	return "";
 }
 
+function randomInt(min, max) {
+	min = Math.ceil(min);
+	max = Math.floor(max);
+	return Math.floor(Math.random() * (max - min)) + min;
+}
+
 var startPage = $("#startPage");
 var trainPage = $("#trainPage");
 var ALL = $("#ALL");
@@ -150,10 +156,19 @@ function checkStorage() {
 			}
 
 			var deals = [];
+
 			function initTrainer() {
 				deals = [];
 				for ( var sectionKey in sectionData) {
 					deals = deals.concat(sectionData[sectionKey]);
+				}
+				var L = deals.length;
+				for (var i = 0; i < deals.length; i++) {
+					var r = randomInt(0, L);
+					msg4.append('' + r + ' ');
+					var t = deals[i];
+					deals[i] = deals[r];
+					deals[r] = t;
 				}
 				msg3.append(deals.length);
 			}
