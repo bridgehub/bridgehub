@@ -81,6 +81,7 @@ function checkStorage() {
 					if ($(this).prop('checked')) {
 						var section = this.id;
 						sectionKeys.push(section);
+						alert('x: ' + section + ' ' + typeof (section));
 					}
 				});
 				$.each(sectionKeys, loadSection(this));
