@@ -1,0 +1,8 @@
+*.SAV*
+train.X
+_ws
+.project
+.settings
+.tern-project
+.gitignore
+*-v0*
