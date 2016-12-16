@@ -176,6 +176,7 @@ function checkStorage() {
 					deals[r] = t;
 				}
 				msg3.append('' + L);
+				south.html('');
 				for (var i = 0; i < L; i++) {
 					var cards = deals[i]['cards'];
 					msg1.append('' + cards + '<br />');
@@ -189,10 +190,10 @@ function checkStorage() {
 				var hand = {};
 
 				var suits = h['cards'].split(':')[1].split('.');
-				hand[0] = suits[1];
-				hand[1] = suits[2];
-				hand[2] = suits[3];
-				hand[3] = suits[4];
+				hand[0] = suits[0];
+				hand[1] = suits[1];
+				hand[2] = suits[2];
+				hand[3] = suits[3];
 
 				result[0] = hand;
 				return result;
