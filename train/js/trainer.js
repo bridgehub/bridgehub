@@ -85,7 +85,9 @@ function checkStorage() {
 						alert('x: ' + section + ' ' + typeof (section));
 					}
 				});
-				$.each($(sectionKeys), loadSection(this));
+				$.each(sectionKeys, function(ix, val) {
+					loadSection(val);
+				});
 				// startPage.hide();
 				// trainPage.show();
 			}
