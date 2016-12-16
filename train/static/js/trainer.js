@@ -142,7 +142,7 @@ function checkStorage() {
 			}
 
 			function processSection(sectionKey, json) {
-				// alert('typeof: ' + typeof (json));
+				alert('key: ' + sectionKey);
 				data.text(json);
 				sectionData[sectionKey] = json;
 				msg4.append(sectionKey + " ");
