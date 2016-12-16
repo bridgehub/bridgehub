@@ -83,6 +83,9 @@ function checkStorage() {
 				});
 			}
 
+			var requiredSections = 0;
+			var loadedSections = 0;
+
 			function startClicked() {
 				$(".sectionBox").each(function() {
 					if ($(this).prop('checked')) {
@@ -90,6 +93,11 @@ function checkStorage() {
 						sectionKeys.push(section);
 						// alert('x: ' + section + ' ' + typeof (section));
 					}
+				});
+				loadedSections = 0;
+				requiredSections = 0;
+				$.each(sectionKeys, function(ix, val) {
+					requiredSections++;
 				});
 				$.each(sectionKeys, function(ix, val) {
 					loadSection(val);
@@ -141,11 +149,20 @@ function checkStorage() {
 				})
 			}
 
+			function initTrainer() {
+				loadedSections++;
+				if (loadedSections < requiredSections) {
+					return;
+				}
+				msg4.append("OK ");
+			}
+
 			function processSection(sectionKey, json) {
 				// alert('key: ' + sectionKey);
 				data.text(json);
 				sectionData[sectionKey] = json;
 				msg4.append(sectionKey + " ");
+				initTrainer();
 			}
 
 			function main() {
