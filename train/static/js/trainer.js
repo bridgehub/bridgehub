@@ -214,7 +214,7 @@ function checkStorage() {
 
 			function processSection(sectionKey, json) {
 				// alert('key: ' + sectionKey);
-				data.text(json);
+				// data.text(json);
 				sectionData[sectionKey] = json;
 				// msg4.append(sectionKey + " ");
 				loadedSections++;
