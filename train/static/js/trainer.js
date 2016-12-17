@@ -40,6 +40,7 @@ var msg1 = $("#msg1");
 var msg2 = $("#msg2");
 var msg3 = $("#msg3");
 var msg4 = $("#msg4");
+var errMsg = $("#errMsg");
 
 var data = $("#data");
 var topMsg = $("#topMsg");
@@ -127,7 +128,8 @@ function checkStorage() {
 				// msg += "KEY: " + k + " => " + bid[k] + "\n";
 				// }
 				var text = bid.text();
-				msg.text(text);
+				errMsg.text('Insufficient bid.');
+				// msg.text(text);
 			}
 
 			var suitSym = //
