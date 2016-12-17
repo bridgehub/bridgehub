@@ -176,15 +176,15 @@ function checkStorage() {
 				L = deals.length;
 				for (var i = 0; i < L; i++) {
 					var r = randomInt(0, L);
-					msg4.append('' + r + ' ');
+					// msg4.append('' + r + ' ');
 					var t = deals[i];
 					deals[i] = deals[r];
 					deals[r] = t;
 				}
-				msg3.append('' + L);
+				// msg3.append('' + L);
 				for (var i = 0; i < L; i++) {
 					var cards = deals[i]['cards'];
-					msg1.append('' + suitSym[i] + ' ' + cards + '<br />');
+					// msg1.append('' + ' ' + cards + '<br />');
 				}
 				N = 0;
 				loadDeal();
@@ -216,7 +216,7 @@ function checkStorage() {
 				// alert('key: ' + sectionKey);
 				data.text(json);
 				sectionData[sectionKey] = json;
-				msg4.append(sectionKey + " ");
+				// msg4.append(sectionKey + " ");
 				loadedSections++;
 				if (loadedSections >= requiredSections) {
 					initTrainer();
