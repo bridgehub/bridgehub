@@ -6,78 +6,80 @@
 <link rel="stylesheet" type="text/css" href="css/trainer.css">
 </head>
 <body style='background-color: white;'>
-	<div id="topMsg" style="background-color: #FF6666; color: black"></div>
-	<div id="startPage" style="display: none;">
-		Välj sektioner att budträna:
-		<hr />
-		<input type="checkbox" id="ALL" /> <b>Alla:</b><br />
-		<div id="sectionSelect"></div>
-		<hr />
-		<input type="button" id="buttonStart" value="Starta"><br />
-	</div>
-	<div id="trainPage" style="display: none;">
-		<table>
-			<tr>
-				<td>&nbsp;</td>
-				<td class="hand" id="north">North<br /> <br /> <br /> <br /></td>
-				<td>&nbsp;</td>
-			</tr>
-			<tr>
-				<td class="hand" id="west">West<br /> <br /> <br /> <br /></td>
-				<td><table class="bidding">
-						<tr class="bidRow">
-							<th class="bidCell">West</th>
-							<th class="bidCell">North</th>
-							<th class="bidCell">East</th>
-							<th class="bidCell">South</th>
-						</tr>
-						<tr class="bidRow">
-							<td class="bidCell">P</td>
-							<td class="bidCell">1NT</td>
-							<td class="bidCell">P</td>
-							<td class="bidCell">?</td>
-						</tr>
-						<tr class="bidRow">
-							<td class="bidCell">&nbsp;</td>
-							<td class="bidCell"></td>
-							<td class="bidCell"></td>
-							<td class="bidCell"></td>
-						</tr>
-						<tr class="bidRow">
-							<td class="bidCell">&nbsp;</td>
-							<td class="bidCell"></td>
-							<td class="bidCell"></td>
-							<td class="bidCell"></td>
-						</tr>
-						<tr class="bidRow">
-							<td class="bidCell">&nbsp;</td>
-							<td class="bidCell"></td>
-							<td class="bidCell"></td>
-							<td class="bidCell"></td>
-						</tr>
-						<tr class="bidRow">
-							<td class="bidCell">&nbsp;</td>
-							<td class="bidCell"></td>
-							<td class="bidCell"></td>
-							<td class="bidCell"></td>
-						</tr>
-					</table></td>
-				<td class="hand" id="east">East<br /> <br /> <br /> <br /></td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-				<td class="hand" id="south">South<br /> <br /> <br /> <br /></td>
-				<td>&nbsp;</td>
-			</tr>
-		</table>
-		<hr />
-		<table id="biddingBox" border="1" cellspacing="0"></table>
-		<div id="msg"></div>
-		<div id="msg1"></div>
-		<div id="msg2"></div>
-		<div id="msg3"></div>
-		<div id="msg4"></div>
-		<pre id="data">xyz</pre>
+	<div id="content" style="width: 600px;">
+		<div id="topMsg" style="background-color: #FF6666; color: black"></div>
+		<div id="startPage" style="display: none;">
+			Välj sektioner att budträna:
+			<hr />
+			<input type="checkbox" id="ALL" /> <b>Alla:</b><br />
+			<div id="sectionSelect"></div>
+			<hr />
+			<input type="button" id="buttonStart" value="Starta"><br />
+		</div>
+		<div id="trainPage" style="display: none;">
+			<table>
+				<tr>
+					<td>&nbsp;</td>
+					<td class="hand" id="north">North<br /> <br /> <br /> <br /></td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td class="hand" id="west">West<br /> <br /> <br /> <br /></td>
+					<td><table class="bidding">
+							<tr class="bidRow">
+								<th class="bidCell">West</th>
+								<th class="bidCell">North</th>
+								<th class="bidCell">East</th>
+								<th class="bidCell">South</th>
+							</tr>
+							<tr class="bidRow">
+								<td class="bidCell">P</td>
+								<td class="bidCell">1NT</td>
+								<td class="bidCell">P</td>
+								<td class="bidCell">?</td>
+							</tr>
+							<tr class="bidRow">
+								<td class="bidCell">&nbsp;</td>
+								<td class="bidCell"></td>
+								<td class="bidCell"></td>
+								<td class="bidCell"></td>
+							</tr>
+							<tr class="bidRow">
+								<td class="bidCell">&nbsp;</td>
+								<td class="bidCell"></td>
+								<td class="bidCell"></td>
+								<td class="bidCell"></td>
+							</tr>
+							<tr class="bidRow">
+								<td class="bidCell">&nbsp;</td>
+								<td class="bidCell"></td>
+								<td class="bidCell"></td>
+								<td class="bidCell"></td>
+							</tr>
+							<tr class="bidRow">
+								<td class="bidCell">&nbsp;</td>
+								<td class="bidCell"></td>
+								<td class="bidCell"></td>
+								<td class="bidCell"></td>
+							</tr>
+						</table></td>
+					<td class="hand" id="east">East<br /> <br /> <br /> <br /></td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td class="hand" id="south">South<br /> <br /> <br /> <br /></td>
+					<td>&nbsp;</td>
+				</tr>
+			</table>
+			<hr />
+			<table id="biddingBox" border="1" cellspacing="0"></table>
+			<div id="msg"></div>
+			<div id="msg1"></div>
+			<div id="msg2"></div>
+			<div id="msg3"></div>
+			<div id="msg4"></div>
+			<pre id="data">xyz</pre>
+		</div>
 	</div>
 	<script src="js/jquery-3.1.1.min.js"></script>
 	<script src="js/trainer.js" charset="UTF-8"></script>
