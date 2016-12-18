@@ -6,8 +6,9 @@
 <link rel="stylesheet" type="text/css" href="css/trainer.css">
 <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico?">
 </head>
-<body style='background-color: white; font-family: Verdana'>
-	<div id="content" style="width: 500px;">
+<body
+	style='background-color: white; font-family: Verdana; font-size: 16px;'>
+	<div id="content" style="width: 450px;">
 		<div id="topMsg" style="background-color: #FF6666; color: black"></div>
 		<div id="startPage" style="display: none;">
 			Välj sektioner att budträna:
@@ -19,6 +20,12 @@
 		</div>
 		<div id="trainPage" style="display: none;">
 			<center>
+				<input id="prev" type="button" value="F&ouml;reg giv" /> <span
+					id="dealCount"
+					style="display: inline-block; width: 100px; text-align: center;">0
+					/ 0</span> <input id="next" type="button" value="N&auml;sta giv" /><br />
+				<br />
+				<hr />
 				<table border="0">
 					<tr>
 						<td>&nbsp;</td>
@@ -90,8 +97,7 @@
 				<hr />
 				Your Bid?
 				<table id="biddingBox" border="1" cellspacing="0"></table>
-				<br> <span id="errMsg"
-					style="background-color: yellow; color: red; font-weight: bold;"></span>
+				<br> <span id="errMsg"></span>
 				<div id="msg"></div>
 				<div id="msg1"></div>
 				<div id="msg2"></div>

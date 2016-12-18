@@ -1,16 +1,53 @@
 [
 	{
-		"cards": "S:KT8.Q84.A9654.Q6",
-		"bids": "N:1S P 3C P 3S P P P"
+		"DESCR": "1S-3S",
+		"cards": "S:KT84.Q84.K964.57",
+		"bids": "N:1S P 3S P P P"
 	},
 
 	{
-		"cards": "S:KT84.Q84.A964.Q4",
+		"DESCR": "1S-(X)-3S",
+		"cards": "S:KT84.Q84.K964.57",
+		"bids": "N:1S X 3S P P P"
+	},
+
+	{
+		"DESCR": "1H-1S-3H",
+		"cards": "S:Q84.KT84.K964.57",
+		"bids": "N:1H 1S 3H P P P"
+	},
+
+	{
+		"DESCR": "1S-3D",
+		"cards": "S:KT84.57.A964.KJ4",
 		"bids": "N:1S P 3D P 4S P P P"
 	},
 
 	{
+		"DESCR": "1H-3D",
+		"cards": "S:57.KT84.A964.KJ4",
+		"bids": "N:1H P 3D P 4H P P P"
+	},
+
+	{
+		"DESCR": "1S-3C",
+		"cards": "S:KT4.57.A964.KT42",
+		"bids": "N:1S P 3C P P P"
+	},
+
+	{
+		"DESCR": "1H-3C",
+		"cards": "S:KT4.57.A964.KJ42",
+		"bids": "N:1S P 3S P P P"
+	},
+
+	{
+		"DESCR": "1S-2S (3sp, 8-9)",
 		"cards": "S:KT84.Q84.A964.57",
 		"bids": "N:1S P 3S P P P"
+	},
+
+	{
+		
 	}
 ]

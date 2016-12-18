@@ -3,10 +3,10 @@ var sectionList = [ //
 	id : "MAJORRAISE",
 	descr : "Trumfhöjningar till 1HÖ"
 }, //
-{
-	id : "NTDEF",
-	descr : "DONT NT-försvar"
-},//
+// {
+// id : "NTDEF",
+// descr : "DONT NT-försvar"
+// },//
 ];
 
 function getURLParameter(sParam) {
@@ -33,6 +33,7 @@ var ALL = $("#ALL");
 var buttonStart = $("#buttonStart");
 var biddingBox = $("#biddingBox");
 var bidding = $("#bidding");
+var dealCount = $("#dealCount");
 
 var south = $("#south");
 
@@ -63,6 +64,20 @@ function loadStorage() {
 var errorTimer = -99;
 
 function setError(msg, timeout) {
+	// var m = "<span>&nbsp;{MSG}&nbsp;</span>";
+	errMsg.css('font-weight', 'bold');
+	errMsg.css('background-color', 'yellow');
+	errMsg.css('color', 'red');
+	errMsg.html(msg);
+	startTimer();
+	errorTimer = timeout;
+}
+
+function setInfo(msg, timeout) {
+	// var m = "<span>&nbsp;{MSG}&nbsp;</span>";
+	errMsg.css('font-weight', 'bold');
+	errMsg.css('background-color', '#88FF88');
+	errMsg.css('color', 'black');
 	errMsg.html(msg);
 	startTimer();
 	errorTimer = timeout;
@@ -116,13 +131,12 @@ function checkStorage() {
 			var BID_ROUND = 0;
 
 			function loadSection(sectionKey) {
-				// alert('Start AJAX: ' + 'data/' + sectionKey + '.json');
 				$.ajax({
-					url : 'data/' + sectionKey + '.json',
+					url : 'data/' + sectionKey + '.json' + '?x=5',
 					type : 'get',
 					async : true,
 					success : function(json) {
-						// alert('success: ' + json + ' ' + typeof (json));
+						// alert('success: ' + json.length);
 						processSection(sectionKey, json);
 					}
 				});
@@ -139,6 +153,7 @@ function checkStorage() {
 						// alert('x: ' + section + ' ' + typeof (section));
 					}
 				});
+				// alert('sectionKeys: ' + sectionKeys);
 				loadedSections = 0;
 				requiredSections = 0;
 				$.each(sectionKeys, function(ix, val) {
@@ -158,6 +173,12 @@ function checkStorage() {
 			}
 
 			function bidClicked(cell) {
+				if (BID_IX >= BIDS.length) {
+					setInfo(
+							'Budgivningen &auml;r avslutad. V&auml;lj \'N&auml;sta giv\'.',
+							20);
+					return;
+				}
 				var bid = $(cell);
 				var text = bid.text();
 				var id = bid.attr('id');
@@ -171,12 +192,20 @@ function checkStorage() {
 					actual = id;
 				}
 				var ok = (expected === actual);
-				// alert('expected: ' + expected + ' actual: ' + actual + ' =>
-				// ');
-				if (ok) {
-				} else {
-					setError('Det finns ett b&auml;ttre bud :)', 15);
+				// alert('expected: ' + expected + ' actual: ' + actual + ' => '
+				// + ok);
+				if (!ok) {
+					setError('&nbsp;Det finns ett b&auml;ttre bud!&nbsp;', 12);
+					return;
 				}
+
+				var bidder = (DEALER + BID_IX) % 4;
+				var selector = biddingCell(bidder, BID_ROUND);
+				// alert('selector: ' + selector);
+				$(selector).html(htmlCenter(htmlBid(expected)));
+				BID_IX++;
+				BID_ROUND++;
+				play();
 			}
 
 			var suitSym = //
@@ -220,8 +249,8 @@ function checkStorage() {
 
 			function buildBiddingBox() {
 				var ix = 0;
-				row = "<tr><td class='buttonBid' colspan='3' style='background-color:#FF0000;color:white'><center> DOUBLE </center></td>"
-						+ "<td class='buttonBid' colspan='3' style='background-color:#0000BB;color:white'><center>REDOUBLE</center></td></tr>";
+				row = "<tr><td id='X' class='buttonBid' colspan='3' style='background-color:#FF0000;color:white'><center> DOUBLE </center></td>"
+						+ "<td id='XX' class='buttonBid' colspan='2' style='background-color:#0000BB;color:white'><center>REDOUBLE</center></td></tr>";
 				biddingBox.append(row + "\n");
 				for (var level = 7; level >= 1; level--) {
 					var row = "";
@@ -236,7 +265,7 @@ function checkStorage() {
 					row = "<tr>" + row + "</tr>";
 					biddingBox.append(row + "\n");
 				}
-				row = "<tr><td class='buttonBid' colspan='5' style='background-color:#00AA00;color:white'><center>PASS</center></td></tr>";
+				row = "<tr><td id='P' class='buttonBid' colspan='5' style='background-color:#00AA00;color:white'><center>PASS</center></td></tr>";
 				biddingBox.append(row + "\n");
 				$(".buttonBid").click(function() {
 					bidClicked(this);
@@ -252,21 +281,21 @@ function checkStorage() {
 
 			function play() {
 				while (true) {
+					var bidder = (DEALER + BID_IX) % 4;
 					if (BID_IX >= BIDS.length) {
-						setPrompt('Bidding is finished.');
+						setInfo('Budgivningen &auml;r avslutad.', 12);
 						break;
 					}
 					var nextBid = BIDS[BID_IX];
-					if (BID_IX == 2) {
+					if (bidder == 2) {
 						nextBid = "?";
 					}
-					var bidder = (DEALER + BID_IX) % 4;
 					var selector = biddingCell(bidder, BID_ROUND);
 					$(selector).html(htmlCenter(htmlBid(nextBid)));
-					if (BID_IX == 2) {
+					if (bidder == 2) {
 						break;
 					}
-					BID_IX = (1 + BID_IX) % 4;
+					BID_IX++;
 				}
 				// var bidder = (DEALER + BID_IX) % 4;
 				// var selector = biddingCell(bidder, BID_ROUND);
@@ -289,10 +318,11 @@ function checkStorage() {
 					DEALS[r] = t;
 				}
 				// msg3.append('' + L);
-				for (var i = 0; i < L; i++) {
-					var cards = DEALS[i]['cards'];
-					// msg1.append('' + ' ' + cards + '<br />');
-				}
+				// for (var i = 0; i < L; i++) {
+				// var cards = DEALS[i]['cards'];
+				// // msg1.append('' + ' ' + cards + '<br />');
+				// }
+				// alert('L: ' + L);
 				N = 0;
 				loadDeal();
 				play();
@@ -320,6 +350,7 @@ function checkStorage() {
 			}
 
 			function parseBids(bids) {
+				// alert('bids: ' + bids);
 				var result = {};
 				var bidList = bids.split(" ");
 				var firstBid = bidList[0];
@@ -344,16 +375,20 @@ function checkStorage() {
 			function loadDeal() {
 				var currentDeal = DEALS[N];
 				var deal = parseDeal(currentDeal);
-				south.html('');
+				south.html('<br />');
 				for (var i = 0; i < 4; i++) {
 					var cards = deal['cards'][2].split(".")[i];
 					south.append('' + suitSym[i] + ' ' + cards + '<br />');
 				}
+				south.append('<br />');
 				BID_IX = 0;
 				BID_ROUND = 0;
 				DEALER = "NESW".search(deal['bids']['dealer']);
 				BIDS = deal['bids']['bids'];
+				// alert('BIDS: ' + BIDS);
 				CURRENT_DEAL = deal;
+				var dealText = '' + (1 + N) + ' / ' + L;
+				dealCount.text(dealText);
 				return deal;
 			}
 
