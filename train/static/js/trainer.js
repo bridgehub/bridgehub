@@ -136,7 +136,7 @@ function checkStorage() {
 
 			function loadSection(sectionKey) {
 				$.ajax({
-					url : 'data/' + sectionKey + '.json' + '?x=6',
+					url : 'data/' + sectionKey + '.json' + '?x=7',
 					type : 'get',
 					async : true,
 					success : function(json) {
@@ -399,7 +399,12 @@ function checkStorage() {
 				return result;
 			}
 
+			function clearDeal() {
+				$(".bidCell").html("&nbsp;");
+			}
+
 			function loadDeal() {
+				clearDeal();
 				var currentDeal = DEALS[N];
 				var deal = parseDeal(currentDeal);
 				south.html('<br />');
