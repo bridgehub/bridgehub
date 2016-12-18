@@ -136,7 +136,7 @@ function checkStorage() {
 
 			function loadSection(sectionKey) {
 				$.ajax({
-					url : 'data/' + sectionKey + '.json' + '?x=5',
+					url : 'data/' + sectionKey + '.json' + '?x=6',
 					type : 'get',
 					async : true,
 					success : function(json) {
