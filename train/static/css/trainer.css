@@ -1,8 +1,13 @@
 .hand {
 	width: 100px;
-	# border: 1px solid gray;
 }
 
 .bidCell {
 	width: 60px;
+	height: 20px;
+}
+
+.bidCellHead {
+	width: 60px;
+	height: 20px;
 }

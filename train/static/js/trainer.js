@@ -31,6 +31,7 @@ var startPage = $("#startPage");
 var trainPage = $("#trainPage");
 var ALL = $("#ALL");
 var buttonStart = $("#buttonStart");
+var buttonRestart = $("#buttonRestart");
 var buttonPrev = $("#buttonPrev");
 var buttonNext = $("#buttonNext");
 var biddingBox = $("#biddingBox");
@@ -190,11 +191,18 @@ function checkStorage() {
 				$.each(sectionKeys, function(ix, val) {
 					requiredSections++;
 				});
+				if (requiredSections <= 0) {
+					alert('Du måste välja minst en sektion ur listan.');
+					return;
+				}
 				$.each(sectionKeys, function(ix, val) {
 					loadSection(val);
 				});
-				startPage.hide();
-				trainPage.show();
+			}
+
+			function restartClicked() {
+				trainPage.hide();
+				startPage.show();
 			}
 
 			function allClicked() {
@@ -357,6 +365,8 @@ function checkStorage() {
 				// // alert(selector);
 				// $(selector).text("?");
 				// // alert(BID_IX);
+				startPage.hide();
+				trainPage.show();
 			}
 
 			function initTrainer() {
@@ -520,6 +530,10 @@ function checkStorage() {
 
 				buttonStart.click(function() {
 					startClicked();
+				});
+
+				buttonRestart.click(function() {
+					restartClicked();
 				});
 
 				buttonPrev.click(function() {
