@@ -31,6 +31,8 @@ var startPage = $("#startPage");
 var trainPage = $("#trainPage");
 var ALL = $("#ALL");
 var buttonStart = $("#buttonStart");
+var buttonPrev = $("#buttonPrev");
+var buttonNext = $("#buttonNext");
 var biddingBox = $("#biddingBox");
 var bidding = $("#bidding");
 var dealCount = $("#dealCount");
@@ -84,7 +86,9 @@ function setInfo(msg, timeout) {
 }
 
 function clearError() {
-	errMsg.text('');
+	errMsg.css('background-color', '#FFFFFF');
+	errMsg.css('color', '#FFFFFF');
+	errMsg.html('&nbsp;');
 }
 
 function startTimer() {
@@ -93,7 +97,7 @@ function startTimer() {
 	}
 	setInterval(function() {
 		if (errorTimer == 1) {
-			errMsg.text('');
+			clearError();
 		}
 		if (errorTimer >= 1) {
 			errorTimer--;
@@ -205,6 +209,28 @@ function checkStorage() {
 				$(selector).html(htmlCenter(htmlBid(expected)));
 				BID_IX++;
 				BID_ROUND++;
+				play();
+			}
+
+			function nextClicked() {
+				if (N >= L - 1) {
+					setInfo(
+							'Detta var sista given i detta urval.<br />Klicka på Start för att välja nya givar.',
+							30);
+					return;
+				}
+				N++;
+				loadDeal();
+				play();
+			}
+
+			function prevClicked() {
+				if (N <= 0) {
+					setInfo('Detta är första given.', 15);
+					return;
+				}
+				N--;
+				loadDeal();
 				play();
 			}
 
@@ -329,6 +355,7 @@ function checkStorage() {
 			}
 
 			function parseCards(cards) {
+				// alert('cards: ' + cards);
 				var result = {};
 				var handList = cards.split(" ");
 				var firstHand = handList[0];
@@ -380,7 +407,7 @@ function checkStorage() {
 					var cards = deal['cards'][2].split(".")[i];
 					south.append('' + suitSym[i] + ' ' + cards + '<br />');
 				}
-				south.append('<br />');
+				// south.append('<br />');
 				BID_IX = 0;
 				BID_ROUND = 0;
 				DEALER = "NESW".search(deal['bids']['dealer']);
@@ -395,7 +422,16 @@ function checkStorage() {
 			function processSection(sectionKey, json) {
 				// alert('key: ' + sectionKey);
 				// data.text(json);
-				sectionData[sectionKey] = json;
+				var json2 = [];
+				for (var i = 0; i < json.length; i++) {
+					var item = json[i];
+					for ( var key in item) {
+						if (key === 'cards') {
+							json2.push(item);
+						}
+					}
+				}
+				sectionData[sectionKey] = json2;
 				// msg4.append(sectionKey + " ");
 				loadedSections++;
 				if (loadedSections >= requiredSections) {
@@ -425,12 +461,22 @@ function checkStorage() {
 					startClicked();
 				});
 
+				buttonPrev.click(function() {
+					prevClicked();
+				});
+
+				buttonNext.click(function() {
+					nextClicked();
+				});
+
 				ALL.change(function() {
 					allClicked();
 				});
 
 				ALL.trigger('click');
 				startPage.show();
+
+				buttonStart.focus();
 			}
 
 			$(function() {

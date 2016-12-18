@@ -7,7 +7,7 @@
 <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico?">
 </head>
 <body
-	style='background-color: white; font-family: Verdana; font-size: 16px; zoom:250%'>
+	style='background-color: white; font-family: Verdana; font-size: 15px;'>
 	<div id="content" style="width: 450px;">
 		<div id="topMsg" style="background-color: #FF6666; color: black"></div>
 		<div id="startPage" style="display: none;">
@@ -20,22 +20,23 @@
 		</div>
 		<div id="trainPage" style="display: none;">
 			<center>
-				<input id="prev" type="button" value="F&ouml;reg giv" /> <span
+				<input id="buttonPrev" type="button" value="F&ouml;reg giv" /> <span
 					id="dealCount"
 					style="display: inline-block; width: 100px; text-align: center;">0
-					/ 0</span> <input id="next" type="button" value="N&auml;sta giv" /><br />
+					/ 0</span> <input id="buttonNext" type="button" value="N&auml;sta giv" /><br />
 				<br />
 				<hr />
 				<table border="0">
 					<tr>
 						<td>&nbsp;</td>
 						<td class="hand" id="north" style="text-align: center">North<br />
-							<br /> <br /> <br /></td>
+							<br /></td>
 						<td>&nbsp;</td>
 					</tr>
 					<tr>
 						<td class="hand" id="west" style="text-align: center">West<br />
-							<br /> <br /> <br /></td>
+							<br />
+						</td>
 						<td><table id="bidding" class="bidding" border="1"
 								cellspacing="0">
 								<tr class="bidRow">
@@ -76,7 +77,8 @@
 								</tr>
 							</table></td>
 						<td class="hand" id="east" style="text-align: center">East<br />
-							<br /> <br /> <br /></td>
+							<br />
+						</td>
 					</tr>
 					<tr>
 						<td>&nbsp;</td>
@@ -94,6 +96,7 @@
 						<td>&nbsp;</td>
 					</tr>
 				</table>
+				<span id="errMsg">&nbsp;</span>
 				<hr />
 				Your Bid?
 				<table id="biddingBox" border="1" cellspacing="0"></table>
