@@ -1,44 +1,200 @@
 [
 	{
-		"DESCR": "1S-3S",
+		"DESCR": "   1S-3S   ",
 		"cards": "S:KT84.Q84.K964.75",
-		"bids": "N:1S P 3S P P P"
+		"bids": "N:1S P 3S P 4S P P P"
 	},
 
 	{
-		"DESCR": "1S-(X)-3S",
-		"cards": "S:KT84.Q84.K964.75",
-		"bids": "N:1S X 3S P P P"
+		"DESCR": "   1S-(X)-3S   ",
+		"cards": "S:QT84.K84.K964.75",
+		"bids": "N:1S X 3S P 4S P P P"
 	},
 
 	{
-		"DESCR": "1H-1S-3H",
-		"cards": "S:Q84.KT84.K964.75",
+		"DESCR": "   1H-3H   ",
+		"cards": "S:KT8.Q842.K964.75",
+		"bids": "N:1H P 3H P P P"
+	},
+
+	{
+		"DESCR": "   1H-(X)-3H   ",
+		"cards": "S:KT8.K842.Q964.75",
+		"bids": "N:1H X 3H P P P"
+	},
+
+	{
+		"DESCR": "   1H-(1S)-3H   ",
+		"cards": "S:KT.K842.Q964.875",
 		"bids": "N:1H 1S 3H P P P"
 	},
 
 	{
-		"DESCR": "1S-3D",
-		"cards": "S:KT84.75.A964.KJ4",
-		"bids": "N:1S P 3D P 4S P P P"
-	},
-
-	{
-		"DESCR": "1H-3D",
-		"cards": "S:75.KT84.A964.KJ4",
-		"bids": "N:1H P 3D P 4H P P P"
-	},
-
-	{
-		"DESCR": "1S-3C",
+		"DESCR": "   1S-3C   ",
 		"cards": "S:KT4.75.A964.KT42",
 		"bids": "N:1S P 3C P 4S P P P"
 	},
 
 	{
-		"DESCR": "1S-2S (3sp, 8-9)",
-		"cards": "S:KT84.Q84.A964.75",
-		"bids": "N:1S P 3S P P P"
+		"DESCR": "   1S-(X)-3C   ",
+		"cards": "S:KT4.75.A964.KT42",
+		"bids": "N:1S X 3C P 3S P P P"
+	},
+
+	{
+		"DESCR": "   1S-3D   ",
+		"cards": "S:KT84.75.A96.KJ42",
+		"bids": "N:1S P 3D P 4S P P P"
+	},
+
+	{
+		"DESCR": "   1S-(X)-3D   ",
+		"cards": "S:KT84.7542.A7.K52",
+		"bids": "N:1S X 3D P 4S P P P"
+	},
+
+	{
+		"DESCR": "   1H-3C   ",
+		"cards": "S:75.KT4.AJ64.KT42",
+		"bids": "N:1H P 3C P 4H P P P"
+	},
+
+	{
+		"DESCR": "   1H-(X)-3C   ",
+		"cards": "S:75.KT4.AJ64.QT42",
+		"bids": "N:1H X 3C P 3H P P P"
+	},
+
+	{
+		"DESCR": "   1H-(1S)-3C   ",
+		"cards": "S:K5.QT4.KJ64.QT42",
+		"bids": "N:1H 1S 3C P 4H P P P"
+	},
+
+	{
+		"DESCR": "   1H-3D   ",
+		"cards": "S:75.KT84.A964.K54",
+		"bids": "N:1H P 3D P 4H P P P"
+	},
+
+	{
+		"DESCR": "   1H-(X)-3D   ",
+		"cards": "S:K5.KT84.A964.J54",
+		"bids": "N:1H X 3D P 4H P P P"
+	},
+
+	{
+		"DESCR": "   1H-(1S)-3D   ",
+		"cards": "S:K5.QT84.A964.J54",
+		"bids": "N:1H 1S 3D P 4H P P P"
+	},
+
+	{
+		"DESCR": "   1S-2S(3k, 8-9)   ",
+		"cards": "S:KT8.QT4.K9642.75",
+		"bids": "N:1S P 2S P 4S P P P"
+	},
+
+	{
+		"DESCR": "   1S-(X)-2S(3k, 8-9)   ",
+		"cards": "S:KT8.QT4.K9642.75",
+		"bids": "N:1S X 2S P P P"
+	},
+
+	{
+		"DESCR": "   1H-2H(3k, 8-9)   ",
+		"cards": "S:KT8.QT4.K9642.75",
+		"bids": "N:1H P 2H P 4H P P P"
+	},
+
+	{
+		"DESCR": "   1H-(X)-2H(3k, 8-9)   ",
+		"cards": "S:QT8.AT4.Q9642.75",
+		"bids": "N:1H X 2H P P P"
+	},
+
+	{
+		"DESCR": "   1H-(1S)-2H(3k, 8-9)   ",
+		"cards": "S:K8.AT4.J9642.975",
+		"bids": "N:1H 1S 2H P P P"
+	},
+
+	{
+		"DESCR": "   1S-2S(4k, 6-7)   ",
+		"cards": "S:KT85.T94.QJ62.J5",
+		"bids": "N:1S P 2S P 4S P P P"
+	},
+
+	{
+		"DESCR": "   1S-(X)-2S(4k, 6-7)   ",
+		"cards": "S:KT85.T94.QJ62.J5",
+		"bids": "N:1S X 2S P P P"
+	},
+
+	{
+		"DESCR": "   1H-2H(4k, 6-7)   ",
+		"cards": "S:J765.KT94.Q62.85",
+		"bids": "N:1H P 2H P P P"
+	},
+
+	{
+		"DESCR": "   1H-(X)-2H(4k, 6-7)   ",
+		"cards": "S:J765.KT94.Q62.85",
+		"bids": "N:1H X 2H P 4H P P P"
+	},
+
+	{
+		"DESCR": "   1H-(1S)-2H(4k, 6-7)   ",
+		"cards": "S:8765.KT94.QJ2.85",
+		"bids": "N:1H 1S 2H P P P"
+	},
+
+	{
+		"DESCR": "   1S-(2C)-2NT   ",
+		"cards": "S:Q7.KT2.Q854.KJT3",
+		"bids": "N:1S 2C 2N P 3N P P P"
+	},
+
+	{
+		"DESCR": "   1S-(2C)-3C   ",
+		"cards": "S:K92.AJ2.KQ754.53",
+		"bids": "N:1S 2C 3C P 3S P 4S P P P"
+	},
+
+	{
+		"DESCR": "   1S-(2C)-2S(4k,8-9)   ",
+		"cards": "S:QT86.AT4.Q964.75",
+		"bids": "N:1S 2C 2S P P P"
+	},
+
+	{
+		"DESCR": "   1S-(2C)-3S(3k,10-11)   ",
+		"cards": "S:QT8.AT4.KJ642.75",
+		"bids": "N:1S 2C 3S P 4S P P P"
+	},
+
+	{
+		"DESCR": "   1H-(2D)-2NT   ",
+		"cards": "S:J87.KT.QJ94.KJT3",
+		"bids": "N:1H 2D 2N P 3N P P P"
+	},
+
+	{
+		"DESCR": "   1H-(2D)-3D   ",
+		"cards": "S:A54.KT5.A3.QJ832",
+		"bids": "N:1H 2D 3D P 4H P P P"
+	},
+
+	{
+		"DESCR": "   1H-(2D)-2H(4k,8-9)   ",
+		"cards": "S:A54.AT52.73.T832",
+		"bids": "N:1H 2D 2H P 4H P P P"
+	},
+
+	{
+		"DESCR": "   1H-(2D)-3H(3k,10-11)   ",
+		"cards": "S:A54.AT5.73.Q8732",
+		"bids": "N:1H 2D 3H P 4H P P P"
 	},
 
 	{

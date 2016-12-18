@@ -46,6 +46,8 @@ var msg3 = $("#msg3");
 var msg4 = $("#msg4");
 var errMsg = $("#errMsg");
 
+var yourBid = $("#yourBid");
+
 var data = $("#data");
 var topMsg = $("#topMsg");
 
@@ -65,13 +67,15 @@ function loadStorage() {
 
 var errorTimer = -99;
 
+var yourBidTimer = -99;
+
 function setError(msg, timeout) {
 	// var m = "<span>&nbsp;{MSG}&nbsp;</span>";
 	errMsg.css('font-weight', 'bold');
 	errMsg.css('background-color', 'yellow');
 	errMsg.css('color', 'red');
+	msg = '&nbsp;' + msg + '&nbsp;';
 	errMsg.html(msg);
-	startTimer();
 	errorTimer = timeout;
 }
 
@@ -80,8 +84,8 @@ function setInfo(msg, timeout) {
 	errMsg.css('font-weight', 'bold');
 	errMsg.css('background-color', '#88FF88');
 	errMsg.css('color', 'black');
+	msg = '&nbsp;' + msg + '&nbsp;';
 	errMsg.html(msg);
-	startTimer();
 	errorTimer = timeout;
 }
 
@@ -89,18 +93,37 @@ function clearError() {
 	errMsg.css('background-color', '#FFFFFF');
 	errMsg.css('color', '#FFFFFF');
 	errMsg.html('&nbsp;');
+	errorTimer = 0;
+}
+
+function setYourBid() {
+	yourBid.css('background-color', '#FFFF00');
+	yourBidTimer = 7;
+}
+
+function clearYourBid() {
+	yourBid.css('background-color', '#FFFFFF');
+	yourBidTimer = 0;
 }
 
 function startTimer() {
 	if (errorTimer >= 0) {
 		return;
 	}
+	errorTimer = 0;
+	yourBidTimer = 0;
 	setInterval(function() {
 		if (errorTimer == 1) {
 			clearError();
 		}
 		if (errorTimer >= 1) {
 			errorTimer--;
+		}
+		if (yourBidTimer == 1) {
+			clearYourBid();
+		}
+		if (yourBidTimer >= 1) {
+			yourBidTimer--;
 		}
 	}, 100);
 }
@@ -135,10 +158,14 @@ function checkStorage() {
 			var BID_ROUND = 0;
 
 			function loadSection(sectionKey) {
+				$.ajaxSetup({
+					cache : false
+				});
 				$.ajax({
-					url : 'data/' + sectionKey + '.json' + '?x=7',
+					url : 'data/' + sectionKey + '.json',
 					type : 'get',
 					async : true,
+					cache : false,
 					success : function(json) {
 						// alert('success: ' + json.length);
 						processSection(sectionKey, json);
@@ -177,9 +204,10 @@ function checkStorage() {
 			}
 
 			function bidClicked(cell) {
+				clearError();
 				if (BID_IX >= BIDS.length) {
 					setInfo(
-							'Budgivningen &auml;r avslutad. V&auml;lj \'N&auml;sta giv\'.',
+							"Budgivningen &auml;r avslutad. V&auml;lj 'N&auml;sta giv'.",
 							20);
 					return;
 				}
@@ -199,7 +227,7 @@ function checkStorage() {
 				// alert('expected: ' + expected + ' actual: ' + actual + ' => '
 				// + ok);
 				if (!ok) {
-					setError('&nbsp;Det finns ett b&auml;ttre bud!&nbsp;', 12);
+					setError('Det finns ett b&auml;ttre bud!', 12);
 					return;
 				}
 
@@ -215,7 +243,7 @@ function checkStorage() {
 			function nextClicked() {
 				if (N >= L - 1) {
 					setInfo(
-							'Detta var sista given i detta urval.<br />Klicka på Start för att välja nya givar.',
+							"Detta var sista given i detta urval.&nbsp;<br />&nbsp;Klicka på 'Nytt urval' för att välja nya givar.",
 							30);
 					return;
 				}
@@ -315,6 +343,7 @@ function checkStorage() {
 					var nextBid = BIDS[BID_IX];
 					if (bidder == 2) {
 						nextBid = "?";
+						setYourBid();
 					}
 					var selector = biddingCell(bidder, BID_ROUND);
 					$(selector).html(htmlCenter(htmlBid(nextBid)));
@@ -407,6 +436,7 @@ function checkStorage() {
 				clearDeal();
 				var currentDeal = DEALS[N];
 				var deal = parseDeal(currentDeal);
+				deal['DESCR'] = currentDeal['DESCR'];
 				south.html('<br />');
 				for (var i = 0; i < 4; i++) {
 					var cards = deal['cards'][2].split(".")[i];
@@ -421,7 +451,28 @@ function checkStorage() {
 				CURRENT_DEAL = deal;
 				var dealText = '' + (1 + N) + ' / ' + L;
 				dealCount.text(dealText);
+				if (isLocalhost()) {
+					topMsg.html(CURRENT_DEAL['DESCR']);
+				}
 				return deal;
+			}
+
+			function isLocalhost() {
+				var hostname = window.location.hostname;
+				return (hostname.startsWith("localhost") //
+				|| hostname.startsWith("127."));
+			}
+
+			function validateData(cards, bids) {
+				if (isLocalhost()) {
+					if (cards.search("S:") != 0) {
+						alert("INCORRECT CARDS: " + cards);
+					}
+					if (!bids.startsWith("N:") || bids.endsWith("P P P P")
+							|| !bids.endsWith(" P P P")) {
+						alert("INCORRECT BIDS: " + bids);
+					}
+				}
 			}
 
 			function processSection(sectionKey, json) {
@@ -432,7 +483,12 @@ function checkStorage() {
 					var item = json[i];
 					for ( var key in item) {
 						if (key === 'cards') {
-							json2.push(item);
+							if ("" !== item[key]) {
+								var cards = item[key];
+								var bids = item['bids'];
+								validateData(cards, bids);
+								json2.push(item);
+							}
 						}
 					}
 				}
@@ -482,6 +538,8 @@ function checkStorage() {
 				startPage.show();
 
 				buttonStart.focus();
+
+				startTimer();
 			}
 
 			$(function() {
