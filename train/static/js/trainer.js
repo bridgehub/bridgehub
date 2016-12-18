@@ -32,6 +32,7 @@ var trainPage = $("#trainPage");
 var ALL = $("#ALL");
 var buttonStart = $("#buttonStart");
 var biddingBox = $("#biddingBox");
+var bidding = $("#bidding");
 
 var south = $("#south");
 
@@ -59,6 +60,32 @@ function loadStorage() {
 	storage = localStorage.getItem('storage');
 }
 
+var errorTimer = -99;
+
+function setError(msg, timeout) {
+	errMsg.html(msg);
+	startTimer();
+	errorTimer = timeout;
+}
+
+function clearError() {
+	errMsg.text('');
+}
+
+function startTimer() {
+	if (errorTimer >= 0) {
+		return;
+	}
+	setInterval(function() {
+		if (errorTimer == 1) {
+			errMsg.text('');
+		}
+		if (errorTimer >= 1) {
+			errorTimer--;
+		}
+	}, 100);
+}
+
 function checkStorage() {
 	if (typeof (localStorage) !== "undefined") {
 		return true;
@@ -78,6 +105,15 @@ function checkStorage() {
 			if (!checkStorage()) {
 				return;
 			}
+
+			var DEALS = [];
+			var BID_IX = 0;
+			var CURRENT_DEAL;
+			var N = 0;
+			var L = 0;
+			var BIDDER = 0;
+			var DEALER = 0;
+			var BID_ROUND = 0;
 
 			function loadSection(sectionKey) {
 				// alert('Start AJAX: ' + 'data/' + sectionKey + '.json');
@@ -123,93 +159,202 @@ function checkStorage() {
 
 			function bidClicked(cell) {
 				var bid = $(cell);
-				// var msg = "";
-				// for ( var k in bid) {
-				// msg += "KEY: " + k + " => " + bid[k] + "\n";
-				// }
 				var text = bid.text();
-				errMsg.text('Insufficient bid.');
-				// msg.text(text);
+				var id = bid.attr('id');
+				// setError('Otillr&auml;ckligt bud: ' + text, 12);
+				var expected = BIDS[BID_IX];
+				var actual;
+				if (id.search("_") == 1) {
+					var tokens = id.split("_");
+					actual = tokens[0] + tokens[1];
+				} else {
+					actual = id;
+				}
+				var ok = (expected === actual);
+				// alert('expected: ' + expected + ' actual: ' + actual + ' =>
+				// ');
+				if (ok) {
+				} else {
+					setError('Det finns ett b&auml;ttre bud :)', 15);
+				}
 			}
 
 			var suitSym = //
 			[ "&spades;", "<span style='color:red;'>&hearts;</span>",
 					"<span style='color:red;'>&diams;</span>", "&clubs;" ];
 
-			var bidDenoms = //
+			var bidSymbols = //
 			[ "&clubs;", "&diams;", "&hearts;", "&spades;", "NT" ];
+
+			var bidDenoms = //
+			[ "C", "D", "H", "S", "N" ];
 
 			var colorDenom = //
 			[ "#006600", "#CC2200", "#AA0000", "#0000AA", "black" ];
 
+			function htmlCenter(s) {
+				return "<center>" + s + "</center>"
+			}
+
+			function htmlBid(s) {
+				if (s === "?") {
+					return "?";
+				}
+				if (s === "P") {
+					return "<span style='color:green'>PASS</span>";
+				}
+				if (s === "X") {
+					return "<span style='color:red'>X</span>";
+				}
+				if (s === "XX") {
+					return "<span style='color:blue'>XX</span>";
+				}
+				var level = s.charAt(0);
+				var denom = s.charAt(1);
+				var color = colorDenom["CDHSN".search(denom)];
+				var symbol = bidSymbols["CDHSN".search(denom)];
+				var html = "<span style='color:{COLOR}'>{LEVEL}{SYMBOL}</span>";
+				return html.replace("{COLOR}", color).replace("{LEVEL}", level)
+						.replace("{SYMBOL}", symbol);
+			}
+
 			function buildBiddingBox() {
 				var ix = 0;
+				row = "<tr><td class='buttonBid' colspan='3' style='background-color:#FF0000;color:white'><center> DOUBLE </center></td>"
+						+ "<td class='buttonBid' colspan='3' style='background-color:#0000BB;color:white'><center>REDOUBLE</center></td></tr>";
+				biddingBox.append(row + "\n");
 				for (var level = 7; level >= 1; level--) {
-
 					var row = "";
 					for (var denom = 4; denom >= 0; denom--) {
 						var d = bidDenoms[denom];
-						row += "<td id='x"
-								+ (ix++)
-								+ "' class='buttonBid' style='text-align:center;width:50px;color:"
-								+ colorDenom[denom] + ";'>" + level + d
-								+ "</td>";
+						var bid = '' + level + '' + d;
+						var id = level + '_' + d;
+						row += "<td id='" + id
+								+ "' class='buttonBid' style='width:50px;'>"
+								+ htmlCenter(htmlBid(bid)) + "</td>";
 					}
 					row = "<tr>" + row + "</tr>";
 					biddingBox.append(row + "\n");
 				}
+				row = "<tr><td class='buttonBid' colspan='5' style='background-color:#00AA00;color:white'><center>PASS</center></td></tr>";
+				biddingBox.append(row + "\n");
 				$(".buttonBid").click(function() {
 					bidClicked(this);
 				})
 			}
 
-			var deals = [];
-			var N = 0;
-			var L = 0;
-			var currentDeal;
+			function biddingCell(bidder, bid_round) {
+				var x = 1 + ((1 + bidder) % 4);
+				var y = (2 + bid_round);
+				var selector = "#bidding tr:nth-child({Y}) td:nth-child({X})";
+				return selector.replace("{X}", x).replace("{Y}", y);
+			}
+
+			function play() {
+				while (true) {
+					if (BID_IX >= BIDS.length) {
+						setPrompt('Bidding is finished.');
+						break;
+					}
+					var nextBid = BIDS[BID_IX];
+					if (BID_IX == 2) {
+						nextBid = "?";
+					}
+					var bidder = (DEALER + BID_IX) % 4;
+					var selector = biddingCell(bidder, BID_ROUND);
+					$(selector).html(htmlCenter(htmlBid(nextBid)));
+					if (BID_IX == 2) {
+						break;
+					}
+					BID_IX = (1 + BID_IX) % 4;
+				}
+				// var bidder = (DEALER + BID_IX) % 4;
+				// var selector = biddingCell(bidder, BID_ROUND);
+				// // alert(selector);
+				// $(selector).text("?");
+				// // alert(BID_IX);
+			}
 
 			function initTrainer() {
-				deals = [];
+				DEALS = [];
 				for ( var sectionKey in sectionData) {
-					deals = deals.concat(sectionData[sectionKey]);
+					DEALS = DEALS.concat(sectionData[sectionKey]);
 				}
-				L = deals.length;
+				L = DEALS.length;
 				for (var i = 0; i < L; i++) {
 					var r = randomInt(0, L);
 					// msg4.append('' + r + ' ');
-					var t = deals[i];
-					deals[i] = deals[r];
-					deals[r] = t;
+					var t = DEALS[i];
+					DEALS[i] = DEALS[r];
+					DEALS[r] = t;
 				}
 				// msg3.append('' + L);
 				for (var i = 0; i < L; i++) {
-					var cards = deals[i]['cards'];
+					var cards = DEALS[i]['cards'];
 					// msg1.append('' + ' ' + cards + '<br />');
 				}
 				N = 0;
 				loadDeal();
+				play();
+			}
+
+			function parseCards(cards) {
+				var result = {};
+				var handList = cards.split(" ");
+				var firstHand = handList[0];
+				var handId = "S";
+				if (firstHand.search(":") >= 1) {
+					var tokens = firstHand.split(":");
+					handId = tokens[0];
+					handList[0] = tokens[1];
+				}
+				result[0] = "?";
+				result[1] = "?";
+				result[2] = "?";
+				result[3] = "?";
+				var handIx = "NESW".search(handId);
+				for (var i = 0; i < handList.length; i++) {
+					result[(i + handIx) % 4] = handList[i];
+				}
+				return result;
+			}
+
+			function parseBids(bids) {
+				var result = {};
+				var bidList = bids.split(" ");
+				var firstBid = bidList[0];
+				var dealer = "S";
+				if (firstBid.search(":") >= 1) {
+					var tokens = firstBid.split(":");
+					dealer = tokens[0];
+					bidList[0] = tokens[1];
+				}
+				result['dealer'] = dealer;
+				result['bids'] = bidList;
+				return result;
 			}
 
 			function parseDeal(h) {
 				var result = {}
-				var hand = {};
-				var suits = h['cards'].split(':')[1].split('.');
-				hand[0] = suits[0];
-				hand[1] = suits[1];
-				hand[2] = suits[2];
-				hand[3] = suits[3];
-				result[0] = hand;
+				result['cards'] = parseCards(h['cards']);
+				result['bids'] = parseBids(h['bids']);
 				return result;
 			}
 
 			function loadDeal() {
-				var currentDeal = deals[N];
+				var currentDeal = DEALS[N];
 				var deal = parseDeal(currentDeal);
 				south.html('');
 				for (var i = 0; i < 4; i++) {
-					var cards = deal[0][i];
+					var cards = deal['cards'][2].split(".")[i];
 					south.append('' + suitSym[i] + ' ' + cards + '<br />');
 				}
+				BID_IX = 0;
+				BID_ROUND = 0;
+				DEALER = "NESW".search(deal['bids']['dealer']);
+				BIDS = deal['bids']['bids'];
+				CURRENT_DEAL = deal;
+				return deal;
 			}
 
 			function processSection(sectionKey, json) {
@@ -224,6 +369,11 @@ function checkStorage() {
 			}
 
 			function main() {
+
+				// alert(htmlBid("3S"));
+				// alert(htmlBid("3D"));
+				// alert(htmlBid("3N"));
+
 				for (var i = 0; i < sectionList.length; i++) {
 					var id = sectionList[i]["id"];
 					var descr = sectionList[i]["descr"];
