@@ -130,6 +130,8 @@ function startTimer() {
 }
 
 function checkStorage() {
+	// NOT USED YET
+	return true;
 	if (typeof (localStorage) !== "undefined") {
 		return true;
 	} else {
