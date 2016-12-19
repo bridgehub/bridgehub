@@ -3,6 +3,10 @@ var sectionList = [ //
 	id : "MAJORRAISE",
 	descr : "Trumfhöjningar till 1HÖ"
 }, //
+{
+	id : "NEGDBL",
+	descr : "Störd färgbudgivning"
+}, //
 // {
 // id : "NTDEF",
 // descr : "DONT NT-försvar"
@@ -180,6 +184,10 @@ function checkStorage() {
 			var loadedSections = 0;
 
 			function startClicked() {
+				sectionKeys = [];
+				sectionData = {};
+				loadedSections = 0;
+				requiredSections = 0;
 				$(".sectionBox").each(function() {
 					if ($(this).prop('checked')) {
 						var section = this.id;
@@ -188,8 +196,6 @@ function checkStorage() {
 					}
 				});
 				// alert('sectionKeys: ' + sectionKeys);
-				loadedSections = 0;
-				requiredSections = 0;
 				$.each(sectionKeys, function(ix, val) {
 					requiredSections++;
 				});
@@ -480,8 +486,10 @@ function checkStorage() {
 					if (cards.search("S:") != 0) {
 						alert("INCORRECT CARDS: " + cards);
 					}
-					if (!bids.startsWith("N:") || bids.endsWith("P P P P")
-							|| !bids.endsWith(" P P P")) {
+					if ((!bids.startsWith("N:") && !bids.startsWith("S:"))
+							|| bids.endsWith("P P P P")
+							|| !bids.endsWith(" P P P")
+							|| bids.search("NT") >= 0) {
 						alert("INCORRECT BIDS: " + bids);
 					}
 				}

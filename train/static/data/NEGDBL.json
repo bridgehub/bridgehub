@@ -1,0 +1,54 @@
+[
+	{
+		"DESCR": "   1C-(1S)-X(5+hj,7-11)   ",
+		"cards": "S:52.KQT972.K72.74",
+		"bids": "N:1C 1S X P 1N P 2H P P P"
+	},
+
+	{
+		"DESCR": "   1H-(2C)-X(5+sp,7-11)   ",
+		"cards": "S:KJT972.7.K72.962",
+		"bids": "N:1H 2C X P 2D P 2S P P P"
+	},
+
+	{
+		"DESCR": "   1H-(2C)-X(5+sp,7-11)   ",
+		"cards": "S:KQJT72.7.K72.962",
+		"bids": "N:1H 2C X P 2N P 3S P P P"
+	},
+
+	{
+		"DESCR": "   1S-(2C)-X(5+hj,7-11)   ",
+		"cards": "S:J5.AJT72.Q72.962",
+		"bids": "N:1S 2C X P 2S P P P"
+	},
+
+	{
+		"DESCR": "   1C-(1S)-X(5+hj,7-11)   ",
+		"cards": "S:KJ52.83.A72.AJ94",
+		"bids": "S:1C 1S X P 1N P 2H P P P"
+	},
+
+	{
+		"SEP": "=============================",
+		"DESCR": "   1H-(2C)-X(5+sp,7-11)   ",
+		"cards": "S:7.AJ865.AKJ3.962",
+		"bids": "S:1H 2C X P 2D P 2S P P P"
+	},
+
+	{
+		"DESCR": "   1H-(2C)-X(5+sp,7-11)   ",
+		"cards": "S:32.KJ854.KQ2.AJT",
+		"bids": "S:1H 2C X P 2N P 3S P P P"
+	},
+
+	{
+		"DESCR": "   1S-(2C)-X(5+hj,7-11)   ",
+		"cards": "S:AJT72.8.AQJ2.962",
+		"bids": "S:1S 2C X P 2D P 2H P P P"
+	},
+
+	{
+		
+	}
+]
