@@ -533,10 +533,6 @@ function checkStorage() {
 
 			function main() {
 
-				// alert(htmlBid("3S"));
-				// alert(htmlBid("3D"));
-				// alert(htmlBid("3N"));
-
 				for (var i = 0; i < sectionList.length; i++) {
 					var id = sectionList[i]["id"];
 					var descr = sectionList[i]["descr"];
