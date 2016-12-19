@@ -7,6 +7,10 @@ var sectionList = [ //
 	id : "NEGDBL",
 	descr : "Störd färgbudgivning"
 }, //
+{
+	id : "MULTIDEF",
+	descr : "Försvar mot 2RU Multi"
+}, //
 // {
 // id : "NTDEF",
 // descr : "DONT NT-försvar"
@@ -312,7 +316,12 @@ function checkStorage() {
 				var denom = s.charAt(1);
 				var color = colorDenom["CDHSN".search(denom)];
 				var symbol = bidSymbols["CDHSN".search(denom)];
-				var html = "<span style='color:{COLOR}'>{LEVEL}{SYMBOL}</span>";
+				var html = "<span style='color:{COLOR}'>{LEVEL}{SYMBOL}</span>{ALERT}";
+				if (s.search('\\*') >= 1) {
+					html = html.replace('{ALERT}', '<sup><b>&#42;</b></sup>');
+				} else {
+					html = html.replace('{ALERT}', '');
+				}
 				return html.replace("{COLOR}", color).replace("{LEVEL}", level)
 						.replace("{SYMBOL}", symbol);
 			}
@@ -486,8 +495,10 @@ function checkStorage() {
 					if (cards.search("S:") != 0) {
 						alert("INCORRECT CARDS: " + cards);
 					}
-					if ((!bids.startsWith("N:") && !bids.startsWith("S:"))
-							|| bids.endsWith("P P P P")
+					if ((!bids.startsWith("N:") //
+							&& !bids.startsWith("S:") //
+							&& !bids.startsWith("E:") // 
+					&& !bids.startsWith("W:")) || bids.endsWith("P P P P")
 							|| !bids.endsWith(" P P P")
 							|| bids.search("NT") >= 0) {
 						alert("INCORRECT BIDS: " + bids);

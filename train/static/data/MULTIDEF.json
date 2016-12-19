@@ -1,0 +1,89 @@
+[
+	{
+		"DESCR": "   (2D*)- 15-18NT   ",
+		"cards": "S:AQ5.KJ4.KT53.K74",
+		"bids": "E:2D* X 2H* 3N P P P"
+	},
+
+	{
+		"DESCR": "   (2D*)- UD av hj, min  ",
+		"cards": "S:AQ52.74.KT53.K74",
+		"bids": "E:2D* P 2H* P P X P 3S P P P"
+	},
+
+	{
+		"DESCR": "   (2D*)- UD av sp, min   ",
+		"cards": "S:52.AQ74.K74.KT53",
+		"bids": "E:2D* P 2H* P 2S X P 3H P P P"
+	},
+
+	{
+		"DESCR": "   (2D*)- UD av sp, min   ",
+		"cards": "S:52.AQ74.K74.KT53",
+		"bids": "E:2D* P 2H* P 2S X P 3D P P P"
+	},
+
+	{
+		"DESCR": "   (2D*)- UD av hj, extras   ",
+		"cards": "S:AQ52.74.KT53.AK4",
+		"bids": "E:2D* P 2H* P P X P 3S P 4S P P P"
+	},
+
+	{
+		"DESCR": "   (2D*)- UD av hj, extras+   ",
+		"cards": "S:AQJ2.7.KQT3.AQ42",
+		"bids": "E:2D* P 2H* P P X P 2S P 3S P 4S P P P"
+	},
+
+	{
+		"DESCR": "   (2D*)- UD av hj, extras++   ",
+		"cards": "S:AK52.7.AK963.AQJ",
+		"bids": "E:2D* P 2H* P P X P 2S P 4S P P P"
+	},
+
+	{
+		"DESCR": "   (2D*)- UD av hj i 3e   ",
+		"cards": "S:QT74.7.KQT3.AJ92",
+		"bids": "W:2D* P 2H* X P 3S P P P"
+	},
+
+	{
+		"DESCR": "   (2D*)- UD av sp i 3e, extras+   ",
+		"cards": "S:52.AQ52.QJT3.KT5",
+		"bids": "W:2D* P 2H* P 2S P P X P 3C P P P"
+	},
+
+	{
+		"DESCR": "   (2D*)- 5-4 i lå   ",
+		"cards": "S:52.A2.QT83.AKJ95",
+		"bids": "E:2D* 2N P 3D P P P"
+	},
+
+	{
+		"DESCR": "   (2D*)- 5-4 i lå t 5ko sp  ",
+		"cards": "S:752.A.KT83.AKJ95",
+		"bids": "E:2D* 2N P 3S P 4S P P P"
+	},
+
+	{
+		"DESCR": "   (2D*)- 5-4 i lå t 5ko sp  ",
+		"cards": "S:7.AQ.AQT83.KT952",
+		"bids": "E:2D* 2N P 3S P 3N P P P"
+	},
+
+	{
+		"DESCR": "   (2D*)- UD av 'fel' färg   ",
+		"cards": "S:AK52.74.KJT3.AK4",
+		"bids": "E:2D* P 2H* P 2S 2N P 3N P P P"
+	},
+
+	{
+		"DESCR": "   (2D*)- UD av 'fel' färg   ",
+		"cards": "S:7.KJ52.AQT32.AK4",
+		"bids": "E:2D* P 2H* P P 2N P 3N P P P"
+	},
+
+	{
+		
+	}
+]
