@@ -21,12 +21,7 @@
 		</div>
 		<div id="trainPage" style="display: none;">
 			<center>
-				<input id="buttonRestart" type="button" value="Nytt urval" /><br />
-				<br /> <input id="buttonPrev" type="button" value="F&ouml;reg giv" />
-				<span id="dealCount"
-					style="display: inline-block; width: 100px; text-align: center;">0
-					/ 0</span> <input id="buttonNext" type="button" value="N&auml;sta giv" /><br />
-				<br />
+				<input id="buttonRestart" type="button" value="Nytt urval" />
 				<hr />
 				<table border="0" cellspacing="0">
 					<tr>
@@ -97,9 +92,14 @@
 						<td>&nbsp;</td>
 					</tr>
 				</table>
-				<span id="errMsg">&nbsp;</span>
 				<hr />
-				<span id="yourBid">&nbsp;Vad bjuder du?&nbsp;</span>
+				<input id="buttonPrev" type="button" value="F&ouml;reg giv" /> <span
+					id="dealCount"
+					style="display: inline-block; width: 150px; text-align: center;">0
+					/ 0</span> <input id="buttonNext" type="button" value="N&auml;sta giv" />
+				<hr>
+				<span id="yourBid">&nbsp;Vad bjuder du?&nbsp;</span><br /> <span
+					id="errMsg">&nbsp;</span>
 				<table id="biddingBox" border="1" cellspacing="0"></table>
 				<br> <span id="errMsg"></span>
 				<div id="msg"></div>

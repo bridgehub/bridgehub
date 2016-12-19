@@ -82,7 +82,7 @@ function setError(msg, timeout) {
 
 function setInfo(msg, timeout) {
 	// var m = "<span>&nbsp;{MSG}&nbsp;</span>";
-	errMsg.css('font-weight', 'bold');
+	errMsg.css('font-weight', 'normal');
 	errMsg.css('background-color', '#88FF88');
 	errMsg.css('color', 'black');
 	msg = '&nbsp;' + msg + '&nbsp;';
@@ -235,7 +235,7 @@ function checkStorage() {
 				// alert('expected: ' + expected + ' actual: ' + actual + ' => '
 				// + ok);
 				if (!ok) {
-					setError('Det finns ett b&auml;ttre bud!', 12);
+					setError('Det finns ett b&auml;ttre bud!', 8);
 					return;
 				}
 
