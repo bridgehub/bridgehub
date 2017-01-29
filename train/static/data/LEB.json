@@ -1,0 +1,67 @@
+[
+	{
+		"DESCR": "   LEB RESP   ",
+		"cards": "S:53.932.QT873.Q52",
+		"bids": "E:1H P 2H X P 2N* P 3C* P 3D P P P"
+	},
+
+	{
+		"DESCR": "   LEB RESP   ",
+		"cards": "S:53.932.J873.QJ52",
+		"bids": "E:1H P 2H X P 2N* P 3C* P P P"
+	},
+
+	{
+		"DESCR": "   LEB RESP   ",
+		"cards": "S:532.J932.K73.Q52",
+		"bids": "E:1S P 2S X P 2N* P 3C* P 3H P P P"
+	},
+
+	{
+		"DESCR": "   LEB RESP   ",
+		"cards": "S:532.KJT2.AJ93.T5",
+		"bids": "E:1S P 2S X P 3H P 4H P P P"
+	},
+
+	{
+		"DESCR": "   LEB RESP   ",
+		"cards": "S:53.932.QT873.Q52",
+		"bids": "W:2H X P 2N* P 3C* P 3D P P P"
+	},
+
+	{
+		"DESCR": "   LEB RESP   ",
+		"cards": "S:53.932.J873.QJ52",
+		"bids": "E:2H P P X P 2N* P 3C* P P P"
+	},
+
+	{
+		"DESCR": "   LEB RESP   ",
+		"cards": "S:532.J932.K73.Q52",
+		"bids": "E:2S P P X P 2N* P 3C* P 3H P P P"
+	},
+
+	{
+		"DESCR": "   LEB RESP   ",
+		"cards": "S:532.KJT2.AJ93.T5",
+		"bids": "W:2S X P 3H P 4H P P P"
+	},
+
+	{
+		"DESCR": "   LEB RESP   ",
+		"cards": "S:52.K32.AKT93.T52",
+		"bids": "W:2S X P 3D P 3N P P P"
+	},
+
+	{
+		"DESCR": "   LEB DOUBLER   ",
+		"cards": "S:52.KJ32.AQ92.AJ2",
+		"bids": "E:2S X P 2N* P 3C* P 3H P P P"
+	},
+
+	{
+		"DESCR": "   LEB DOUBLER   ",
+		"cards": "S:52.KJ32.AQ92.AJ2",
+		"bids": "E:2S X P 3H P 4H P P P"
+	}
+]

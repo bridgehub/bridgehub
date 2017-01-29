@@ -10,7 +10,11 @@ var sectionList = [ //
 {
 	id : "MULTIDEF",
 	descr : "Försvar mot 2RU Multi"
-}, //
+}, {
+	id : "LEB",
+	descr : "Lebensohl"
+},
+//
 // {
 // id : "NTDEF",
 // descr : "DONT NT-försvar"
@@ -235,7 +239,8 @@ function checkStorage() {
 				var text = bid.text();
 				var id = bid.attr('id');
 				// setError('Otillr&auml;ckligt bud: ' + text, 12);
-				var expected = BIDS[BID_IX];
+				var expected0 = BIDS[BID_IX];
+				var expected = BIDS[BID_IX].replace('*', '');
 				var actual;
 				if (id.search("_") == 1) {
 					var tokens = id.split("_");
@@ -254,7 +259,7 @@ function checkStorage() {
 				var bidder = (DEALER + BID_IX) % 4;
 				var selector = biddingCell(bidder, BID_ROUND);
 				// alert('selector: ' + selector);
-				$(selector).html(htmlCenter(htmlBid(expected)));
+				$(selector).html(htmlCenter(htmlBid(expected0)));
 				BID_IX++;
 				BID_ROUND++;
 				play();
