@@ -1,9 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="css/dealedit.css">
+<style>
+.hand { #
+	width: 250px;
+}
 
-<body>
-  <table>
-   <tr><td></td><td>N</td><td></td></tr>
-   <tr><td>W</td><td></td><td>E</td></tr>
-   <tr><td></td><td>S</td><td></td></tr>
+.card {
+	width: 40px;
+	font-family: Consolas, monospace;
+	font-size: 1en;
+}
+
+.consolas {
+	font-family: Consolas, monospace;
+}
+
+.textURL {
+	width: 500px;
+	font-family: Consolas, monospace;
+	font-size: 1en;
+}
+</style>
+<body
+	style='font-family: Consolas, monospace; background-color: #FFFFDD'>
+	Enter BBO-Handviewer URL and click 'Load URL':
+	<br />
+	<input type='text' id='inputURL' class='textURL consolas' />
+	<br />
+	<input type='button' id='btnLoad' value='Load URL' />
+	<br />
+	<br />
+	<table>
+		<tr>
+			<td class="hand"></td>
+			<td class="hand"><div id="north"></div></td>
+			<td class="hand"></td>
+		</tr>
+		<tr>
+			<td class="hand"><div id="west"></div></td>
+			<td class="hand"></td>
+			<td class="hand"><div id="east"></div></td>
+		</tr>
+		<tr>
+			<td class="hand"></td>
+			<td class="hand" id="south"></td>
+			<td class="hand"></td>
+		</tr>
+	</table>
+	<br />
+	<br />
+	<input type='button' id='btnCreateURL' value='Generate Handviewer URL' />
+	<br />
+	<br />
+	<div id='msg'>xyz</div>
+	<a href='' id='hrefNewURL'></a>
+	<script src="js/jquery-3.2.1.js"></script>
+	<script src="js/dealedit.js" charset="UTF-8"></script>
 </body>
 </html>

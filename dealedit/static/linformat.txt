@@ -1,0 +1,51 @@
+nn = north name
+sn = south name
+en = east name
+wn = west name
+n  = north hand
+s  = south hand
+e  = east hand
+w  = west hand
+d  = dealer (n,s,e,w)
+v  = vuln (o=none,n=ns,e=ew,b=both)
+b  = board number (integer)
+a  = full bidding-sequence, incl descriptions (...)
+p  = full playing-sequenc
+b  = board number
+
+lin=
+pn = player-names
+st = ?
+md = dealer + cards
+rh = ?
+ah = board number (text 'Board *')
+mb = one bid
+an = bid-description
+pc = played-card
+sv = ?  (o)
+
+
+http://www.bridgebase.com/tools/handviewer.html?
+sn=stefan_o
+s=SAKT72HK864DKQ9C6
+wn=Robot
+w=SJ9864HAJTDAT3C54
+nn=Robot
+n=S53H32D754CKQJT72
+en=Robot
+e=SQHQ975DJ862CA983
+d=e
+v=n
+b=2
+a=P1S(Major suit opening -- 5+ !S; 11-21 HCP; 12-22 total points)P1N(Forcing one notrump -- 3- !S; 6+ HCP; 12- total points)P2H(New suit -- 4+ !H; 5+ !S; 11+ HCP; 12-18 total points)P3C(New suit, bad S -- 3- !H; 2- !S; 6+ HCP; twice rebiddable !C; 10- total points)PPP
+p=SQSAS4S3C6C5CKCAD6DKDAD4S6S5C3S2HQHKHAH2HJH3H5H4D3D5DJDQSKS8D7C8H9H6HTC2CQC9D9C4CJD8S7S9CTD2STDTC7H7H8SJ
+
+%20 = space
+%21 = !
+%2C = ,
+%3B = ;
+
+
+http://www.bridgebase.com/tools/handviewer.html?sn=stefan_o&s=SAKT72HK864DKQ9C6&wn=Robot&w=SJ9864HAJTDAT3C54&nn=Robot&n=S53H32D754CKQJT72&en=Robot&e=SQHQ975DJ862CA983&d=e&v=a&b=1&a=P1S(Major%20suit%20opening%20--%205+%20%21S%3B%2011-21%20HCP%3B%2012-22%20total%20points)P1N(Forcing%20one%20notrump%20--%203-%20%21S%3B%206+%20HCP%3B%2012-%20total%20points)P2H(New%20suit%20--%204+%20%21H%3B%205+%20%21S%3B%2011+%20HCP%3B%2012-18%20total%20points)P3C(New%20suit%2C%20bad%20S%20--%203-%20%21H%3B%202-%20%21S%3B%206+%20HCP%3B%20twice%20rebiddable%20%21C%3B%2010-%20total%20points)PPP&p=SQSAS4S3C6C5CKCAD6DKDAD4S6S5C3S2HQHKHAH2HJH3H5H4D3D5DJDQSKS8D7C8H9H6HTC2CQC9D9C4CJD8S7S9CTD2STDTC7H7H8SJ
+
+http://www.bridgebase.com/tools/handviewer.html?sn=stefan_o&s=SKQJ852HKQTDQ53CT&wn=Robot&w=S74H9762DA7CK8763&nn=Robot&n=ST3HAJ8DKJT2C9542&en=Robot&e=SA96H543D9864CAQJ&d=n&v=o&b=1&a=PP1S(Major%20suit%20opening%20--%205+%20%21S%3B%2011-21%20HCP%3B%2012-22%20total%20points)P1N(2-%20%21S%3B%206-11%20HCP%3B%2012-%20total%20points)P2S(6+%20%21S%3B%2011+%20HCP%3B%2012-16%20total%20points)P3S(2%20%21S%3B%2011-%20HCP%3B%2010-12%20total%20points)P4S(6+%20%21S%3B%2014+%20HCP%3B%2015-16%20total%20points)PPP&p=S7S3SAS2CACTC3C2CQSKC8C4S5S4STS6H8H3HKH9SQH2D2S9SJC7C5D9D3D7DTD8HJH5HQH7D5DADJD6C6C9CJS8HTH6HAH4DKD4DQCK
