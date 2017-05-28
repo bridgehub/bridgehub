@@ -8,6 +8,11 @@
 			var BR_NL = BR + NL;
 			var NBSP = '&nbsp;';
 
+			var NORTH = 0;
+			var EAST = 1;
+			var SOUTH = 2
+			var WEST = 3;
+
 			var CLUBS = 0;
 			var DIAMS = 1;
 			var HEARTS = 2
@@ -20,6 +25,9 @@
 			SYM_SUIT[HEARTS] = '&hearts;';
 			SYM_SUIT[SPADES] = '&spades;';
 			SYM_SUIT[NT] = 'NT';
+
+			var SUIT_CHARS = [ 'C', 'D', 'H', 'S' ];
+			var PLAYER_CHARS = [ 'N', 'E', 'S', 'W' ];
 
 			var north = $("#north");
 			var east = $("#east");
@@ -50,8 +58,7 @@
 			}
 
 			function handHtml(hand) {
-				var res = "<span class='card'><u>" + hand + "</u></span>"
-						+ BR_NL;
+				var res = "<span class='card'><u>" + hand + "</u></span>" + BR_NL;
 				for (var i = SPADES; i >= CLUBS; i--) {
 					res += suitHtml(hand, i);
 				}
@@ -59,18 +66,126 @@
 			}
 
 			function decodeURL(url) {
-				var res = url.replace(new RegExp('%2C', 'g'), ',');
+				var res = url;
+				res = res.replace(new RegExp('%2C', 'g'), ',');
 				res = res.replace(new RegExp('%20', 'g'), ' ');
+				res = res.replace(new RegExp('%2!', 'g'), '!');
+				res = res.replace(new RegExp('%3B', 'g'), ';');
 				return res;
+			}
+
+			// deal-format:
+			// suit = {} //ranks falling 'A','K','Q','J','T','9',...
+			// hand => 4*suit; // 0=north, etc
+			// hands = 4*hand;
+			// deal = {'hands':hands, 'declarer':0..3,
+			// / / / / 'denom': 0..4, 'level': 1..7}
+
+			function initDeal() {
+				var deal = {};
+				deal['hands'] = [ [ [], [], [], [] ], [ [], [], [], [] ], [ [], [], [], [] ], [ [], [], [], [] ] ];
+				deal['declarer'] = NORTH; // north
+				deal['denom'] = NT; // NT
+				deal['level'] = 1;
+				return deal;
+			}
+
+			function parseLIN(lin) {
+				msg.text('LIN');
+			}
+
+			function isSuit(c) {
+				return (SUIT_CHARS.indexOf(c) >= 0);
+			}
+
+			function ixSuit(c) {
+				return (SUIT_CHARS.indexOf(c));
+			}
+
+			function parseFromParams(params) {
+				var deal = initDeal();
+				var players = Array.from('nesw');
+				for (var p = 0; p < players.length; p++) {
+					var pl = players[p];
+					var hand = params[pl];
+					var suits = [ [], [], [], [] ];
+					var suit;
+					if (hand) {
+						var tok = Array.from(hand);
+						for (var i = 0; i < tok.length; i++) {
+							var c = tok[i];
+							if (isSuit(c)) {
+								suit = ixSuit(c);
+							} else {
+								suits[suit].push(c);
+							}
+						}
+					}
+					deal['hands'][p] = suits;
+				}
+				return deal;
+			}
+
+			function parseURLParams(url) {
+				url = decodeURL(url);
+				var res = {};
+				var tok = url.split(new RegExp('[&\?]', 'g'));
+				for (var i = 1; i < tok.length; i++) {
+					var pair = tok[i].split('=');
+					var key = pair[0];
+					var value = pair[1];
+					if (key) {
+						if (value) {
+							res[key] = value;
+						}
+					}
+				}
+				return res;
+			}
+
+			function displayClear() {
+				for (var p = NORTH; p <= WEST; p++) {
+					for (var s = CLUBS; s <= SPADES; s++) {
+						for (var pos = 0; pos <= 12; pos++) {
+							var id = cardId(p, s, pos);
+							$('#' + id).html('&nbsp;');
+						}
+					}
+				}
+			}
+
+			function displayDeal(deal) {
+				var hands = deal['hands'];
+				for (var pl = NORTH; pl <= WEST; pl++) {
+					for (var su = CLUBS; su <= SPADES; su++) {
+						var suit = hands[pl][su];
+						for (var i = 0; i <= suit.length; i++) {
+							var c = suit[i];
+							var id = cardId(pl, su, i);
+							$('#' + id).text(c);
+						}
+					}
+				}
 			}
 
 			function parseBBOURL(url) {
 				var res = {};
+				var urlParams = parseURLParams(url);
 
-				var urlParams = {};
+				msg.text(JSON.stringify(urlParams));
+
+				if (urlParams['lin']) {
+					deal = parseLIN(urlParams['lin']);
+				} else {
+					deal = parseFromParams(urlParams);
+				}
+
+				msg.text(JSON.stringify(deal));
+
+				displayDeal(deal);
+				return;
 
 				res['mb'] = [];
-				url = decodeURL(url);
 				var tok = url.split(new RegExp('[&\?]', 'g'));
 
 				for (var i = 0; i < tok.length; i++) {
@@ -111,6 +226,7 @@
 			}
 
 			function btnLoadClicked() {
+				displayClear();
 				var txt = '';
 				var inp0 = '' + $('#inputURL').val();
 				// alert('.\n.\n' + inp0.substring(0, 20) + '.\n.\n');
@@ -118,6 +234,7 @@
 				// alert('.\n.\n' + inp.substring(0, 20) + '.\n.\n');
 				var deal0 = parseBBOURL(inp);
 				var deal = parseDeal(deal0);
+				// displayDeal(deal);
 			}
 
 			function loadData() {
@@ -128,16 +245,16 @@
 
 			function init() {
 				$('#inputURL').focus();
-				north.html(handHtml("N"));
-				south.html(handHtml("S"));
-				east.html(handHtml("E"));
-				west.html(handHtml("W"));
+				north.html(handHtml("0"));
+				east.html(handHtml("1"));
+				south.html(handHtml("2"));
+				west.html(handHtml("3"));
 				$('#btnLoad').click(btnLoadClicked);
 			}
 
 			function update() {
-				$("#C_N_3_0").text('J');
-				$("#C_N_3_1").text('T');
+				$("#C_1_3_0").text('J');
+				$("#C_2_3_1").text('T');
 				hrefNewURL.attr('target', ('' + new Date().getTime()));
 				hrefNewURL
 						.attr(

@@ -45,7 +45,17 @@ p=SQSAS4S3C6C5CKCAD6DKDAD4S6S5C3S2HQHKHAH2HJH3H5H4D3D5DJDQSKS8D7C8H9H6HTC2CQC9D9
 %2C = ,
 %3B = ;
 
+LIN URL sample (from Inbox):
 
+http://www.bridgebase.com/tools/handviewer.html?bbo=y&lin=st||md|3SKQ742HJ3DA8CK642,SJ96HKT654D963CT8,STHAQ982DJ752CQJ7,SA853H7DKQT4CA953|sv|0|ah|Board%201|mb|P|mb|1D|an|Minor%20suit%20opening%20--%203+%20!D;%2011-21%20HCP;%2012-22%20total%20points|mb|1S|an|One-level%20overcall%20--%205+%20!S;%208-17%20HCP;%209-19%20total%20points|mb|P|mb|2H|an|5+%20!H;%202-%20!S;%2011-%20HCP;%209-12%20total%20points|mb|P|mb|P|mb|P|pc|DK|pc|DA|pc|D3|pc|D2|pc|HJ|pc|H6|pc|H2|pc|H7|pc|H3|pc|H4|pc|HQ|pc|C5|pc|ST|pc|S5|pc|SK|pc|S6|pc|S2|pc|SJ|pc|H8|pc|S3|pc|CJ|pc|CA|pc|C2|pc|C8|pc|C3|pc|C4|pc|CT|pc|CQ|pc|C7|pc|C9|pc|CK|pc|H5|pc|HK|pc|HA|pc|S8|pc|S4|pc|DJ|pc|DQ|pc|D8|pc|D6|pc|D4|pc|C6|pc|D9|pc|D5|pc|HT|pc|H9|pc|DT|pc|S7|pc|S9|pc|D7|pc|SA|pc|SQ|
+
+Param URL sample (from Hands Results => Export handviewer link):
+
+http://www.bridgebase.com/tools/handviewer.html?sn=stefan_o&s=SKQ742HJ3DA8CK642&wn=Robot&w=SJ96HKT654D963CT8&nn=Robot&n=STHAQ982DJ752CQJ7&en=Robot&e=SA853H7DKQT4CA953&d=n&v=o&b=1&a=P1D(Minor%20suit%20opening%20--%203+%20%21D%3B%2011-21%20HCP%3B%2012-22%20total%20points)1S(One-level%20overcall%20--%205+%20%21S%3B%208-17%20HCP%3B%209-19%20total%20points)P2H(5+%20%21H%3B%202-%20%21S%3B%2011-%20HCP%3B%209-12%20total%20points)PPP&p=DKDAD3D2HJH6H2H7H3H4HQC5STS5SKS6S2SJH8S3CJCAC2C8C3C4CTCQC7C9CKH5HKHAS8S4DJDQD8D6D4C6D9D5HTH9DTS7S9D7SASQ
+
+{"hands":[[[],[],[],[]],[[],[],[],[]],[[],[],[],[]],[[],[],[],[]]],"declarer":0,"denom":4,"level":1}
+
+======================
 http://www.bridgebase.com/tools/handviewer.html?sn=stefan_o&s=SAKT72HK864DKQ9C6&wn=Robot&w=SJ9864HAJTDAT3C54&nn=Robot&n=S53H32D754CKQJT72&en=Robot&e=SQHQ975DJ862CA983&d=e&v=a&b=1&a=P1S(Major%20suit%20opening%20--%205+%20%21S%3B%2011-21%20HCP%3B%2012-22%20total%20points)P1N(Forcing%20one%20notrump%20--%203-%20%21S%3B%206+%20HCP%3B%2012-%20total%20points)P2H(New%20suit%20--%204+%20%21H%3B%205+%20%21S%3B%2011+%20HCP%3B%2012-18%20total%20points)P3C(New%20suit%2C%20bad%20S%20--%203-%20%21H%3B%202-%20%21S%3B%206+%20HCP%3B%20twice%20rebiddable%20%21C%3B%2010-%20total%20points)PPP&p=SQSAS4S3C6C5CKCAD6DKDAD4S6S5C3S2HQHKHAH2HJH3H5H4D3D5DJDQSKS8D7C8H9H6HTC2CQC9D9C4CJD8S7S9CTD2STDTC7H7H8SJ
 
 http://www.bridgebase.com/tools/handviewer.html?sn=stefan_o&s=SKQJ852HKQTDQ53CT&wn=Robot&w=S74H9762DA7CK8763&nn=Robot&n=ST3HAJ8DKJT2C9542&en=Robot&e=SA96H543D9864CAQJ&d=n&v=o&b=1&a=PP1S(Major%20suit%20opening%20--%205+%20%21S%3B%2011-21%20HCP%3B%2012-22%20total%20points)P1N(2-%20%21S%3B%206-11%20HCP%3B%2012-%20total%20points)P2S(6+%20%21S%3B%2011+%20HCP%3B%2012-16%20total%20points)P3S(2%20%21S%3B%2011-%20HCP%3B%2010-12%20total%20points)P4S(6+%20%21S%3B%2014+%20HCP%3B%2015-16%20total%20points)PPP&p=S7S3SAS2CACTC3C2CQSKC8C4S5S4STS6H8H3HKH9SQH2D2S9SJC7C5D9D3D7DTD8HJH5HQH7D5DADJD6C6C9CJS8HTH6HAH4DKD4DQCK
