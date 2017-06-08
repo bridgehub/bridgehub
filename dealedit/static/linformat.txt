@@ -10,7 +10,7 @@ d  = dealer (n,s,e,w)
 v  = vuln (o=none,n=ns,e=ew,b=both)
 b  = board number (integer)
 a  = full bidding-sequence, incl descriptions (...)
-p  = full playing-sequenc
+p  = full playing-sequence
 b  = board number
 
 lin=

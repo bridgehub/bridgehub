@@ -57,8 +57,8 @@
 				return res + BR_NL;
 			}
 
-			function handHtml(hand) {
-				var res = "<span class='card'><u>" + hand + "</u></span>" + BR_NL;
+			function handHtml(hand, label) {
+				var res = "<span class='card'><u>" + label + "</u></span>" + BR_NL;
 				for (var i = SPADES; i >= CLUBS; i--) {
 					res += suitHtml(hand, i);
 				}
@@ -155,6 +155,7 @@
 			}
 
 			function displayDeal(deal) {
+				displayClear();
 				var hands = deal['hands'];
 				for (var pl = NORTH; pl <= WEST; pl++) {
 					for (var su = CLUBS; su <= SPADES; su++) {
@@ -182,8 +183,7 @@
 
 				msg.text(JSON.stringify(deal));
 
-				displayDeal(deal);
-				return;
+				return deal;
 
 				res['mb'] = [];
 				var tok = url.split(new RegExp('[&\?]', 'g'));
@@ -222,39 +222,106 @@
 				return res;
 			}
 
+			function load(id) {
+				var json = localStorage.getItem(id);
+				var obj = JSON.parse(json);
+				return obj;
+			}
+
+			function save(id, obj) {
+				if (obj) {
+					var json = JSON.stringify(obj);
+					localStorage.setItem(id, json);
+				} else {
+					localStorage.removeItem(id);
+				}
+			}
+
 			function parseDeal() {
 			}
 
+			function rotateLeft() {
+				var deal = load('deal');
+				var t = deal['hands'][0];
+				deal['hands'][0] = deal['hands'][1];
+				deal['hands'][1] = deal['hands'][2];
+				deal['hands'][2] = deal['hands'][3];
+				deal['hands'][3] = t;
+				save('deal', deal);
+				displayDeal(deal);
+			}
+
+			function rotateRight() {
+				var deal = load('deal');
+				var t = deal['hands'][0];
+				deal['hands'][0] = deal['hands'][3];
+				deal['hands'][3] = deal['hands'][2];
+				deal['hands'][2] = deal['hands'][1];
+				deal['hands'][1] = t;
+				save('deal', deal);
+				displayDeal(deal);
+			}
+
+			function btnSwapHands(h1, h2) {
+				var deal = load('deal');
+				var t = deal['hands'][h1];
+				deal['hands'][h1] = deal['hands'][h2];
+				deal['hands'][h2] = t;
+				save('deal', deal);
+				displayDeal(deal);
+			}
+
 			function btnLoadClicked() {
-				displayClear();
 				var txt = '';
 				var inp0 = '' + $('#inputURL').val();
 				// alert('.\n.\n' + inp0.substring(0, 20) + '.\n.\n');
 				var inp = decodeURL(inp0);
 				// alert('.\n.\n' + inp.substring(0, 20) + '.\n.\n');
-				var deal0 = parseBBOURL(inp);
-				var deal = parseDeal(deal0);
-				// displayDeal(deal);
-			}
-
-			function loadData() {
-			}
-
-			function saveData() {
+				var deal = parseBBOURL(inp);
+				// var deal = parseDeal(deal0);
+				displayDeal(deal);
+				save('deal', deal);
 			}
 
 			function init() {
 				$('#inputURL').focus();
-				north.html(handHtml("0"));
-				east.html(handHtml("1"));
-				south.html(handHtml("2"));
-				west.html(handHtml("3"));
+				north.html(handHtml("0", "North"));
+				east.html(handHtml("1", "East"));
+				south.html(handHtml("2", "South"));
+				west.html(handHtml("3", "West"));
 				$('#btnLoad').click(btnLoadClicked);
+				$('#swapNE').click(function() {
+					btnSwapHands(NORTH, EAST);
+				});
+				$('#swapNS').click(function() {
+					btnSwapHands(NORTH, SOUTH);
+				});
+				$('#swapNW').click(function() {
+					btnSwapHands(NORTH, WEST);
+				});
+				$('#swapES').click(function() {
+					btnSwapHands(EAST, SOUTH);
+				});
+				$('#swapEW').click(function() {
+					btnSwapHands(EAST, WEST);
+				});
+				$('#swapSW').click(function() {
+					btnSwapHands(SOUTH, WEST);
+				});
+				$('#rotL').click(rotateLeft);
+				$('#rotR').click(rotateRight);
+
+				// save('deal', null);
+
+				// var x = null;
+				// localStorage.setItem('deal', x);
+				var deal = load('deal');
+				if (deal) {
+					displayDeal(deal);
+				}
 			}
 
 			function update() {
-				$("#C_1_3_0").text('J');
-				$("#C_2_3_1").text('T');
 				hrefNewURL.attr('target', ('' + new Date().getTime()));
 				hrefNewURL
 						.attr(
