@@ -283,6 +283,38 @@
 				save('deal', deal);
 			}
 
+			var BBO_URL = 'http://www.bridgebase.com/tools/handviewer.html?n={n}&e={e}&s={s}&w={w}&a={a}';
+
+			function bboUrl(n, e, s, w, a) {
+				var url = BBO_URL.replace('{n}', n).replace('{e}', e).replace('{s}', s).replace('{w}', w).replace('{a}', a);
+				return url;
+			}
+
+			function stringHand(hand) {
+				return 'S' + hand[SPADES].join('') + 'H' + hand[HEARTS].join('') + 'D' + hand[DIAMS].join('') + 'C' + hand[CLUBS].join('');
+			}
+
+			function randomInt(min, max) {
+				return Math.floor(Math.random() * (max - min + 1)) + min;
+			}
+
+			function btnCreateURLClicked() {
+				// alert('btnCreateURLClicked');
+				var deal = JSON.parse(localStorage.getItem('deal'));
+				// alert(JSON.stringify(deal));
+				var hands = deal['hands'];
+				// alert(JSON.stringify(hands));
+				var n = stringHand(hands[NORTH]);
+				var e = stringHand(hands[EAST]);
+				var s = stringHand(hands[SOUTH]);
+				var w = stringHand(hands[WEST]);
+
+				var a = $("#hrefNewURL");
+				a.attr('href', bboUrl(n, e, s, w));
+				a.attr('target', 'w' + randomInt(1000000000, 2000000000));
+				a.text('handviewer_link');
+			}
+
 			function init() {
 				$('#inputURL').focus();
 				north.html(handHtml("0", "North"));
@@ -290,6 +322,7 @@
 				south.html(handHtml("2", "South"));
 				west.html(handHtml("3", "West"));
 				$('#btnLoad').click(btnLoadClicked);
+				$('#btnCreateURL').click(btnCreateURLClicked);
 				$('#swapNE').click(function() {
 					btnSwapHands(NORTH, EAST);
 				});
@@ -332,6 +365,6 @@
 
 			$(function() {
 				init();
-				update();
+				// update();
 			});
 		}));
