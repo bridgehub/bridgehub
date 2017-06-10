@@ -1,11 +1,12 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!DOCTYPE HTML>
 <html>
+<title>Deal Editor</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" type="text/css" href="css/dealedit.css">
+<!-- <link rel="stylesheet" type="text/css" href="css/dealedit.css"> -->
 <style>
 .hand { #
-	width: 250px;
+	xxwidth: 250px;
 }
 
 .card {
@@ -18,10 +19,19 @@
 	font-family: Consolas, monospace;
 }
 
+.editBtn {
+	width: 90px;
+	text-align: left;
+}
+
 .textURL {
 	width: 500px;
 	font-family: Consolas, monospace;
 	font-size: 1en;
+}
+
+.active {
+	background-color: #FFFF00;
 }
 </style>
 <body
@@ -39,6 +49,16 @@
 			<td class="hand"></td>
 			<td class="hand"><div id="north"></div></td>
 			<td class="hand"></td>
+			<td rowspan='2'><input class='editBtn' id='rotL' type='button'
+				value='Rotate Left' /><br /> <input class='editBtn' id='rotR'
+				type='button' value='Rotate Right' /><br /> <input class='editBtn'
+				id='swapNE' type='button' value='Swap N-E' /><br /> <input
+				class='editBtn' id='swapNS' type='button' value='Swap N-S' /><br />
+				<input class='editBtn' id='swapNW' type='button' value='Swap N-W' /><br />
+				<input class='editBtn' id='swapES' type='button' value='Swap E-S' /><br />
+				<input class='editBtn' id='swapEW' type='button' value='Swap E-W' /><br />
+				<input class='editBtn' id='swapSW' type='button' value='Swap S-W' /><br />
+			</td>
 		</tr>
 		<tr>
 			<td class="hand"><div id="west"></div></td>
@@ -49,16 +69,9 @@
 			<td class="hand"></td>
 			<td class="hand" id="south"></td>
 			<td class="hand"></td>
+			<td class="hand" id="deck"></td>
 		</tr>
 	</table>
-	<input id='swapNE' type='button' value='Swap N-E' />
-	<input id='swapNS' type='button' value='Swap N-S' />
-	<input id='swapNW' type='button' value='Swap N-W' />
-	<input id='swapES' type='button' value='Swap E-S' />
-	<input id='swapEW' type='button' value='Swap E-W' />
-	<input id='swapSW' type='button' value='Swap S-W' />
-	<input id='rotL' type='button' value='Rotate Left' />
-	<input id='rotR' type='button' value='Rotate Right' />
 	<br />
 	<br />
 	<input type='button' id='btnCreateURL' value='Generate Handviewer URL' />

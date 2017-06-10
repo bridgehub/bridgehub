@@ -12,6 +12,7 @@
 			var EAST = 1;
 			var SOUTH = 2
 			var WEST = 3;
+			var DECK = 4;
 
 			var CLUBS = 0;
 			var DIAMS = 1;
@@ -28,11 +29,13 @@
 
 			var SUIT_CHARS = [ 'C', 'D', 'H', 'S' ];
 			var PLAYER_CHARS = [ 'N', 'E', 'S', 'W' ];
+			var RANK_CHARS = [ '', '', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A' ];
 
 			var north = $("#north");
 			var east = $("#east");
 			var south = $("#south");
 			var west = $("#west");
+			var deck = $("#deck");
 
 			var hrefNewURL = $("#hrefNewURL");
 			var msg = $("#msg");
@@ -58,11 +61,49 @@
 			}
 
 			function handHtml(hand, label) {
-				var res = "<span class='card'><u>" + label + "</u></span>" + BR_NL;
+				var res = "<span id='H_{id}' class='card player'><u>" + label + "</u></span>" + BR_NL;
+				res = res.replace('{id}', '' + hand);
 				for (var i = SPADES; i >= CLUBS; i--) {
 					res += suitHtml(hand, i);
 				}
 				return res;
+			}
+
+			function addCard(suit, sRank) {
+				for (var pos = 0; pos <= 12; pos++) {
+					if (suit[pos]) {
+					} else {
+						suit[pos] = sRank;
+						return;
+					}
+				}
+			}
+
+			function cardClicked() {
+				var id = $(this).attr('id');
+				var tok = id.split('_');
+				var hand = parseInt(tok[1]);
+				var suit = parseInt(tok[2]);
+				var pos = parseInt(tok[3]);
+
+				var sHand = PLAYER_CHARS[hand];
+				var sSuit = SUIT_CHARS[suit];
+				var deal = load('deal');
+				var sRank = deal['hands'][hand][suit][pos];
+
+				if (sRank) {
+				} else {
+					return;
+				}
+
+				addCard(deal['hands'][DECK][suit], sRank);
+				deal['hands'][hand][suit].splice(pos, 1);
+				deal['hands'][hand][suit].push(undefined);
+				deal['active'] = hand;
+				save('deal', deal);
+				displayDeal();
+				// msg.text(JSON.stringify(tok));
+				msg.text(sHand + ':' + sSuit + ':' + sRank);
 			}
 
 			function decodeURL(url) {
@@ -83,7 +124,7 @@
 
 			function initDeal() {
 				var deal = {};
-				deal['hands'] = [ [ [], [], [], [] ], [ [], [], [], [] ], [ [], [], [], [] ], [ [], [], [], [] ] ];
+				deal['hands'] = [ [ [], [], [], [] ], [ [], [], [], [] ], [ [], [], [], [] ], [ [], [], [], [] ], [ [], [], [], [] ] ];
 				deal['declarer'] = NORTH; // north
 				deal['denom'] = NT; // NT
 				deal['level'] = 1;
@@ -144,7 +185,7 @@
 			}
 
 			function displayClear() {
-				for (var p = NORTH; p <= WEST; p++) {
+				for (var p = NORTH; p <= DECK; p++) {
 					for (var s = CLUBS; s <= SPADES; s++) {
 						for (var pos = 0; pos <= 12; pos++) {
 							var id = cardId(p, s, pos);
@@ -154,10 +195,49 @@
 				}
 			}
 
-			function displayDeal(deal) {
+			function countCardsSuit(suit) {
+				var res = 0;
+				for (var pos = 0; pos <= 12; pos++) {
+					if (suit[pos]) {
+						res++;
+					}
+				}
+				return res;
+			}
+
+			function countCardsHand(hand) {
+				return countCardsSuit(hand[CLUBS]) + countCardsSuit(hand[DIAMS]) + countCardsSuit(hand[HEARTS]) + countCardsSuit(hand[SPADES]);
+			}
+
+			function displayActiveHand() {
+				var deal = load('deal');
+				var active = deal['active'];
+				var bActive = 0;
+				$(".player").removeClass('active');
+				if (active || 0 === active) {
+					if (active >= NORTH && active <= WEST) {
+						var hands = deal['hands'];
+						var hand = hands[active];
+						if (countCardsHand(hand) <= 13) {
+							msg.text(JSON.stringify(hand));
+							msg.text(JSON.stringify($('H_' + active)));
+							$('#H_' + active).addClass('active');
+							bActive = 1;
+						}
+					}
+				}
+			}
+
+			function displayDeal() {
 				displayClear();
+				var deal = load('deal');
+				if (deal) {
+				} else {
+					return;
+				}
 				var hands = deal['hands'];
-				for (var pl = NORTH; pl <= WEST; pl++) {
+				var active = deal['active'];
+				for (var pl = NORTH; pl <= DECK; pl++) {
 					for (var su = CLUBS; su <= SPADES; su++) {
 						var suit = hands[pl][su];
 						for (var i = 0; i <= suit.length; i++) {
@@ -167,6 +247,7 @@
 						}
 					}
 				}
+				displayActiveHand();
 			}
 
 			function parseBBOURL(url) {
@@ -248,7 +329,7 @@
 				deal['hands'][2] = deal['hands'][3];
 				deal['hands'][3] = t;
 				save('deal', deal);
-				displayDeal(deal);
+				displayDeal();
 			}
 
 			function rotateRight() {
@@ -259,7 +340,7 @@
 				deal['hands'][2] = deal['hands'][1];
 				deal['hands'][1] = t;
 				save('deal', deal);
-				displayDeal(deal);
+				displayDeal();
 			}
 
 			function btnSwapHands(h1, h2) {
@@ -268,7 +349,7 @@
 				deal['hands'][h1] = deal['hands'][h2];
 				deal['hands'][h2] = t;
 				save('deal', deal);
-				displayDeal(deal);
+				displayDeal();
 			}
 
 			function btnLoadClicked() {
@@ -279,8 +360,8 @@
 				// alert('.\n.\n' + inp.substring(0, 20) + '.\n.\n');
 				var deal = parseBBOURL(inp);
 				// var deal = parseDeal(deal0);
-				displayDeal(deal);
 				save('deal', deal);
+				displayDeal();
 			}
 
 			var BBO_URL = 'http://www.bridgebase.com/tools/handviewer.html?n={n}&e={e}&s={s}&w={w}&a={a}';
@@ -321,6 +402,9 @@
 				east.html(handHtml("1", "East"));
 				south.html(handHtml("2", "South"));
 				west.html(handHtml("3", "West"));
+				deck.html(handHtml("4", "Deck"));
+				$('.card').click(cardClicked);
+				$('.card').css('cursor', 'crosshair');
 				$('#btnLoad').click(btnLoadClicked);
 				$('#btnCreateURL').click(btnCreateURLClicked);
 				$('#swapNE').click(function() {
@@ -348,10 +432,7 @@
 
 				// var x = null;
 				// localStorage.setItem('deal', x);
-				var deal = load('deal');
-				if (deal) {
-					displayDeal(deal);
-				}
+				displayDeal();
 			}
 
 			function update() {
