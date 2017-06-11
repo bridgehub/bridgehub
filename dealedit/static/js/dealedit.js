@@ -28,7 +28,7 @@
 			SYM_SUIT[NT] = 'NT';
 
 			var SUIT_CHARS = [ 'C', 'D', 'H', 'S' ];
-			var PLAYER_CHARS = [ 'N', 'E', 'S', 'W' ];
+			var PLAYER_CHARS = [ 'N', 'E', 'S', 'W', 'D' ];
 			var RANK_CHARS = [ '', '', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A' ];
 
 			var north = $("#north");
@@ -43,6 +43,38 @@
 			var card_html = "<span class='card' id='{id}'>&nbsp;</span>";
 			var card_id = "C_{hand}_{suit}_{ix}";
 
+			function msgAdd(m) {
+				var txt = msg.text();
+				txt = JSON.stringify(m) + ' --- ' + txt;
+				msg.text(txt);
+			}
+
+			function sortDeal(deal) {
+				for (var h = NORTH; h <= DECK; h++) {
+					sortHand(deal[h]);
+				}
+			}
+
+			function sortHand(hand) {
+				for (var s = CLUBS; s <= SPADES; s++) {
+					sortSuit(hand[s]);
+				}
+			}
+
+			function sortSuit(suit) {
+				suit.sort(function(x, y) {
+					var xx = RANK_CHARS.indexOf(x);
+					var yy = RANK_CHARS.indexOf(y);
+					if (yy < 0) {
+						return -1;
+					}
+					if (xx < 0) {
+						return 1;
+					}
+					return (yy - xx);
+				});
+			}
+
 			function cardId(hand, suit, ix) {
 				return card_id.replace('{hand}', hand).replace('{suit}', suit) //
 				.replace('{ix}', ix);
@@ -53,7 +85,7 @@
 			}
 
 			function suitHtml(hand, suit) {
-				var res = SYM_SUIT[suit] + NBSP;
+				var res = '<span class="col' + suit + '">' + SYM_SUIT[suit] + '</span>' + NBSP;
 				for (var i = 0; i < 13; i++) {
 					res += cardHtml(hand, suit, i)
 				}
@@ -61,7 +93,7 @@
 			}
 
 			function handHtml(hand, label) {
-				var res = "<span id='H_{id}' class='card player'><u>" + label + "</u></span>" + BR_NL;
+				var res = "<span id='H_{id}' class='player'><u>" + label + "</u></span>" + BR_NL;
 				res = res.replace('{id}', '' + hand);
 				for (var i = SPADES; i >= CLUBS; i--) {
 					res += suitHtml(hand, i);
@@ -76,6 +108,19 @@
 						suit[pos] = sRank;
 						return;
 					}
+				}
+			}
+
+			function playerClicked() {
+				var id = $(this).attr('id');
+				var tok = id.split('_');
+				var hand = parseInt(tok[1]);
+				if (hand >= NORTH && hand <= WEST) {
+					var deal = load('deal');
+					deal['active'] = hand;
+					save('deal', deal);
+					msgAdd(id);
+					displayActiveHand();
 				}
 			}
 
@@ -96,14 +141,24 @@
 					return;
 				}
 
-				addCard(deal['hands'][DECK][suit], sRank);
-				deal['hands'][hand][suit].splice(pos, 1);
-				deal['hands'][hand][suit].push(undefined);
-				deal['active'] = hand;
-				save('deal', deal);
+				if (DECK === hand) {
+					var active = deal['active'];
+					if (active >= NORTH && active <= WEST) {
+						addCard(deal['hands'][active][suit], sRank);
+						deal['hands'][hand][suit].splice(pos, 1);
+						deal['hands'][hand][suit].push(undefined);
+						save('deal', deal);
+					}
+				} else {
+					addCard(deal['hands'][DECK][suit], sRank);
+					deal['hands'][hand][suit].splice(pos, 1);
+					deal['hands'][hand][suit].push(undefined);
+					deal['active'] = hand;
+					save('deal', deal);
+				}
 				displayDeal();
 				// msg.text(JSON.stringify(tok));
-				msg.text(sHand + ':' + sSuit + ':' + sRank);
+				msgAdd(sHand + ':' + sSuit + ':' + sRank);
 			}
 
 			function decodeURL(url) {
@@ -132,7 +187,7 @@
 			}
 
 			function parseLIN(lin) {
-				msg.text('LIN');
+				msgAdd('LIN');
 			}
 
 			function isSuit(c) {
@@ -218,14 +273,33 @@
 					if (active >= NORTH && active <= WEST) {
 						var hands = deal['hands'];
 						var hand = hands[active];
-						if (countCardsHand(hand) <= 13) {
-							msg.text(JSON.stringify(hand));
-							msg.text(JSON.stringify($('H_' + active)));
+						if (countCardsHand(hand) < 13) {
 							$('#H_' + active).addClass('active');
 							bActive = 1;
 						}
 					}
 				}
+				if (bActive) {
+					return;
+				}
+				var hands = deal['hands'];
+				for (var h = NORTH; h <= WEST; h++) {
+					var hand = hands[h];
+					var c = countCardsHand(hand)
+					msgAdd(h + "=>" + c);
+					if (c < 13) {
+						active = h;
+						deal['active'] = active;
+						$('#H_' + active).addClass('active');
+						bActive = 1;
+						break;
+					}
+				}
+				if (bActive) {
+				} else {
+					deal['active'] = -1;
+				}
+				save('deal', deal);
 			}
 
 			function displayDeal() {
@@ -235,8 +309,9 @@
 				} else {
 					return;
 				}
+				sortDeal(deal['hands']);
+				save('deal', deal);
 				var hands = deal['hands'];
-				var active = deal['active'];
 				for (var pl = NORTH; pl <= DECK; pl++) {
 					for (var su = CLUBS; su <= SPADES; su++) {
 						var suit = hands[pl][su];
@@ -254,7 +329,7 @@
 				var res = {};
 				var urlParams = parseURLParams(url);
 
-				msg.text(JSON.stringify(urlParams));
+				// msg.text(JSON.stringify(urlParams));
 
 				if (urlParams['lin']) {
 					deal = parseLIN(urlParams['lin']);
@@ -262,7 +337,7 @@
 					deal = parseFromParams(urlParams);
 				}
 
-				msg.text(JSON.stringify(deal));
+				// msg.text(JSON.stringify(deal));
 
 				return deal;
 
@@ -278,7 +353,7 @@
 				if (lin) {
 				} else {
 					res['error'] = 'No lin parameter found';
-					msg.text(JSON.stringify(res));
+					// msg.text(JSON.stringify(res));
 					return res;
 				}
 				tok = lin.split('|');
@@ -298,7 +373,7 @@
 						}
 					}
 				}
-				msg.text(JSON.stringify(res));
+				// msg.text(JSON.stringify(res));
 				// $("outURL").html(JSON.stringify(res));
 				return res;
 			}
@@ -405,6 +480,8 @@
 				deck.html(handHtml("4", "Deck"));
 				$('.card').click(cardClicked);
 				$('.card').css('cursor', 'crosshair');
+				$('.player').click(playerClicked);
+				$('.player').css('cursor', 'crosshair');
 				$('#btnLoad').click(btnLoadClicked);
 				$('#btnCreateURL').click(btnCreateURLClicked);
 				$('#swapNE').click(function() {
