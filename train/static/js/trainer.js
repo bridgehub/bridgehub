@@ -5,7 +5,11 @@ var sectionList = [ //
 }, //
 {
 	id : "NEGDBL",
-	descr : "Störd färgbudgivning"
+	descr : "Negativa dubblingar"
+}, //
+{
+	id : "SUPPDBL",
+	descr : "Support-dubblingar, -redubblingar"
 }, //
 {
 	id : "MULTIDEF",
