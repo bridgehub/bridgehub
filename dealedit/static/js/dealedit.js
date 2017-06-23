@@ -49,6 +49,11 @@
 				msg.text(txt);
 			}
 
+			function msgText(s) {
+				var txt = JSON.stringify(s);
+				msg.text(s);
+			}
+
 			function sortDeal(deal) {
 				for (var h = NORTH; h <= DECK; h++) {
 					sortHand(deal[h]);
@@ -325,6 +330,25 @@
 				displayActiveHand();
 			}
 
+			function isSuit(s) {
+				s = s.replace('E', 'A');
+				s = s.replace('D', 'Q');
+				s = s.replace('kn', 'J');
+				s = s.replace('Kn', 'J');
+				s = s.replace('10', 'T');
+				msgAdd(s);
+			}
+
+			function cntSuits(lines) {
+				("LEN:" + lines.filter(isSuit).length);
+			}
+
+			function parseBW(s) {
+				var lines = s.split('\n');
+				var nSuits = cntSuits(lines);
+				// msgText(lines.length + "=>" + lines);
+			}
+
 			function parseBBOURL(url) {
 				var res = {};
 				var urlParams = parseURLParams(url);
@@ -341,41 +365,41 @@
 
 				return deal;
 
-				res['mb'] = [];
-				var tok = url.split(new RegExp('[&\?]', 'g'));
-
-				for (var i = 0; i < tok.length; i++) {
-					var prop = tok[i].split('=');
-					if (prop[0] === 'lin') {
-						lin = prop[1];
-					}
-				}
-				if (lin) {
-				} else {
-					res['error'] = 'No lin parameter found';
-					// msg.text(JSON.stringify(res));
-					return res;
-				}
-				tok = lin.split('|');
-				var key;
-				var value;
-				for (var i = 0; i < tok.length; i++) {
-					if (i % 2 == 0) {
-						key = tok[i];
-					} else {
-						value = tok[i];
-						if (key === 'mb') {
-							if (!value === 'p') {
-								res[key].push(value);
-							}
-						} else {
-							res[key] = value;
-						}
-					}
-				}
-				// msg.text(JSON.stringify(res));
-				// $("outURL").html(JSON.stringify(res));
-				return res;
+				// res['mb'] = [];
+				// var tok = url.split(new RegExp('[&\?]', 'g'));
+				//
+				// for (var i = 0; i < tok.length; i++) {
+				// var prop = tok[i].split('=');
+				// if (prop[0] === 'lin') {
+				// lin = prop[1];
+				// }
+				// }
+				// if (lin) {
+				// } else {
+				// res['error'] = 'No lin parameter found';
+				// // msg.text(JSON.stringify(res));
+				// return res;
+				// }
+				// tok = lin.split('|');
+				// var key;
+				// var value;
+				// for (var i = 0; i < tok.length; i++) {
+				// if (i % 2 == 0) {
+				// key = tok[i];
+				// } else {
+				// value = tok[i];
+				// if (key === 'mb') {
+				// if (!value === 'p') {
+				// res[key].push(value);
+				// }
+				// } else {
+				// res[key] = value;
+				// }
+				// }
+				// }
+				// // msg.text(JSON.stringify(res));
+				// // $("outURL").html(JSON.stringify(res));
+				// return res;
 			}
 
 			function load(id) {
@@ -393,7 +417,70 @@
 				}
 			}
 
-			function parseDeal() {
+			function isCardSymbols(s) {
+				if ('' === s) {
+					return false;
+				}
+				if ('-' === s) {
+					return true;
+				}
+				var tok = s.split("");
+				for (var i = 0; i < tok.length; i++) {
+					var ix = RANK_CHARS.indexOf(tok[i]);
+					if (ix < 2 || ix > 14) {
+						return false;
+					}
+				}
+				return true;
+			}
+
+			function parseDeal(s) {
+				var deal = initDeal();
+				var hands = [ [ [], [], [], [] ], [ [], [], [], [] ], [ [], [], [], [] ], [ [], [], [], [] ], [ [], [], [], [] ] ];
+				s = s.toUpperCase();
+				s = s.replace(new RegExp('\-', 'g'), ' - ');
+				s = s.replace(new RegExp('E', 'g'), 'A');
+				s = s.replace(new RegExp('D', 'g'), 'Q');
+				s = s.replace(new RegExp('KN', 'g'), 'J');
+				s = s.replace(new RegExp('10', 'g'), 'T');
+				s = s.replace(new RegExp(' ', 'g'), '\n');
+				s = s.replace(new RegExp('\t', 'g'), '\n');
+				var tok = s.split('\n').filter(isCardSymbols);
+
+				// res = res.replace(new RegExp('%2C', 'g'), ',');
+				msgText('END');
+				msgAdd(tok);
+				msgAdd('' + tok.length);
+
+				if (16 != tok.length) {
+					var d = 'Please correct input: \n\n';
+					for (var p = 0; p < tok.length; p++) {
+						d += tok[p] + ' ';
+						if (0 == (p + 1) % 4) {
+							d += '\n';
+						}
+					}
+					$('#dealInput').val(d);
+					alert('Parse failed, sorry');
+					return deal;
+				}
+				var ix = 0;
+				for (var p = 0; p <= 3; p++) {
+					for (var s = 3; s >= 0; s--) {
+						var suit = tok[ix++];
+						msgAdd(suit);
+						if (suit != '-') {
+							var cards = suit.split('');
+							// msgAdd(cards);
+							for (var c = 0; c < cards.length; c++) {
+								hands[p][s].push(cards[c]);
+							}
+						}
+					}
+				}
+				msgAdd(hands);
+				deal['hands'] = hands;
+				return deal;
 			}
 
 			function rotateLeft() {
@@ -427,16 +514,33 @@
 				displayDeal();
 			}
 
-			function btnLoadClicked() {
-				var txt = '';
-				var inp0 = '' + $('#inputURL').val();
+			function btnLoadURLClicked() {
+				var inp0 = '' + $('#dealInput').val();
 				// alert('.\n.\n' + inp0.substring(0, 20) + '.\n.\n');
 				var inp = decodeURL(inp0);
 				// alert('.\n.\n' + inp.substring(0, 20) + '.\n.\n');
 				var deal = parseBBOURL(inp);
-				// var deal = parseDeal(deal0);
 				save('deal', deal);
 				displayDeal();
+			}
+
+			function btnLoadDealClicked() {
+				var inp = '' + $('#dealInput').val();
+				var deal = parseDeal(inp);
+				save('deal', deal);
+				displayDeal();
+			}
+
+			function btnLoadBWClicked() {
+				var inp0 = '' + $('#dealInput').val();
+				var inp = parseBW(inp0);
+				// // alert('.\n.\n' + inp0.substring(0, 20) + '.\n.\n');
+				// var inp = decodeURL(inp0);
+				// // alert('.\n.\n' + inp.substring(0, 20) + '.\n.\n');
+				// var deal = parseBBOURL(inp);
+				// // var deal = parseDeal(deal0);
+				// save('deal', deal);
+				// displayDeal();
 			}
 
 			var BBO_URL = 'http://www.bridgebase.com/tools/handviewer.html?n={n}&e={e}&s={s}&w={w}&a={a}';
@@ -472,7 +576,7 @@
 			}
 
 			function init() {
-				$('#inputURL').focus();
+				$('#dealInput').focus();
 				north.html(handHtml("0", "North"));
 				east.html(handHtml("1", "East"));
 				south.html(handHtml("2", "South"));
@@ -482,7 +586,9 @@
 				$('.card').css('cursor', 'crosshair');
 				$('.player').click(playerClicked);
 				$('.player').css('cursor', 'crosshair');
-				$('#btnLoad').click(btnLoadClicked);
+				$('#btnLoadURL').click(btnLoadURLClicked);
+				$('#btnLoadBW').click(btnLoadBWClicked);
+				$('#btnLoadDeal').click(btnLoadDealClicked);
 				$('#btnCreateURL').click(btnCreateURLClicked);
 				$('#swapNE').click(function() {
 					btnSwapHands(NORTH, EAST);
