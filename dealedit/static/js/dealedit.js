@@ -3,6 +3,15 @@
 }
 		(function($, window, document) {
 
+			var logEnabled = true;
+			function LOG(s) {
+				if (logEnabled) {
+					if (console) {
+						console.log(JSON.stringify(s));
+					}
+				}
+			}
+
 			var BR = '<br />';
 			var NL = '\n';
 			var BR_NL = BR + NL;
@@ -43,15 +52,19 @@
 			var card_html = "<span class='card' id='{id}'>&nbsp;</span>";
 			var card_id = "C_{hand}_{suit}_{ix}";
 
-			function msgAdd(m) {
-				var txt = msg.text();
-				txt = JSON.stringify(m) + ' --- ' + txt;
-				msg.text(txt);
-			}
+			// function msgAdd(m) {
+			// var txt = msg.text();
+			// txt = JSON.stringify(m) + ' --- ' + txt;
+			// msg.text(txt);
+			// }
+			//
+			// function msgText(s) {
+			// var txt = JSON.stringify(s);
+			// msg.text(s);
+			// }
 
-			function msgText(s) {
-				var txt = JSON.stringify(s);
-				msg.text(s);
+			function randomInt(min, max) {
+				return Math.floor(Math.random() * (max - min)) + min;
 			}
 
 			function sortDeal(deal) {
@@ -124,7 +137,6 @@
 					var deal = load('deal');
 					deal['active'] = hand;
 					save('deal', deal);
-					msgAdd(id);
 					displayActiveHand();
 				}
 			}
@@ -163,7 +175,7 @@
 				}
 				displayDeal();
 				// msg.text(JSON.stringify(tok));
-				msgAdd(sHand + ':' + sSuit + ':' + sRank);
+				LOG(sHand + ':' + sSuit + ':' + sRank);
 			}
 
 			function decodeURL(url) {
@@ -192,7 +204,7 @@
 			}
 
 			function parseLIN(lin) {
-				msgAdd('LIN');
+				LOG('LIN');
 			}
 
 			function isSuit(c) {
@@ -291,7 +303,7 @@
 				for (var h = NORTH; h <= WEST; h++) {
 					var hand = hands[h];
 					var c = countCardsHand(hand)
-					msgAdd(h + "=>" + c);
+					// LOG(h + "=>" + c);
 					if (c < 13) {
 						active = h;
 						deal['active'] = active;
@@ -336,7 +348,7 @@
 				s = s.replace('kn', 'J');
 				s = s.replace('Kn', 'J');
 				s = s.replace('10', 'T');
-				msgAdd(s);
+				// LOG(s);
 			}
 
 			function cntSuits(lines) {
@@ -346,7 +358,7 @@
 			function parseBW(s) {
 				var lines = s.split('\n');
 				var nSuits = cntSuits(lines);
-				// msgText(lines.length + "=>" + lines);
+				// LOG(lines.length + "=>" + lines);
 			}
 
 			function parseBBOURL(url) {
@@ -434,9 +446,63 @@
 				return true;
 			}
 
+			function linearDeck(deck) {
+				var linear = [];
+				for (s = CLUBS; s <= SPADES; s++) {
+					for (c = 0; c < deck[s].length; c++) {
+						var card = [ s, deck[s][c] ];
+						linear.push(card);
+					}
+				}
+				// LOG(linear);
+				return linear;
+			}
+
+			function shuffleDeck(linearDeck) {
+				LOG('---');
+				LOG(linearDeck);
+				var len = linearDeck.length;
+				for (var i = 0; i < len; i++) {
+					var r = randomInt(0, len);
+					var t = linearDeck[r];
+					linearDeck[r] = linearDeck[i];
+					linearDeck[i] = t;
+				}
+				LOG(linearDeck);
+				return linearDeck;
+			}
+
+			function fullDeck() {
+				LOG('FULL');
+				var deck = [ [], [], [], [] ];
+				for (var s = CLUBS; s <= SPADES; s++) {
+					for (var r = 14; r >= 2; r--) {
+						deck[s].push(RANK_CHARS[r]);
+					}
+				}
+				// LOG(deck);
+				return deck;
+			}
+
+			function removeCard(deck, suit, card) {
+				// LOG(suit + ':' + card);
+				// LOG(deck[suit]);
+				// LOG(deck);
+				// LOG('S:' + suit);
+				for (var c = 0; c < deck[suit].length; c++) {
+					// LOG(deck[suit][c] + '(eq)' + card)
+					if (deck[suit][c] === card) {
+						deck[suit].splice(c, 1);
+						return true;
+					}
+				}
+				return false;
+			}
+
 			function parseDeal(s) {
 				var deal = initDeal();
 				var hands = [ [ [], [], [], [] ], [ [], [], [], [] ], [ [], [], [], [] ], [ [], [], [], [] ], [ [], [], [], [] ] ];
+				var deck = fullDeck();
 				s = s.toUpperCase();
 				s = s.replace(new RegExp('\-', 'g'), ' - ');
 				s = s.replace(new RegExp('E', 'g'), 'A');
@@ -448,38 +514,59 @@
 				var tok = s.split('\n').filter(isCardSymbols);
 
 				// res = res.replace(new RegExp('%2C', 'g'), ',');
-				msgText('END');
-				msgAdd(tok);
-				msgAdd('' + tok.length);
+				LOG(tok);
+				LOG('' + tok.length);
 
-				if (16 != tok.length) {
-					var d = 'Please correct input: \n\n';
-					for (var p = 0; p < tok.length; p++) {
-						d += tok[p] + ' ';
-						if (0 == (p + 1) % 4) {
-							d += '\n';
-						}
+				var d = '';
+				for (var p = 0; p < tok.length; p++) {
+					d += tok[p] + ' ';
+					if (0 == (p + 1) % 4) {
+						d += '\n';
 					}
+				}
+
+				if (16 === tok.length || 8 === tok.length) {
+					$('#dealInput').val(d);
+				} else {
+					d = 'Please correct input: \n\n' + d;
 					$('#dealInput').val(d);
 					alert('Parse failed, sorry');
 					return deal;
 				}
+
 				var ix = 0;
 				for (var p = 0; p <= 3; p++) {
 					for (var s = 3; s >= 0; s--) {
-						var suit = tok[ix++];
-						msgAdd(suit);
-						if (suit != '-') {
-							var cards = suit.split('');
-							// msgAdd(cards);
-							for (var c = 0; c < cards.length; c++) {
-								hands[p][s].push(cards[c]);
+						if (ix < tok.length) {
+							var suit = tok[ix++];
+							if (suit != '-') {
+								var cards = suit.split('');
+								for (var c = 0; c < cards.length; c++) {
+									if (removeCard(deck, s, cards[c])) {
+										hands[p][s].push(cards[c]);
+									}
+								}
 							}
 						}
 					}
 				}
-				msgAdd(hands);
+				hands[DECK] = deck;
 				deal['hands'] = hands;
+				var linear = linearDeck(deck);
+				var lix = 0;
+				if (linear.length > 0) {
+					linear = shuffleDeck(linear);
+				}
+				for (p = NORTH; p <= WEST; p++) {
+					while (countCardsHand(hands[p]) < 13 && (lix < linear.length)) {
+						var c = linear[lix++];
+						var s = c[0];
+						var r = c[1];
+						if (removeCard(deck, s, r)) {
+							hands[p][s].push(r);
+						}
+					}
+				}
 				return deal;
 			}
 
@@ -554,10 +641,6 @@
 				return 'S' + hand[SPADES].join('') + 'H' + hand[HEARTS].join('') + 'D' + hand[DIAMS].join('') + 'C' + hand[CLUBS].join('');
 			}
 
-			function randomInt(min, max) {
-				return Math.floor(Math.random() * (max - min + 1)) + min;
-			}
-
 			function btnCreateURLClicked() {
 				// alert('btnCreateURLClicked');
 				var deal = JSON.parse(localStorage.getItem('deal'));
@@ -569,6 +652,11 @@
 				var s = stringHand(hands[SOUTH]);
 				var w = stringHand(hands[WEST]);
 
+				var url = bboUrl(n, e, s, w);
+				var name = 'w' + randomInt(1000000000, 2000000000);
+				window.open(url, name);
+				return;
+
 				var a = $("#hrefNewURL");
 				a.attr('href', bboUrl(n, e, s, w));
 				a.attr('target', 'w' + randomInt(1000000000, 2000000000));
@@ -576,6 +664,10 @@
 			}
 
 			function init() {
+				// for (var x = 0; x < 20; x++) {
+				// LOG(randomInt(4, 8));
+				// }
+
 				$('#dealInput').focus();
 				north.html(handHtml("0", "North"));
 				east.html(handHtml("1", "East"));
