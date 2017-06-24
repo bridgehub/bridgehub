@@ -5,8 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- <link rel="stylesheet" type="text/css" href="css/dealedit.css"> -->
 <style>
-.hand { #
-	xxwidth: 250px;
+.contract {
+	text-align: center;
+	width: 40px;
+	background-color: #FFFFFF;
+	border-style: solid;
+	border-width: 1px;
+	font-size: 1.3em;
+	background-color: #FFFFFF;
+}
+
+.txt {
+	font-size: 1.3em;
 }
 
 .col0 {
@@ -25,10 +35,14 @@
 	color: #0000FF
 }
 
+.col4 {
+	color: #000000
+}
+
 .card {
 	width: 40px;
 	font-family: Consolas, monospace;
-	font-size: 1en;
+	font-size: 1.3em;
 }
 
 .consolas {
@@ -58,44 +72,8 @@
 	<!-- 		value="http://www.bridgebase.com/tools/handviewer.html?sn=stefan_o&s=SKQ742HJ3DA8CK642&wn=Robot&w=SJ96HKT654D963CT8&nn=Robot&n=STHAQ982DJ752CQJ7&en=Robot&e=SA853H7DKQT4CA953&d=n&v=o&b=1&a=P1D(Minor%20suit%20opening%20--%203+%20%21D%3B%2011-21%20HCP%3B%2012-22%20total%20points)1S(One-level%20overcall%20--%205+%20%21S%3B%208-17%20HCP%3B%209-19%20total%20points)P2H(5+%20%21H%3B%202-%20%21S%3B%2011-%20HCP%3B%209-12%20total%20points)PPP&p=DKDAD3D2HJH6H2H7H3H4HQC5STS5SKS6S2SJH8S3CJCAC2C8C3C4CTCQC7C9CKH5HKHAS8S4DJDQD8D6D4C6D9D5HTH9DTS7S9D7SASQ" /> -->
 	<!-- 	<br /> -->
 	<hr />
-<!-- 	<textarea id='dealInput' cols="55" rows="3">http://www.bridgebase.com/tools/handviewer.html?sn=stefan_o&s=SKQ742HJ3DA8CK642&wn=Robot&w=SJ96HKT654D963CT8&nn=Robot&n=STHAQ982DJ752CQJ7&en=Robot&e=SA853H7DKQT4CA953&d=n&v=o&b=1&a=P1D(Minor%20suit%20opening%20--%203+%20%21D%3B%2011-21%20HCP%3B%2012-22%20total%20points)1S(One-level%20overcall%20--%205+%20%21S%3B%208-17%20HCP%3B%209-19%20total%20points)P2H(5+%20%21H%3B%202-%20%21S%3B%2011-%20HCP%3B%209-12%20total%20points)PPP&p=DKDAD3D2HJH6H2H7H3H4HQC5STS5SKS6S2SJH8S3CJCAC2C8C3C4CTCQC7C9CKH5HKHAS8S4DJDQD8D6D4C6D9D5HTH9DTS7S9D7SASQ</textarea> -->
-	<textarea id='dealInput' cols="55" rows="3">	
-West
-?
-KQ75
-?
-Q5
-?
-QJ73
-?
-864
-North
-?
-1082
-?
-J93
-?
-K954
-?
-972
-East
-?
-9
-?
-A1072
-?
-1082
-?
-AJ1053
-South
-?
-AJ643
-?
-K864
-?
-A6
-?
-KQ
+	<!-- 	<textarea id='dealInput' cols="55" rows="3">http://www.bridgebase.com/tools/handviewer.html?sn=stefan_o&s=SKQ742HJ3DA8CK642&wn=Robot&w=SJ96HKT654D963CT8&nn=Robot&n=STHAQ982DJ752CQJ7&en=Robot&e=SA853H7DKQT4CA953&d=n&v=o&b=1&a=P1D(Minor%20suit%20opening%20--%203+%20%21D%3B%2011-21%20HCP%3B%2012-22%20total%20points)1S(One-level%20overcall%20--%205+%20%21S%3B%208-17%20HCP%3B%209-19%20total%20points)P2H(5+%20%21H%3B%202-%20%21S%3B%2011-%20HCP%3B%209-12%20total%20points)PPP&p=DKDAD3D2HJH6H2H7H3H4HQC5STS5SKS6S2SJH8S3CJCAC2C8C3C4CTCQC7C9CKH5HKHAS8S4DJDQD8D6D4C6D9D5HTH9DTS7S9D7SASQ</textarea> -->
+	<textarea id='dealInput' cols="55" rows="6">	
 </textarea>
 	<br />
 	<input type='button' id='btnLoadURL' value='Load URL' />
@@ -104,7 +82,7 @@ KQ
 	<hr />
 	<br />
 	<br />
-	<table>
+	<table border="0">
 		<tr>
 			<td class="hand"></td>
 			<td class="hand"><div id="north"></div></td>
@@ -133,11 +111,37 @@ KQ
 		</tr>
 	</table>
 	<br />
+	<span class='txt'>Contract:</span>
+	<span class='txt' id='txtContract'></span>
+	<table class='table_contract'>
+		<tr>
+			<td class='contract' id='LVL_1'>1</td>
+			<td class='contract' id='LVL_2'>2</td>
+			<td class='contract' id='LVL_3'>3</td>
+			<td class='contract' id='LVL_4'>4</td>
+			<td class='contract' id='LVL_5'>5</td>
+			<td class='contract' id='LVL_6'>6</td>
+			<td class='contract' id='LVL_7'>7</td>
+		</tr>
+		<tr>
+			<td class='contract col0' id='DENOM_0'>&clubs;</td>
+			<td class='contract col1' id='DENOM_1'>&diams;</td>
+			<td class='contract col2' id='DENOM_2'>&hearts;</td>
+			<td class='contract col3' id='DENOM_3'>&spades;</td>
+			<td class='contract' id='DENOM_4'>NT</td>
+		</tr>
+		<tr>
+			<td class='contract' id='PLAYER_0'>N</td>
+			<td class='contract' id='PLAYER_1'>E</td>
+			<td class='contract' id='PLAYER_2'>S</td>
+			<td class='contract' id='PLAYER_3'>W</td>
+		</tr>
+	</table>
 	<br />
 	<input type='button' id='btnCreateURL' value='Generate Handviewer URL' />
 	<br />
 	<br />
-	<div id='msg'>xyz</div>
+	<div id='msg'></div>
 	<a href='' id='hrefNewURL'></a>
 	<script src="js/jquery-3.2.1.js"></script>
 	<script src="js/dealedit.js" charset="UTF-8"></script>

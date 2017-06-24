@@ -36,8 +36,9 @@
 			SYM_SUIT[SPADES] = '&spades;';
 			SYM_SUIT[NT] = 'NT';
 
-			var SUIT_CHARS = [ 'C', 'D', 'H', 'S' ];
+			var SUIT_CHARS = [ 'C', 'D', 'H', 'S', 'N' ];
 			var PLAYER_CHARS = [ 'N', 'E', 'S', 'W', 'D' ];
+			var PLAYER_TEXT = [ 'North', 'East', 'South', 'West', 'Deck' ];
 			var RANK_CHARS = [ '', '', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A' ];
 
 			var north = $("#north");
@@ -141,6 +142,49 @@
 				}
 			}
 
+			function displayContract(key, val) {
+				var deal = load('deal');
+				var level = deal['level'];
+				var denom = deal['denom'];
+				var declarer = deal['declarer'];
+				if (level) {
+				} else {
+					level = 1;
+				}
+				if (denom || 0 === denom) {
+				} else {
+					denom = NT;
+				}
+				if (declarer || 0 === declarer) {
+				} else {
+					declarer = SOUTH;
+				}
+				if ('LVL' === key) {
+					level = val;
+				}
+				if ('DENOM' === key) {
+					denom = val;
+				}
+				if ('PLAYER' === key) {
+					declarer = val;
+				}
+				var contract = level + '<span class=\'col' + denom + '\'>' + SYM_SUIT[denom] + '</span> by ' + PLAYER_TEXT[declarer];
+				LOG(contract)
+				deal['level'] = level;
+				deal['denom'] = denom;
+				deal['declarer'] = declarer;
+				save('deal', deal);
+				$('#txtContract').html(contract);
+			}
+
+			function contractClicked() {
+				var id = $(this).attr('id');
+				var tok = id.split('_');
+				var key = tok[0];
+				var val = parseInt(tok[1]);
+				displayContract(key, val);
+			}
+
 			function cardClicked() {
 				var id = $(this).attr('id');
 				var tok = id.split('_');
@@ -195,11 +239,29 @@
 			// / / / / 'denom': 0..4, 'level': 1..7}
 
 			function initDeal() {
+				var deal = load('deal');
+				var level = 1;
+				var denom = NT;
+				var declarer = SOUTH;
+				if (deal) {
+					if (deal['declarer'] || 0 === deal['declarer']) {
+						declarer = deal['declarer'];
+					}
+					if (deal['denom'] || 0 === deal['denom']) {
+						denom = deal['denom'];
+					}
+					if (deal['level']) {
+						level = deal['level'];
+					}
+				}
+
 				var deal = {};
+
 				deal['hands'] = [ [ [], [], [], [] ], [ [], [], [], [] ], [ [], [], [], [] ], [ [], [], [], [] ], [ [], [], [], [] ] ];
-				deal['declarer'] = NORTH; // north
-				deal['denom'] = NT; // NT
-				deal['level'] = 1;
+
+				deal['declarer'] = declarer; // north
+				deal['denom'] = denom; // NT
+				deal['level'] = level;
 				return deal;
 			}
 
@@ -510,6 +572,7 @@
 				s = s.replace(new RegExp('KN', 'g'), 'J');
 				s = s.replace(new RegExp('10', 'g'), 'T');
 				s = s.replace(new RegExp(' ', 'g'), '\n');
+				s = s.replace(new RegExp('\\.', 'g'), '\n');
 				s = s.replace(new RegExp('\t', 'g'), '\n');
 				var tok = s.split('\n').filter(isCardSymbols);
 
@@ -630,15 +693,28 @@
 				// displayDeal();
 			}
 
-			var BBO_URL = 'http://www.bridgebase.com/tools/handviewer.html?n={n}&e={e}&s={s}&w={w}&a={a}';
+			var BBO_URL = 'http://www.bridgebase.com/tools/handviewer.html?n={n}&e={e}&s={s}&w={w}&d={d}&a={a}';
 
-			function bboUrl(n, e, s, w, a) {
-				var url = BBO_URL.replace('{n}', n).replace('{e}', e).replace('{s}', s).replace('{w}', w).replace('{a}', a);
+			function bboUrl(n, e, s, w, d, a) {
+				var url = BBO_URL.replace('{n}', n).replace('{e}', e).replace('{s}', s).replace('{w}', w).replace('{d}', d).replace('{a}', a);
 				return url;
 			}
 
 			function stringHand(hand) {
 				return 'S' + hand[SPADES].join('') + 'H' + hand[HEARTS].join('') + 'D' + hand[DIAMS].join('') + 'C' + hand[CLUBS].join('');
+			}
+
+			function readAuction() {
+				var deal = load('deal');
+				var level = deal['level'];
+				var denom = deal['denom'];
+				return '' + level + SUIT_CHARS[denom] + 'PPP';
+			}
+
+			function readDeclarer() {
+				var deal = load('deal');
+				var declarer = PLAYER_CHARS[deal['declarer']];
+				return declarer;
 			}
 
 			function btnCreateURLClicked() {
@@ -652,15 +728,18 @@
 				var s = stringHand(hands[SOUTH]);
 				var w = stringHand(hands[WEST]);
 
-				var url = bboUrl(n, e, s, w);
+				var auction = readAuction();
+				var declarer = readDeclarer();
+
+				var url = bboUrl(n, e, s, w, declarer, auction);
 				var name = 'w' + randomInt(1000000000, 2000000000);
 				window.open(url, name);
 				return;
 
-				var a = $("#hrefNewURL");
-				a.attr('href', bboUrl(n, e, s, w));
-				a.attr('target', 'w' + randomInt(1000000000, 2000000000));
-				a.text('handviewer_link');
+				// var a = $("#hrefNewURL");
+				// a.attr('href', bboUrl(n, e, s, w));
+				// a.attr('target', 'w' + randomInt(1000000000, 2000000000));
+				// a.text('handviewer_link');
 			}
 
 			function init() {
@@ -675,7 +754,9 @@
 				west.html(handHtml("3", "West"));
 				deck.html(handHtml("4", "Deck"));
 				$('.card').click(cardClicked);
+				$('.contract').click(contractClicked);
 				$('.card').css('cursor', 'crosshair');
+				$('.contract').css('cursor', 'crosshair');
 				$('.player').click(playerClicked);
 				$('.player').css('cursor', 'crosshair');
 				$('#btnLoadURL').click(btnLoadURLClicked);
@@ -708,6 +789,7 @@
 				// var x = null;
 				// localStorage.setItem('deal', x);
 				displayDeal();
+				displayContract();
 			}
 
 			function update() {
