@@ -12,6 +12,21 @@
 				}
 			}
 
+			function load(id) {
+				var json = localStorage.getItem(id);
+				var obj = JSON.parse(json);
+				return obj;
+			}
+
+			function save(id, obj) {
+				if (obj) {
+					var json = JSON.stringify(obj);
+					localStorage.setItem(id, json);
+				} else {
+					localStorage.removeItem(id);
+				}
+			}
+
 			var MYHAND_X = 100;
 			var MYHAND_X_D = 15;
 			var MYHAND_Y = 300;
@@ -272,7 +287,7 @@
 
 			// var DEAL = [ 'SA', 'SK', 'SQ', 'SJ', 'ST', 'S9', 'S8', 'S7',
 			// 'S6', 'S2', 'H2', 'C2', 'D2' ];
-			var DEAL = 'md|3SQ92HKJ53DAQ63CKT,S4HT76DJ974CAQJ95,SAKJ653HA9DKT2C76,ST87HQ842D85C8432|sv|0|ah|Board+1|mb|1S|an|Major+suit+opening+--+5++!S;+11-21+HCP;+12-22+total+points|mb|P|mb|2N!|an|Jacoby+->+support;+balanced+--+4++!S;+13++total+points|mb|P|mb|3N|an|Balanced+submaximum+--+2++!C;+2++!D;+2++!H;+5++!S;+15-17+HCP|mb|P|mb|6N|an|4++!S;+13++total+points|mb|P|mb|P|mb|P|pc|H6|pc|H9|pc|HQ|pc|HK|pc|S2|pc|S4|pc|SA|pc|S7|pc|S3|pc|ST|pc|SQ|pc|C5|pc|S9|pc|C9|pc|SK|pc|S8|pc|HA|pc|H2|pc|H3|pc|H7|pc|D2|pc|D5|pc|DA|pc|D7|pc|HJ|pc|HT|pc|C6|pc|H4|pc|D6|pc|D9|pc|DK|pc|D8|pc|SJ|pc|C4|pc|CT|pc|CQ|pc|S6|pc|C2|pc|CK|pc|CA|pc|S5|pc|C3|pc|H5|pc|D4|pc|DT|pc|C8|pc|DQ|pc|DJ|pc|D3|pc|CJ|pc|C7|pc|H8|';
+			var DEAL = 'md|3S4HT76DJ974CAQJ95,SQ92HKJ53DAQ63CKT,SAKJ653HA9DKT2C76,ST87HQ842D85C8432|sv|0|ah|Board+1|mb|1S|an|Major+suit+opening+--+5++!S;+11-21+HCP;+12-22+total+points|mb|P|mb|2N!|an|Jacoby+->+support;+balanced+--+4++!S;+13++total+points|mb|P|mb|3N|an|Balanced+submaximum+--+2++!C;+2++!D;+2++!H;+5++!S;+15-17+HCP|mb|P|mb|6N|an|4++!S;+13++total+points|mb|P|mb|P|mb|P|pc|H6|pc|H9|pc|HQ|pc|HK|pc|S2|pc|S4|pc|SA|pc|S7|pc|S3|pc|ST|pc|SQ|pc|C5|pc|S9|pc|C9|pc|SK|pc|S8|pc|HA|pc|H2|pc|H3|pc|H7|pc|D2|pc|D5|pc|DA|pc|D7|pc|HJ|pc|HT|pc|C6|pc|H4|pc|D6|pc|D9|pc|DK|pc|D8|pc|SJ|pc|C4|pc|CT|pc|CQ|pc|S6|pc|C2|pc|CK|pc|CA|pc|S5|pc|C3|pc|H5|pc|D4|pc|DT|pc|C8|pc|DQ|pc|DJ|pc|D3|pc|CJ|pc|C7|pc|H8|';
 
 			function readURL(url) {
 				url = url.replace(new RegExp('\\+\\+', 'g'), '# ');
@@ -332,23 +347,64 @@
 				return result;
 			}
 
-			function parseHands(hands) {
+			function parseHands(result, hands) {
 				var dealer = dealConvert[Number(hands.substring(0, 1)) - 1];
 				hands = hands.substring(1).split(',');
-				LOG(dealer);
-				LOG(hands);
+				var cards = [];
+				// LOG(dealer);
+				// LOG(hands);
 				for (var p = NORTH; p <= WEST; p++) {
 					var hand = parseHand(hands[dealConvert[p]]);
-					LOG(hand);
+					cards.push(hand);
+					// LOG(hand);
 				}
+				result['dealer'] = dealer;
+				result['cards'] = cards;
+			}
+
+			function orderSHCD(hand) {
+				var result = [];
+				for (var i = 0; i < hand.length; i++) {
+					if (hand[i].split('')[0] === 'D') {
+						// nothing
+					} else {
+						result.push(hand[i]);
+					}
+				}
+				for (var i = 0; i < hand.length; i++) {
+					if (hand[i].split('')[0] === 'D') {
+						result.push(hand[i]);
+					} else {
+						// nothing
+					}
+				}
+				return result;
+			}
+
+			function displayCards(hand) {
+				hand = orderSHCD(hand);
+				dealCards(hand);
 			}
 
 			function loadNewDeal() {
+				var result = {}
 				phase = PHASE_BID;
 				var d = parseDeal(DEAL);
 				var hands = d['md'][0];
-				LOG(hands);
-				parseHands(hands);
+				// LOG(hands);
+				var bids = d['mb'];
+				var expl = d['an'];
+				// LOG(bids);
+				// LOG(expl);
+				parseHands(result, hands);
+				result['bids'] = bids;
+				result['expl'] = expl;
+				result['play'] = d['pc'];
+				LOG(result);
+				// LOG(result['cards'][2]);
+				var south = result['cards'][SOUTH];
+				displayCards(south);
+				return result;
 			}
 
 			var info = $('#info');
@@ -364,7 +420,8 @@
 
 			function handleTick(p) {
 				if (PHASE_INIT === phase) {
-					loadNewDeal();
+					var deal = loadNewDeal();
+					save('deal', deal);
 					phase = PHASE_BID;
 					return;
 				}
