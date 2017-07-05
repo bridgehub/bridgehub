@@ -12,6 +12,17 @@
 				}
 			}
 
+			var divMsg = $('#msg');
+
+			function msg(s) {
+				divMsg.text(s);
+			}
+
+			function msgAdd(s) {
+				var txt = divMsg.text() + '\n' + s;
+				msg(txt);
+			}
+
 			function load(id) {
 				var json = localStorage.getItem(id);
 				var obj = JSON.parse(json);
@@ -82,8 +93,6 @@
 
 			var SUIT_ZINDEX = [ 1, 0, 2, 3 ];
 
-			var turn = NORTH;
-
 			var PHASE_INIT = 0;
 			var PHASE_BID = 1;
 			var PHASE_PLAY = 2;
@@ -99,7 +108,7 @@
 			var deck = $("#deck");
 
 			var hrefNewURL = $("#hrefNewURL");
-			var msg = $("#msg");
+			// var msg = $("#msg");
 
 			var card_html = "<span class='card' id='{id}'>&nbsp;</span>";
 			var card_id = "C_{hand}_{suit}_{ix}";
@@ -111,10 +120,6 @@
 			function randomInt(min, max) {
 				return Math.floor(Math.random() * (max - min)) + min;
 			}
-
-			// <div id='D_C_3'>
-			// <img id='I_C_3' src='img/cards.png' />
-			// </div>
 
 			var CARDS = [ [ 0, 0 ], [ 0, 0 ], [ 0, 0 ], [ 0, 0 ] ];
 
@@ -141,7 +146,7 @@
 
 			function cardDiv(s, r) {
 				var suit_rank = SUIT_CHARS[s] + '_' + RANK_CHARS[r];
-				var divId = 'D_' + suit_rank;
+				var divId = 'C_' + suit_rank;
 				var imgId = 'I_' + suit_rank;
 				var div = $($.parseHTML('<div />'));
 				{
@@ -271,23 +276,19 @@
 
 			var skipNext = false;
 
+			function bidClicked() {
+				var id = $(this).attr('id');
+				uiController('click', id);
+			}
+
 			function cardClicked() {
 				var id = $(this).attr('id');
-				if (skipNext) {
-					skipNext = false;
-					if ('myhand' === id) {
-						return;
-					}
-				}
-				LOG('#CLICK: ' + id);
-				if (0 === id.indexOf('D_')) {
-					skipNext = true;
-				}
+				uiController('click', id);
 			}
 
 			// var DEAL = [ 'SA', 'SK', 'SQ', 'SJ', 'ST', 'S9', 'S8', 'S7',
 			// 'S6', 'S2', 'H2', 'C2', 'D2' ];
-			var DEAL = 'md|3S4HT76DJ974CAQJ95,SQ92HKJ53DAQ63CKT,SAKJ653HA9DKT2C76,ST87HQ842D85C8432|sv|0|ah|Board+1|mb|1S|an|Major+suit+opening+--+5++!S;+11-21+HCP;+12-22+total+points|mb|P|mb|2N!|an|Jacoby+->+support;+balanced+--+4++!S;+13++total+points|mb|P|mb|3N|an|Balanced+submaximum+--+2++!C;+2++!D;+2++!H;+5++!S;+15-17+HCP|mb|P|mb|6N|an|4++!S;+13++total+points|mb|P|mb|P|mb|P|pc|H6|pc|H9|pc|HQ|pc|HK|pc|S2|pc|S4|pc|SA|pc|S7|pc|S3|pc|ST|pc|SQ|pc|C5|pc|S9|pc|C9|pc|SK|pc|S8|pc|HA|pc|H2|pc|H3|pc|H7|pc|D2|pc|D5|pc|DA|pc|D7|pc|HJ|pc|HT|pc|C6|pc|H4|pc|D6|pc|D9|pc|DK|pc|D8|pc|SJ|pc|C4|pc|CT|pc|CQ|pc|S6|pc|C2|pc|CK|pc|CA|pc|S5|pc|C3|pc|H5|pc|D4|pc|DT|pc|C8|pc|DQ|pc|DJ|pc|D3|pc|CJ|pc|C7|pc|H8|';
+			var DEAL = 'md|3SQ92HKJ53DAQ63CKT,S4HT76DJ974CAQJ95,SAKJ653HA9DKT2C76,ST87HQ842D85C8432|sv|0|ah|Board+1|mb|1S|an|Major+suit+opening+--+5++!S;+11-21+HCP;+12-22+total+points|mb|P|mb|2N!|an|Jacoby+->+support;+balanced+--+4++!S;+13++total+points|mb|P|mb|3N|an|Balanced+submaximum+--+2++!C;+2++!D;+2++!H;+5++!S;+15-17+HCP|mb|P|mb|6N|an|4++!S;+13++total+points|mb|P|mb|P|mb|P|pc|H6|pc|H9|pc|HQ|pc|HK|pc|S2|pc|S4|pc|SA|pc|S7|pc|S3|pc|ST|pc|SQ|pc|C5|pc|S9|pc|C9|pc|SK|pc|S8|pc|HA|pc|H2|pc|H3|pc|H7|pc|D2|pc|D5|pc|DA|pc|D7|pc|HJ|pc|HT|pc|C6|pc|H4|pc|D6|pc|D9|pc|DK|pc|D8|pc|SJ|pc|C4|pc|CT|pc|CQ|pc|S6|pc|C2|pc|CK|pc|CA|pc|S5|pc|C3|pc|H5|pc|D4|pc|DT|pc|C8|pc|DQ|pc|DJ|pc|D3|pc|CJ|pc|C7|pc|H8|';
 
 			function readURL(url) {
 				url = url.replace(new RegExp('\\+\\+', 'g'), '# ');
@@ -359,6 +360,7 @@
 					// LOG(hand);
 				}
 				result['dealer'] = dealer;
+				result['turn'] = dealer;
 				result['cards'] = cards;
 			}
 
@@ -386,7 +388,15 @@
 				dealCards(hand);
 			}
 
+			function tst() {
+				var a = {};
+				var b = {};
+				var c = (a === b);
+				LOG("EQ: " + c);
+			}
+
 			function loadNewDeal() {
+				// tst();
 				var result = {}
 				phase = PHASE_BID;
 				var d = parseDeal(DEAL);
@@ -400,6 +410,8 @@
 				result['bids'] = bids;
 				result['expl'] = expl;
 				result['play'] = d['pc'];
+				result['ixBid'] = 0;
+				result['ixPlay'] = 0;
 				LOG(result);
 				// LOG(result['cards'][2]);
 				var south = result['cards'][SOUTH];
@@ -414,8 +426,23 @@
 			}
 
 			function nextAutoBid() {
+				var deal = load('deal');
+				var turn = deal['turn'];
+				var bids = deal['bids'];
+				var ixBid = deal['ixBid'];
+				var bid = bids[ixBid];
+				var player = PLAYER_CHARS[turn];
+				var expl = deal['expl'][ixBid];
+				// LOG(player + ": " + bid + ' -- ' + expl);
+				msgAdd(player + ": " + bid + ' -- ' + expl);
+				ixBid++;
+				turn = ((1 + turn) % 4);
+				deal['ixBid'] = ixBid;
+				deal['turn'] = turn;
+				save('deal', deal);
 			}
 			function nextAutoPlay() {
+				alert('nextAutoPlay');
 			}
 
 			function handleTick(p) {
@@ -433,21 +460,57 @@
 				}
 			}
 
-			function handleClick(p) {
-				if (PHASE_BID === phase) {
-					makeBid(p);
+			function makeBid(p) {
+				var lvl = p[1];
+				var denom = SUIT_CHARS[Number(p[2])];
+				var actualBid = lvl + '' + denom;
+				// msgAdd(actualBid);
+				var deal = load('deal');
+				var bids = deal['bids'];
+				var ixBid = deal['ixBid'];
+				var expectedBid = deal['bids'][ixBid].replace('!', '');
+				LOG('EXPECTED: ' + expectedBid);
+				if (expectedBid === actualBid) {
+					msgAdd('YES');
+					var turn = deal['turn'];
+					deal['turn'] = ((1 + turn) % 4);
+					deal['ixBid'] = 1 + ixBid;
+					save('deal', deal);
+				} else {
+					msgAdd('NOPE');
 				}
-				if (PHASE_PLAY === phase) {
-					makePlay(p);
+			}
+
+			function makePlay(p) {
+				LOG('PLAY: ' + p);
+			}
+
+			function handleClick(p) {
+				LOG('CLICK: ' + p);
+				var tok = p.split('_');
+				var action = tok[0];
+				if (PHASE_BID === phase && action === 'B') {
+					makeBid(tok);
+				} else if (PHASE_PLAY === phase && action === 'C') {
+					makePlay(tok);
+				} else {
+					msgAdd('???');
 				}
 			}
 
 			function uiController(t, p) {
+				var deal = load('deal');
+				var turn = deal['turn'];
 				var tag = info.text();
 				if ('=' === tag) {
 					info.text(':');
 				} else {
 					info.text('=');
+				}
+				LOG(turn);
+				if (PHASE_INIT === phase) {
+					handleTick(p);
+					return;
 				}
 				if (turn === SOUTH && 'click' === t) {
 					handleClick(p);
@@ -458,6 +521,8 @@
 			}
 
 			function setup() {
+				console.clear();
+				biddingBox();
 				info.css('color', '#FFFFFF');
 				info.css('font-weight', 'bold');
 				var myhand = $('#myhand');
@@ -470,9 +535,9 @@
 					}
 				}
 				$('.card').click(cardClicked);
+				$('.bid').click(bidClicked);
 				$('.card').css('display', 'none');
-				$('#myhand').click(cardClicked);
-				biddingBox();
+				// $('#myhand').click(cardClicked);
 			}
 
 			$(function() {
