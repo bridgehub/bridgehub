@@ -98,6 +98,7 @@
 			var PHASE_PLAY = 2;
 			var PHASE_ASK = 3;
 			var PHASE_CONTINUE = 4;
+			var PHASE_END = 9;
 
 			var phase = PHASE_INIT;
 
@@ -208,6 +209,7 @@
 					dbl.css('border-style', 'solid');
 					dbl.css('border-width', '0.1px');
 					dbl.addClass('bid');
+					dbl.attr('id', 'B_0_X');
 				}
 				var pass = $($.parseHTML('<td></td>'));
 				{
@@ -220,6 +222,7 @@
 					pass.css('border-style', 'solid');
 					pass.css('border-width', '0.1px');
 					pass.addClass('bid');
+					pass.attr('id', 'B_0_P');
 				}
 				var rdbl = $($.parseHTML('<td></td>'));
 				{
@@ -231,6 +234,7 @@
 					rdbl.css('border-style', 'solid');
 					rdbl.css('border-width', '0.1px');
 					rdbl.addClass('bid');
+					rdbl.attr('id', 'B_0_XX');
 				}
 				tr.append(rdbl);
 				tr.append(pass);
@@ -269,12 +273,6 @@
 					last_suit = s;
 				}
 			}
-
-			// var DEAL = [ 'SA', 'SQ', 'ST', 'HA', 'HT', 'H9', 'H7', 'H5',
-			// 'CA', 'C3',
-			// 'DQ', 'DJ', 'D2', [] ];
-
-			var skipNext = false;
 
 			function bidClicked() {
 				var id = $(this).attr('id');
@@ -401,11 +399,8 @@
 				phase = PHASE_BID;
 				var d = parseDeal(DEAL);
 				var hands = d['md'][0];
-				// LOG(hands);
 				var bids = d['mb'];
 				var expl = d['an'];
-				// LOG(bids);
-				// LOG(expl);
 				parseHands(result, hands);
 				result['bids'] = bids;
 				result['expl'] = expl;
@@ -413,9 +408,15 @@
 				result['ixBid'] = 0;
 				result['ixPlay'] = 0;
 				LOG(result);
-				// LOG(result['cards'][2]);
 				var south = result['cards'][SOUTH];
 				displayCards(south);
+				var firstLead = locateCard(result['cards'], result['play'][0]);
+				var dummy = ((1 + firstLead) % 4);
+				var declarer = ((3 + firstLead) % 4);
+				result['declarer'] = declarer;
+				result['dummy'] = dummy;
+				msgAdd('DECLARER: ' + declarer);
+				msgAdd('DUMMY   : ' + dummy);
 				return result;
 			}
 
@@ -425,24 +426,94 @@
 				uiController('tick');
 			}
 
-			function nextAutoBid() {
+			function locateCard(cards, nextPlay) {
+				for (var i = NORTH; i <= WEST; i++) {
+					if (cards[i].includes(nextPlay)) {
+						// LOG('Found: ' + nextPlay);
+						// LOG(cards);
+						// LOG('Hand: ' + i);
+						return i;
+					}
+				}
+				LOG('Could not find card: ' + nextPlay);
+				LOG(cards);
+			}
+
+			function switchBidToPlay() {
+				msg('');
+				phase = PHASE_PLAY;
 				var deal = load('deal');
-				var turn = deal['turn'];
-				var bids = deal['bids'];
-				var ixBid = deal['ixBid'];
-				var bid = bids[ixBid];
-				var player = PLAYER_CHARS[turn];
-				var expl = deal['expl'][ixBid];
-				// LOG(player + ": " + bid + ' -- ' + expl);
-				msgAdd(player + ": " + bid + ' -- ' + expl);
-				ixBid++;
-				turn = ((1 + turn) % 4);
-				deal['ixBid'] = ixBid;
+				var cards = deal['cards'];
+				var play = deal['play'];
+				var ixPlay = deal['ixPlay'];
+				var nextPlay = play[ixPlay];
+				var turn = locateCard(cards, nextPlay);
 				deal['turn'] = turn;
 				save('deal', deal);
 			}
+
+			function showDummy() {
+				LOG('=showDummy=')
+				msgAdd('=showDummy=')
+			}
+
+			function advanceGame() {
+				var deal = load('deal');
+				var turn = deal['turn'];
+				if (PHASE_BID === phase) {
+					var ixBid = deal['ixBid'];
+					ixBid++;
+					deal['ixBid'] = ixBid;
+					var bids = deal['bids'];
+					if (ixBid >= bids.length) {
+						LOG('= AUCTION COMPLETED =');
+						switchBidToPlay();
+						return;
+					}
+					turn = ((1 + turn) % 4);
+					deal['turn'] = turn;
+				} else if (PHASE_PLAY === phase) {
+					var ixPlay = deal['ixPlay'];
+					ixPlay++;
+					if (1 === ixPlay) {
+						showDummy();
+					}
+					deal['ixPlay'] = ixPlay;
+					var play = deal['play'];
+					if (ixPlay >= play.length) {
+						phase = PHASE_END;
+						return;
+					}
+					var cards = deal['cards'];
+					var nextPlay = play[ixPlay];
+					turn = locateCard(cards, nextPlay);
+					deal['turn'] = turn;
+				}
+				save('deal', deal);
+			}
+
+			function nextAutoBid() {
+				var deal = load('deal');
+				var turn = deal['turn'];
+				var player = PLAYER_CHARS[turn];
+				var bids = deal['bids'];
+				var ixBid = deal['ixBid'];
+				var bid = bids[ixBid];
+				var expl = deal['expl'][ixBid];
+				// LOG(player + ": " + bid + ' -- ' + expl);
+				msgAdd(player + ": " + bid + ' -- ' + expl);
+				advanceGame();
+			}
+
 			function nextAutoPlay() {
-				alert('nextAutoPlay');
+				var deal = load('deal');
+				var turn = deal['turn'];
+				var player = PLAYER_CHARS[turn];
+				var play = deal['play'];
+				var ixPlay = deal['ixPlay'];
+				var card = play[ixPlay];
+				msgAdd(player + ": " + card);
+				advanceGame();
 			}
 
 			function handleTick(p) {
@@ -463,6 +534,11 @@
 			function makeBid(p) {
 				var lvl = p[1];
 				var denom = SUIT_CHARS[Number(p[2])];
+				if (denom) {
+					// nothing
+				} else {
+					denom = p[2];
+				}
 				var actualBid = lvl + '' + denom;
 				// msgAdd(actualBid);
 				var deal = load('deal');
@@ -471,18 +547,25 @@
 				var expectedBid = deal['bids'][ixBid].replace('!', '');
 				LOG('EXPECTED: ' + expectedBid);
 				if (expectedBid === actualBid) {
-					msgAdd('YES');
-					var turn = deal['turn'];
-					deal['turn'] = ((1 + turn) % 4);
-					deal['ixBid'] = 1 + ixBid;
-					save('deal', deal);
+					msgAdd('YES: ' + actualBid);
+					advanceGame();
 				} else {
-					msgAdd('NOPE');
+					msgAdd('NOPE ' + expectedBid + ' ' + actualBid);
 				}
 			}
 
-			function makePlay(p) {
-				LOG('PLAY: ' + p);
+			function makePlay(tok) {
+				var deal = load('deal');
+				var play = deal['play'];
+				var ixPlay = deal['ixPlay'];
+				var expectedCard = play[ixPlay];
+				var actualCard = tok[1] + tok[2];
+				if (expectedCard === actualCard) {
+					msgAdd('YES: ' + actualCard);
+					advanceGame();
+				} else {
+					msgAdd('NOPE ' + expectedCard + ' ' + actualCard);
+				}
 			}
 
 			function handleClick(p) {
@@ -501,21 +584,22 @@
 			function uiController(t, p) {
 				var deal = load('deal');
 				var turn = deal['turn'];
+				var declarer = deal['declarer'];
 				var tag = info.text();
 				if ('=' === tag) {
 					info.text(':');
 				} else {
 					info.text('=');
 				}
-				LOG(turn);
+				LOG('TURN: ' + turn);
 				if (PHASE_INIT === phase) {
 					handleTick(p);
 					return;
 				}
-				if (turn === SOUTH && 'click' === t) {
+				var manualDummyPlay = (PHASE_PLAY === phase && turn === NORTH && declarer === SOUTH);
+				if ('click' === t && (turn === SOUTH || manualDummyPlay)) {
 					handleClick(p);
-				}
-				if (turn !== SOUTH && 'tick' === t) {
+				} else if ('tick' === t && turn !== SOUTH && !manualDummyPlay) {
 					handleTick(p);
 				}
 			}
