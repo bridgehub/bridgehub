@@ -582,20 +582,20 @@
 			}
 
 			function uiController(t, p) {
-				var deal = load('deal');
-				var turn = deal['turn'];
-				var declarer = deal['declarer'];
 				var tag = info.text();
 				if ('=' === tag) {
 					info.text(':');
 				} else {
 					info.text('=');
 				}
-				LOG('TURN: ' + turn);
 				if (PHASE_INIT === phase) {
 					handleTick(p);
 					return;
 				}
+				var deal = load('deal');
+				var turn = deal['turn'];
+				var declarer = deal['declarer'];
+				LOG('TURN: ' + turn);
 				var manualDummyPlay = (PHASE_PLAY === phase && turn === NORTH && declarer === SOUTH);
 				if ('click' === t && (turn === SOUTH || manualDummyPlay)) {
 					handleClick(p);
