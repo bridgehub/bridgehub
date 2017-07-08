@@ -517,9 +517,12 @@
 			}
 
 			function handleTick(p) {
+                LOG('handleTick');
 				if (PHASE_INIT === phase) {
+					LOG('INIT');
 					var deal = loadNewDeal();
 					save('deal', deal);
+					LOG('SAVED');
 					phase = PHASE_BID;
 					return;
 				}
