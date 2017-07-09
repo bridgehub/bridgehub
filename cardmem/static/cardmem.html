@@ -58,7 +58,7 @@
 .textURL {
 	width: 500px;
 	font-family: Consolas, monospace;
-	font-size: 1en;
+	font-size: 1em;
 }
 
 .active {
@@ -75,6 +75,7 @@
 	top: 275px;
 	left: 280px;
 	display: none;
+	cursor: default;
 }
 
 .message {
@@ -89,7 +90,7 @@
 	display: none;
 }
 
-.auctionTable {
+table {
 	border-spacing: 0px;
 }
 
@@ -101,11 +102,20 @@
 	text-align: center;
 }
 
-.bid {
-	width: 45px;
+.abid {
+	width: 48px;
 	font-weight: bold;
 	border-style: solid;
 	border-width: 1px;
+	border-color: #CCCCCC;
+	padding: 0px;
+}
+
+.bid {
+	width: 30px;
+	font-weight: bold;
+	border-style: solid;
+	border-width: 0px;
 	border-color: #CCCCCC;
 	padding: 0px;
 }
@@ -125,6 +135,41 @@
 	text-align: center;
 	cursor: crosshair;
 }
+
+#answerSuit {
+	background-color: white;
+	position: absolute;
+	top: 75px;
+	display: none;
+}
+
+#answerRank {
+	background-color: white;
+	position: absolute;
+	top: 100px;
+	display: none;
+}
+
+#question {
+	background-color: yellow;
+	position: absolute;
+	top: 50px;
+	padding-left: 5px;
+	padding-right: 5px;
+	font-family: sans-serif;
+	font-size: 14px;
+	display: none;
+}
+
+.answer {
+	width: 12px;
+	height: 12px;
+	text-align: center;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #CCCCCC;
+	cursor: crosshair;
+}
 </style>
 <body
 	style='font-family: Consolas, monospace; background-color: #AAFFAA'>
@@ -133,50 +178,80 @@
 		<div id='auction' class='auction'>
 			<table class='auctionTable'>
 				<tr>
-					<th class='bid'>WEST</th>
-					<th class='bid'>NORTH</th>
-					<th class='bid'>EAST</th>
-					<th class='bid'>SOUTH</th>
+					<th class='abid'>WEST</th>
+					<th class='abid'>NORTH</th>
+					<th class='abid'>EAST</th>
+					<th class='abid'>SOUTH</th>
 				</tr>
 				<tr class='bidrow'>
-					<td class='bid'>&nbsp;</td>
-					<td class='bid'>&nbsp;</td>
-					<td class='bid'>&nbsp;</td>
-					<td class='bid'>&nbsp;</td>
+					<td class='abid'>&nbsp;</td>
+					<td class='abid'>&nbsp;</td>
+					<td class='abid'>&nbsp;</td>
+					<td class='abid'>&nbsp;</td>
 				</tr>
 				<tr class='bidrow'>
-					<td class='bid'>&nbsp;</td>
-					<td class='bid'>&nbsp;</td>
-					<td class='bid'>&nbsp;</td>
-					<td class='bid'>&nbsp;</td>
+					<td class='abid'>&nbsp;</td>
+					<td class='abid'>&nbsp;</td>
+					<td class='abid'>&nbsp;</td>
+					<td class='abid'>&nbsp;</td>
 				</tr>
 				<tr class='bidrow'>
-					<td class='bid'>&nbsp;</td>
-					<td class='bid'>&nbsp;</td>
-					<td class='bid'>&nbsp;</td>
-					<td class='bid'>&nbsp;</td>
+					<td class='abid'>&nbsp;</td>
+					<td class='abid'>&nbsp;</td>
+					<td class='abid'>&nbsp;</td>
+					<td class='abid'>&nbsp;</td>
 				</tr>
 				<tr class='bidrow'>
-					<td class='bid'>&nbsp;</td>
-					<td class='bid'>&nbsp;</td>
-					<td class='bid'>&nbsp;</td>
-					<td class='bid'>&nbsp;</td>
+					<td class='abid'>&nbsp;</td>
+					<td class='abid'>&nbsp;</td>
+					<td class='abid'>&nbsp;</td>
+					<td class='abid'>&nbsp;</td>
 				</tr>
 				<tr class='bidrow'>
-					<td class='bid'>&nbsp;</td>
-					<td class='bid'>&nbsp;</td>
-					<td class='bid'>&nbsp;</td>
-					<td class='bid'>&nbsp;</td>
+					<td class='abid'>&nbsp;</td>
+					<td class='abid'>&nbsp;</td>
+					<td class='abid'>&nbsp;</td>
+					<td class='abid'>&nbsp;</td>
 				</tr>
 				<tr class='bidrow'>
-					<td class='bid'>&nbsp;</td>
-					<td class='bid'>&nbsp;</td>
-					<td class='bid'>&nbsp;</td>
-					<td class='bid'>&nbsp;</td>
+					<td class='abid'>&nbsp;</td>
+					<td class='abid'>&nbsp;</td>
+					<td class='abid'>&nbsp;</td>
+					<td class='abid'>&nbsp;</td>
 				</tr>
 			</table>
 		</div>
 		<div id='biddingBox'></div>
+		<div id='question'>Question</div>
+		<div id='answerSuit'>
+			<table>
+				<tr>
+					<td class='answer col3' id='A_S_S'>&spades;</td>
+					<td class='answer col2' id='A_S_H'>&hearts;</td>
+					<td class='answer col1' id='A_S_D'>&diams;</td>
+					<td class='answer col0' id='A_S_C'>&clubs;</td>
+				</tr>
+			</table>
+		</div>
+		<div id='answerRank'>
+			<table>
+				<tr>
+					<td class='answer' id='A_R_A'>A</td>
+					<td class='answer' id='A_R_K'>K</td>
+					<td class='answer' id='A_R_Q'>Q</td>
+					<td class='answer' id='A_R_J'>J</td>
+					<td class='answer' id='A_R_T'>T</td>
+					<td class='answer' id='A_R_9'>9</td>
+					<td class='answer' id='A_R_8'>8</td>
+					<td class='answer' id='A_R_7'>7</td>
+					<td class='answer' id='A_R_6'>6</td>
+					<td class='answer' id='A_R_5'>5</td>
+					<td class='answer' id='A_R_4'>4</td>
+					<td class='answer' id='A_R_3'>3</td>
+					<td class='answer' id='A_R_2'>2</td>
+				</tr>
+			</table>
+		</div>
 		<div id='continue' class='continue'>&nbsp;Continue...&nbsp;</div>
 		<div id='message' class='message'>.</div>
 	</div>
@@ -187,7 +262,6 @@
 	<!-- 	<div id='D_D_K'> -->
 	<!-- 		<img id='I_D_K' src='img/cards.png'> -->
 	<!-- 	</div> -->
-	<div id='msg'></div>
 	<script src="js/jquery-3.2.1.js"></script>
 	<script src="js/cardmem.js" charset="UTF-8"></script>
 </body>

@@ -3,6 +3,17 @@
 }
 		(function($, window, document) {
 
+			if (!localStorage) {
+				var txt = 'Hmmm... there seems to be a problem:<br /><br />';
+				txt += 'This application requires HTML5 localStorage.<br /><br />';
+				txt += 'Either it has been disabled (private-browsing, cookies-disabled, etc)<br />'
+				txt += 'or your browser is out-dated and does not support it.<br /><br />';
+				txt += 'If your browser is out-dated,<br />try using an up-to-date version of Chrome or Firefox browsers.<br /><br />';
+				txt += 'If you think you have disabled localStorage and <br />want to enable it, google: enable localStorage';
+				$('body').html(txt);
+				return;
+			}
+
 			// var DEAL = [ 'SA', 'SK', 'SQ', 'SJ', 'ST', 'S9', 'S8', 'S7',
 			// 'S6', 'S2', 'H2', 'C2', 'D2' ];
 			var DEA2 = 'md|3SQ92HKJ53DAQ63CKT,S4HT76DJ974CAQJ95,SAKJ653HA9DKT2C76,ST87HQ842D85C8432|sv|0|ah|Board+1|mb|1S|an|Major+suit+opening+--+5++!S;+11-21+HCP;+12-22+total+points|mb|P|mb|2N!|an|Jacoby+->+support;+balanced+--+4++!S;+13++total+points|mb|P|mb|3N|an|Balanced+submaximum+--+2++!C;+2++!D;+2++!H;+5++!S;+15-17+HCP|mb|P|mb|6N|an|4++!S;+13++total+points|mb|P|mb|P|mb|P|pc|H6|pc|H9|pc|HQ|pc|HK|pc|S2|pc|S4|pc|SA|pc|S7|pc|S3|pc|ST|pc|SQ|pc|C5|pc|S9|pc|C9|pc|SK|pc|S8|pc|HA|pc|H2|pc|H3|pc|H7|pc|D2|pc|D5|pc|DA|pc|D7|pc|HJ|pc|HT|pc|C6|pc|H4|pc|D6|pc|D9|pc|DK|pc|D8|pc|SJ|pc|C4|pc|CT|pc|CQ|pc|S6|pc|C2|pc|CK|pc|CA|pc|S5|pc|C3|pc|H5|pc|D4|pc|DT|pc|C8|pc|DQ|pc|DJ|pc|D3|pc|CJ|pc|C7|pc|H8|';
@@ -24,6 +35,9 @@
 			// =============================================
 
 			var divMsg = $('#msg');
+			var divQuestion = $('#question');
+			var divAnswerSuit = $('#answerSuit');
+			var divAnswerRank = $('#answerRank');
 
 			function msg(s) {
 				divMsg.text(s);
@@ -83,6 +97,7 @@
 			var EW_CARD_XD = 200;
 
 			var EW_Y = MID_Y - CARD_HE;
+			var EW_DUMMY_Y = EW_Y - 1.5 * CARD_HE;
 
 			var WEST_BACK_X = MID_X - EW_BACK_XD - CARD_WI;
 			var EAST_BACK_X = MID_X + EW_BACK_XD - CARD_WI;
@@ -205,6 +220,10 @@
 
 			function randomInt(min, max) {
 				return Math.floor(Math.random() * (max - min)) + min;
+			}
+
+			function int(i) {
+				return Math.floor(0.0000001 + i);
 			}
 
 			var CARDS = [ [ 0, 0 ], [ 0, 0 ], [ 0, 0 ], [ 0, 0 ] ];
@@ -342,7 +361,7 @@
 			var W_X = NS_X - DX;
 
 			var HAND_X = [ NORTH_DUMMY_X, EAST_X, NORTH_DUMMY_X, WEST_X ];
-			var HAND_Y = [ NORTH_Y, EAST_Y, SOUTH_Y, WEST_Y ];
+			var HAND_Y = [ NORTH_Y, EW_DUMMY_Y, SOUTH_Y, EW_DUMMY_Y ];
 			var CARD_X = [ NS_X, E_X, NS_X, W_X ];
 			var CARD_Y = [ N_Y, EW_Y, S_Y, EW_Y ];
 			var MOVE_SUIT_Y = [ 0, 1, 0, 1 ];
@@ -383,9 +402,89 @@
 				}
 			}
 
+			var CORRECT_ANSWER = '';
+			var ANSWER_SUIT = '';
+			var SCORE = 3;
+			var MEMORY_SCORE = 0;
+
+			function answerClicked() {
+				var id = $(this).attr('id');
+				LOG('answerClicked: ' + id);
+				if (PHASE_ASK === phase) {
+					// ok, continue
+				} else {
+					return;
+				}
+				var tok = id.split('_');
+				var typ = tok[1];
+				if ('S' === typ) {
+					$('.answer').css('background-color', 'white');
+					$('#' + id).css('background-color', 'yellow');
+					ANSWER_SUIT = tok[2];
+					LOG('A_S: ' + ANSWER_SUIT);
+				} else if ('R' === typ) {
+					var rank = tok[2];
+					var answer = ANSWER_SUIT + rank;
+					LOG('?: ' + CORRECT_ANSWER + ' ' + answer);
+					if (CORRECT_ANSWER === answer) {
+						MEMORY_SCORE += SCORE;
+						msgAdd('MEMORY_SCORE: ' + MEMORY_SCORE);
+						divAnswerRank.css('display', 'none');
+						divAnswerSuit.css('display', 'none');
+						divQuestion.css('display', 'none');
+						phase = PHASE_PLAY;
+					} else {
+						SCORE--;
+						if (SCORE >= 1) {
+						} else {
+							divAnswerRank.css('display', 'none');
+							divAnswerSuit.css('display', 'none');
+							divQuestion.css('display', 'none');
+							phase = PHASE_PLAY;
+						}
+					}
+				}
+			}
+
 			function bidClicked() {
 				var id = $(this).attr('id');
 				uiController('click', id);
+			}
+
+			var NAMES = [ 'Partner', 'RHO', 'me', 'LHO' ];
+
+			function setupQuestion(deal) {
+				var ixPlay = deal['ixPlay'];
+				var play = deal['play'];
+				LOG(play);
+				var trick = int((ixPlay - 1) / 4);
+				LOG('trick: ' + trick);
+				while (true) {
+					var r = randomInt(0, 3);
+					var c = play[(4 * trick) + r];
+					LOG('r: ' + r + ' ' + ((4 * trick) + r) + ' ' + c);
+					var player = locateCard(deal['cards'], c);
+					LOG('Q: ' + ixPlay + ' ' + c + ' ' + player);
+					var declarer = deal[declarer];
+					if (SOUTH === player || (NORTH === player && SOUTH === declarer)) {
+						// dont ask player's own cards or dummy's cards
+						continue;
+					}
+					var name = NAMES[player];
+					var question = ' Which card did ' + name + ' just play? ';
+					divQuestion.text(question);
+					// showQuestion
+					// showSuit
+					// hideRank
+					CORRECT_ANSWER = c;
+					SCORE = 3;
+					// msgAdd('A: ' + CORRECT_ANSWER);
+					phase = PHASE_ASK;
+					divAnswerRank.css('display', 'block');
+					divAnswerSuit.css('display', 'block');
+					divQuestion.css('display', 'block');
+					return;
+				}
 			}
 
 			var skipContinue = false;
@@ -397,7 +496,6 @@
 					return;
 				}
 				var vis = divContinue.css('display');
-				LOG(vis);
 				if ('none' === divContinue.css('display')) {
 					return;
 				}
@@ -407,14 +505,14 @@
 				var ixPlay = deal['ixPlay'];
 				for (var i = ixPlay - 4; i < ixPlay; i++) {
 					var id = divId(play[i]);
-					LOG('HIDE: ' + play[i]);
 					$('#' + id).css('display', 'none');
 				}
-				if (1 + ixPlay > play.length) {
-					phase = PHASE_END;
-				} else {
-					phase = PHASE_PLAY;
-				}
+				setupQuestion(deal);
+				// if (1 + ixPlay > play.length) {
+				// phase = PHASE_END;
+				// } else {
+				// phase = PHASE_PLAY;
+				// }
 			}
 
 			function cardClicked() {
@@ -610,8 +708,8 @@
 			}
 
 			function showDummy(hand, player) {
-				msgAdd('=showDummy= ' + player);
-				msgAdd(hand);
+				// msgAdd('=showDummy= ' + player);
+				// msgAdd(hand);
 				displayCards(hand, player);
 			}
 
@@ -628,14 +726,14 @@
 				LOG('showBid: ' + dealer + ' ' + turn + ' ' + ixBid + ' ' + bid);
 				var colDealer = (dealer + 1) % 4;
 				var col = (turn + 1) % 4;
-				var row = Math.floor(0.0001 + (ixBid / 4));
+				var row = int(ixBid / 4);
 				if (col < colDealer) {
 					row++;
 				}
 				LOG('R,C:' + row + ' ' + col);
 				var table = $(divAuction.find('table'));
 				var trList = $(table[0]).find('tr');
-				msgAdd('row: ' + row + ' tr: ' + trList.length);
+				// msgAdd('row: ' + row + ' tr: ' + trList.length);
 				if (row > trList.length - 2) {
 					msgAdd('= ADD_ROW =');
 				}
@@ -667,7 +765,7 @@
 					var ixPlay = deal['ixPlay'];
 					var play = deal['play'];
 					var playCard = play[ixPlay];
-					msgAdd('PLAY: ' + playCard);
+					// msgAdd('PLAY: ' + playCard);
 					visible[playCard] = true;
 					var id = divId(playCard);
 					$('#' + id).css('display', 'block');
@@ -703,7 +801,7 @@
 				var bid = bids[ixBid];
 				var expl = deal['expl'][ixBid];
 				// LOG(player + ": " + bid + ' -- ' + expl);
-				msgAdd(player + ": " + bid + ' -- ' + expl);
+				// msgAdd(player + ": " + bid + ' -- ' + expl);
 				advanceGame();
 			}
 
@@ -714,7 +812,7 @@
 				var play = deal['play'];
 				var ixPlay = deal['ixPlay'];
 				var card = play[ixPlay];
-				msgAdd(player + ": " + card);
+				// msgAdd(player + ": " + card);
 				advanceGame();
 			}
 
@@ -798,7 +896,7 @@
 					skipContinue = true;
 					advanceGame();
 				} else {
-					userMessage('Please play ' + htmlCard(expectedCard));
+					userMessage('Please play: ' + htmlCard(expectedCard));
 				}
 			}
 
@@ -830,7 +928,6 @@
 				var deal = load('deal');
 				var turn = deal['turn'];
 				var declarer = deal['declarer'];
-				LOG('TURN: ' + turn);
 				var manualDummyPlay = (PHASE_PLAY === phase && turn === NORTH && declarer === SOUTH);
 				if ('click' === t && (turn === SOUTH || manualDummyPlay)) {
 					handleClick(p);
@@ -840,9 +937,22 @@
 			}
 
 			function setup() {
-				console.clear();
+				LOG('== setup ==');
 				biddingBox();
-				divContinue.click(continueClicked);
+
+				divQuestion.css('top', SOUTH_Y + 2.3 * CARD_HE);
+				divAnswerSuit.css('top', SOUTH_Y + 2.70 * CARD_HE);
+				divAnswerRank.css('top', SOUTH_Y + 3.21 * CARD_HE);
+
+				divQuestion.css('left', CARD_WI + 'px');
+				divAnswerSuit.css('left', (5 + CARD_WI) + 'px');
+				divAnswerRank.css('left', (5 + CARD_WI) + 'px');
+
+				divAnswerRank.css('display', 'none');
+				divAnswerSuit.css('display', 'none');
+				divQuestion.css('display', 'none');
+
+				// divContinue.click(continueClicked);
 				info.css('color', '#FFFFFF');
 				info.css('font-weight', 'bold');
 				var myhand = $('#myhand');
@@ -856,6 +966,7 @@
 				}
 				$('.card').click(cardClicked);
 				$('.bid').click(bidClicked);
+				$('.answer').click(answerClicked);
 				$('.card').css('display', 'none');
 				visible = {};
 				for (var s = CLUBS; s <= SPADES; s++) {
