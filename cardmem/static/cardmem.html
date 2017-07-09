@@ -43,6 +43,7 @@
 	width: 40px;
 	font-family: Consolas, monospace;
 	font-size: 1.3em;
+	cursor: crosshair;
 }
 
 .consolas {
@@ -64,54 +65,120 @@
 	background-color: #FFFF00;
 }
 
-/* #D_C_3 { */
-/* 	display: normal; */
-/* 	position: absolute; */
-/* 	z-index: 2; */
-/* 	top: 0px; */
-/* 	left: 0px; */
-/* } */
+.continue {
+	background-color: #FFDD00;
+	color: #000000;
+	position: absolute;
+	font-family: sans-serif;
+	font-size: 13px;
+	font-weight: bold;
+	top: 275px;
+	left: 280px;
+	display: none;
+}
 
-/* #I_C_3 { */
-/* 	border-style: solid; */
-/* 	border-width: 1px; */
-/* 	object-fit: none; */
-/* 	object-position: -3px -6px; */
-/* 	width: 69px; */
-/* 	height: 92px; */
-/* 	object-fit: none; */
-/* } */
+.message {
+	background-color: #FFFF66;
+	color: #000000;
+	position: absolute;
+	font-family: sans-serif;
+	font-size: 13px;
+	font-weight: bold; #
+	top: 400px;
+	left: 50px;
+	display: none;
+}
 
-/* #D_D_K { */
-/* 	display: normal; */
-/* 	position: absolute; */
-/* 	z-index: 3; */
-/* 	top: 20px; */
-/* 	left: 35px; */
-/* } */
+.auctionTable {
+	border-spacing: 0px;
+}
 
-/* #I_D_K { */
-/* 	border-style: solid; */
-/* 	border-width: 1px; */
-/* 	object-fit: none; */
-/* 	object-position: -903px -309px; */
-/* 	width: 69px; */
-/* 	height: 92px; */
-/* 	object-fit: none; */
-/* } */
+.auction {
+	background-color: #EEEEBB;
+	position: absolute;
+	left: 140px;
+	top: 130px;
+	text-align: center;
+}
+
+.bid {
+	width: 45px;
+	font-weight: bold;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #CCCCCC;
+	padding: 0px;
+}
+
+.red {
+	color: #AA0000;
+}
+
 #myhand {
-	width: 600px;
+	width: 700px;
 	height: 600px;
 	background-color: #007700;
 	position: relative;
+}
+
+#biddingBox {
+	text-align: center;
+	cursor: crosshair;
 }
 </style>
 <body
 	style='font-family: Consolas, monospace; background-color: #AAFFAA'>
 	<div id='myhand'>
 		<div id='info'>INFO</div>
-		<div id='auction'>A</div>
+		<div id='auction' class='auction'>
+			<table class='auctionTable'>
+				<tr>
+					<th class='bid'>WEST</th>
+					<th class='bid'>NORTH</th>
+					<th class='bid'>EAST</th>
+					<th class='bid'>SOUTH</th>
+				</tr>
+				<tr class='bidrow'>
+					<td class='bid'>&nbsp;</td>
+					<td class='bid'>&nbsp;</td>
+					<td class='bid'>&nbsp;</td>
+					<td class='bid'>&nbsp;</td>
+				</tr>
+				<tr class='bidrow'>
+					<td class='bid'>&nbsp;</td>
+					<td class='bid'>&nbsp;</td>
+					<td class='bid'>&nbsp;</td>
+					<td class='bid'>&nbsp;</td>
+				</tr>
+				<tr class='bidrow'>
+					<td class='bid'>&nbsp;</td>
+					<td class='bid'>&nbsp;</td>
+					<td class='bid'>&nbsp;</td>
+					<td class='bid'>&nbsp;</td>
+				</tr>
+				<tr class='bidrow'>
+					<td class='bid'>&nbsp;</td>
+					<td class='bid'>&nbsp;</td>
+					<td class='bid'>&nbsp;</td>
+					<td class='bid'>&nbsp;</td>
+				</tr>
+				<tr class='bidrow'>
+					<td class='bid'>&nbsp;</td>
+					<td class='bid'>&nbsp;</td>
+					<td class='bid'>&nbsp;</td>
+					<td class='bid'>&nbsp;</td>
+				</tr>
+				<tr class='bidrow'>
+					<td class='bid'>&nbsp;</td>
+					<td class='bid'>&nbsp;</td>
+					<td class='bid'>&nbsp;</td>
+					<td class='bid'>&nbsp;</td>
+				</tr>
+			</table>
+		</div>
 		<div id='biddingBox'></div>
+		<div id='continue' class='continue'>&nbsp;Continue...&nbsp;</div>
+		<div id='message' class='message'>.</div>
 	</div>
 	<pre id='msg'>-</pre>
 	<!-- 	<div id='D_C_3'> -->

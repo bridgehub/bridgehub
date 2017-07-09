@@ -3,6 +3,15 @@
 }
 		(function($, window, document) {
 
+			// var DEAL = [ 'SA', 'SK', 'SQ', 'SJ', 'ST', 'S9', 'S8', 'S7',
+			// 'S6', 'S2', 'H2', 'C2', 'D2' ];
+			var DEA2 = 'md|3SQ92HKJ53DAQ63CKT,S4HT76DJ974CAQJ95,SAKJ653HA9DKT2C76,ST87HQ842D85C8432|sv|0|ah|Board+1|mb|1S|an|Major+suit+opening+--+5++!S;+11-21+HCP;+12-22+total+points|mb|P|mb|2N!|an|Jacoby+->+support;+balanced+--+4++!S;+13++total+points|mb|P|mb|3N|an|Balanced+submaximum+--+2++!C;+2++!D;+2++!H;+5++!S;+15-17+HCP|mb|P|mb|6N|an|4++!S;+13++total+points|mb|P|mb|P|mb|P|pc|H6|pc|H9|pc|HQ|pc|HK|pc|S2|pc|S4|pc|SA|pc|S7|pc|S3|pc|ST|pc|SQ|pc|C5|pc|S9|pc|C9|pc|SK|pc|S8|pc|HA|pc|H2|pc|H3|pc|H7|pc|D2|pc|D5|pc|DA|pc|D7|pc|HJ|pc|HT|pc|C6|pc|H4|pc|D6|pc|D9|pc|DK|pc|D8|pc|SJ|pc|C4|pc|CT|pc|CQ|pc|S6|pc|C2|pc|CK|pc|CA|pc|S5|pc|C3|pc|H5|pc|D4|pc|DT|pc|C8|pc|DQ|pc|DJ|pc|D3|pc|CJ|pc|C7|pc|H8|';
+			var DEAL = 'md|2SAKT2H832DAKQ73CQ,SJ94HKQJ6D9CAJT87,S873HA754D82C9642,SQ65HT9DJT654CK53|sv|0|ah|Board+8|mb|1C|an|Minor+suit+opening+--+3++!C;+11-21+HCP;+12-22+total+points|mb|P|mb|1D|an|One+over+one+--+4++!D;+6++total+points|mb|D|an|Two+suit+takeout+--+5-+!C;+5-+!D;+4++!H;+4++!S;+12++total+points|mb|1H|an|3++!C;+4++!H;+11++HCP;+12-18+total+points|mb|P|mb|1N|an|Balanced+minimum+--+2-3+!C;+4++!D;+2-3+!H;+2-3+!S;+6-10+HCP|mb|2D|an|5-+!C;+5-+!D;+4++!H;+4++!S;+24++HCP;+25++total+points;+forcing+to+3N|mb|P|mb|2S|an|4++!S;+8-+total+points;+forcing+to+3N|mb|P|mb|4S|an|5-+!C;+5-+!D;+4++!H;+4++!S;+24++HCP;+25-27+total+points|mb|P|mb|5H|an|Cue+bid+--+1++!C;+1++!D;+4++!S;+no+!CA;+no+!DA;+!HA;+7-8+total+points;+forcing|mb|P|mb|6S|an|5-+!C;+5-+!D;+4++!H;+4++!S;+24++HCP;+25-27+total+points|mb|P|mb|P|mb|P|pc|HT|pc|H2|pc|H6|pc|HA|pc|S3|pc|S6|pc|SK|pc|S4|pc|SA|pc|S9|pc|S7|pc|S5|pc|DA|pc|D9|pc|D8|pc|D4|pc|DK|pc|SJ|pc|D2|pc|D6|pc|HK|pc|H4|pc|H9|pc|H3|pc|HQ|pc|H5|pc|C3|pc|H8|pc|C8|pc|C2|pc|CK|pc|CQ|pc|SQ|pc|S2|pc|C7|pc|S8|pc|DJ|pc|DQ|pc|HJ|pc|C4|pc|D7|pc|CA|pc|C6|pc|DT|pc|C5|pc|ST|pc|CJ|pc|C9|pc|D3|pc|CT|pc|H7|pc|D5|';
+			var DEA4 = 'md|4SKT92HAQJ82DJ2CKJ,SAJ64HT7DA83CQ874,S75HK95DKQT94CA63,SQ83H643D765CT952|sv|E|ah|Board+6|mb|P|mb|1H|an|Major+suit+opening+--+5++!H;+11-21+HCP;+12-22+total+points|mb|D|an|Takeout+double+--+3-5+!C;+3-5+!D;+2-+!H;+3-4+!S;+12++total+points|mb|2N!|an|Truscott+(Jordan)+--+3++!H;+11++total+points|mb|P|mb|4H|an|5++!H;+13++HCP;+14-19+total+points|mb|P|mb|P|mb|P|pc|HT|pc|HK|pc|H4|pc|H2|pc|H9|pc|H6|pc|H8|pc|H7|pc|D4|pc|D5|pc|DJ|pc|D3|pc|D2|pc|DA|pc|D9|pc|D7|pc|D8|pc|DK|pc|D6|pc|S2|pc|H5|pc|H3|pc|HA|pc|C8|pc|CK|pc|C4|pc|C3|pc|CT|pc|CJ|pc|CQ|pc|CA|pc|C5|pc|DQ|pc|S3|pc|S9|pc|S6|pc|DT|pc|C9|pc|ST|pc|S4|pc|S5|pc|S8|pc|SK|pc|SA|pc|C7|pc|C6|pc|C2|pc|HJ|pc|HQ|pc|SJ|pc|S7|pc|SQ|';
+			var DEA5 = 'md|1SQ83H643D765CT952,SKT92HAQJ82DJ2CKJ,SAJ64HT7DA83CQ874,S75HK95DKQT94CA63|sv|E|ah|Board+6|mb|P|mb|1H|an|Major+suit+opening+--+5++!H;+11-21+HCP;+12-22+total+points|mb|D|an|Takeout+double+--+3-5+!C;+3-5+!D;+2-+!H;+3-4+!S;+12++total+points|mb|2N!|an|Truscott+(Jordan)+--+3++!H;+11++total+points|mb|P|mb|4H|an|5++!H;+13++HCP;+14-19+total+points|mb|P|mb|P|mb|P|pc|HT|pc|HK|pc|H4|pc|H2|pc|H9|pc|H6|pc|H8|pc|H7|pc|D4|pc|D5|pc|DJ|pc|D3|pc|D2|pc|DA|pc|D9|pc|D7|pc|D8|pc|DK|pc|D6|pc|S2|pc|H5|pc|H3|pc|HA|pc|C8|pc|CK|pc|C4|pc|C3|pc|CT|pc|CJ|pc|CQ|pc|CA|pc|C5|pc|DQ|pc|S3|pc|S9|pc|S6|pc|DT|pc|C9|pc|ST|pc|S4|pc|S5|pc|S8|pc|SK|pc|SA|pc|C7|pc|C6|pc|C2|pc|HJ|pc|HQ|pc|SJ|pc|S7|pc|SQ|';
+
+			// =============================================
+
 			var logEnabled = true;
 			function LOG(s) {
 				if (logEnabled) {
@@ -11,6 +20,8 @@
 					}
 				}
 			}
+
+			// =============================================
 
 			var divMsg = $('#msg');
 
@@ -22,6 +33,30 @@
 				var txt = divMsg.text() + '\n' + s;
 				msg(txt);
 			}
+
+			// =============================================
+
+			var message = $('#message');
+
+			var messageCounter = -1;
+
+			function userMessageTick() {
+				if (messageCounter < 0) {
+					return;
+				}
+				if (messageCounter == 0) {
+					message.css('display', 'none');
+				}
+				messageCounter--;
+			}
+
+			function userMessage(txt) {
+				message.html('&nbsp;' + txt + '&nbsp;');
+				message.css('display', 'block');
+				messageCounter = 15;
+			}
+
+			// =============================================
 
 			function load(id) {
 				var json = localStorage.getItem(id);
@@ -38,26 +73,63 @@
 				}
 			}
 
-			var MYHAND_X = 100;
-			var MYHAND_X_D = 15;
-			var MYHAND_Y = 300;
+			var CARD_WI = 35;
+			var CARD_HE = 47;
+			var AUCTION_WI = 99;
 
-			var NORTH_BACKSIDE_X = 240 - 50;
-			var NORTH_BACKSIDE_Y = 50;
-			var WEST_BACKSIDE_X = 80 - 36;
-			var WEST_BACKSIDE_Y = 120;
-			var EAST_BACKSIDE_X = 400 - 36;
-			var EAST_BACKSIDE_Y = 120;
+			var MID_X = 300;
+			var MID_Y = 250;
+			var EW_BACK_XD = 250;
+			var EW_CARD_XD = 200;
 
-			var NORTH_X = 0;
-			var NORTH_Y = 0;
-			var WEST_X = 0;
-			var WEST_Y = 0;
-			var EAST_X = 0;
-			var EAST_Y = 0;
+			var EW_Y = MID_Y - CARD_HE;
+
+			var WEST_BACK_X = MID_X - EW_BACK_XD - CARD_WI;
+			var EAST_BACK_X = MID_X + EW_BACK_XD - CARD_WI;
+			var NORTH_BACK_X = MID_X - CARD_HE;
+
+			var WEST_CARD_X = MID_X - EW_CARD_XD - CARD_WI;
+			var EAST_CARD_X = MID_X + EW_CARD_XD - CARD_WI;
+
+			var WEST_X = MID_X - EW_CARD_XD;
+			var EAST_X = MID_X + EW_CARD_XD;
+
+			var NORTH_DUMMY_X = MID_X - 4.5 * CARD_WI;
+			// var SOUTH_X = NORTH_DUMMY_X;
+
+			var NS_Y_D = 150;
+
+			// ===========================
+
+			var NORTH_BACKSIDE_Y = MID_Y - NS_Y_D - CARD_HE;
+			var WEST_BACKSIDE_X = WEST_BACK_X;
+			var WEST_BACKSIDE_Y = EW_Y;
+			var EAST_BACKSIDE_X = EAST_BACK_X;
+			var EAST_BACKSIDE_Y = EW_Y;
+
+			// var SOUTH_X = 100;
+			var SOUTH_Y = MID_Y + NS_Y_D - CARD_HE;
+
+			var WEST_X = WEST_BACKSIDE_X;
+			var WEST_Y = WEST_BACKSIDE_Y;
+
+			var NORTH_X = NORTH_BACK_X;
+			var NORTH_Y = NORTH_BACKSIDE_Y;
+
+			var EAST_X = EAST_BACKSIDE_X;
+			var EAST_Y = EAST_BACKSIDE_Y;
+
+			var HAND_X_D = 15;
+			var HAND_Y_D = 30;
+
+			var MESSAGE_Y_D = 110;
+			var CONTINUE_X = MID_X + 1.5 * CARD_WI;
+			var CONTINUE_Y = SOUTH_Y - 0.5 * CARD_HE;
+
+			message.css('top', '' + (SOUTH_Y + MESSAGE_Y_D) + 'px');
 
 			var BIDDINGBOX_X = 450;
-			var BIDDINGBOX_Y = 300;
+			var BIDDINGBOX_Y = SOUTH_Y;
 
 			var BR = '<br />';
 			var NL = '\n';
@@ -83,6 +155,12 @@
 			SYM_SUIT[SPADES] = '&spades;';
 			SYM_SUIT[NT] = 'NT';
 
+			SYM_SUIT['C'] = '&clubs;';
+			SYM_SUIT['D'] = '&diams;';
+			SYM_SUIT['H'] = '&hearts;';
+			SYM_SUIT['S'] = '&spades;';
+			SYM_SUIT['N'] = 'NT';
+
 			var SUIT_CHARS = [ 'C', 'D', 'H', 'S', 'N' ];
 			var PLAYER_CHARS = [ 'N', 'E', 'S', 'W', 'D' ];
 			var PLAYER_TEXT = [ 'North', 'East', 'South', 'West', 'Deck' ];
@@ -99,6 +177,8 @@
 			var PHASE_ASK = 3;
 			var PHASE_CONTINUE = 4;
 			var PHASE_END = 9;
+
+			var visible = {};
 
 			var phase = PHASE_INIT;
 
@@ -117,6 +197,11 @@
 			var divInfo = $('#info');
 			var divBiddingBox = $('#biddingBox');
 			var divAuction = $('#auction');
+			divAuction.css('left', (MID_X - AUCTION_WI) + 'px');
+			divAuction.css('top', (NORTH_Y + 2 * CARD_HE) + 'px');
+			var divContinue = $('#continue');
+			divContinue.css('left', CONTINUE_X + 'px');
+			divContinue.css('top', CONTINUE_Y + 'px');
 
 			function randomInt(min, max) {
 				return Math.floor(Math.random() * (max - min)) + min;
@@ -129,7 +214,6 @@
 
 				var div = $($.parseHTML('<div />'));
 				div.addClass('backside');
-				div.css('display', 'block');
 				div.css('position', 'absolute');
 				div.css('z-index', '2');
 				div.css('display', 'block');
@@ -156,7 +240,7 @@
 					div.css('display', 'block');
 					div.css('position', 'absolute');
 					var ss = (3 - SUIT_ZINDEX[s]) * 15;
-					var rr = (15 - r);
+					var rr = 5 + (15 - r);
 					var zindex = ss + rr;
 					div.css('z-index', '' + zindex);
 					div.css('top', ((s * 60) + 100) + 'px');
@@ -242,34 +326,59 @@
 				bb.append(tr);
 
 				divBiddingBox.css('position', 'absolute');
+				divBiddingBox.css('width', '200px');
 				divBiddingBox.css('left', BIDDINGBOX_X + 'px');
 				divBiddingBox.css('top', BIDDINGBOX_Y + 'px');
 				divBiddingBox.append(bb);
 			}
 
-			function dealCards(deal) {
+			var NS_X = MID_X - CARD_WI;
+			// var EW_Y = ((NORTH_Y + 30 + SOUTH_Y - 100) / 2);
+			var DX = 75;
+			var DY = 50;
+			var N_Y = EW_Y - DY;
+			var S_Y = EW_Y + DY;
+			var E_X = NS_X + DX;
+			var W_X = NS_X - DX;
+
+			var HAND_X = [ NORTH_DUMMY_X, EAST_X, NORTH_DUMMY_X, WEST_X ];
+			var HAND_Y = [ NORTH_Y, EAST_Y, SOUTH_Y, WEST_Y ];
+			var CARD_X = [ NS_X, E_X, NS_X, W_X ];
+			var CARD_Y = [ N_Y, EW_Y, S_Y, EW_Y ];
+			var MOVE_SUIT_Y = [ 0, 1, 0, 1 ];
+
+			function displayCard(id, player) {
+				var div = $('#' + id);
+				div.css('left', CARD_X[player] + 'px');
+				div.css('top', CARD_Y[player] + 'px');
+				div.css('display', 'block');
+			}
+
+			function displayCards(hand, player) {
+				hand = orderSHCD(hand);
 				var y = 0;
 				var x = 0;
-				var last_suit;
-				$('.card').css('display', 'none');
-				for (var i = 0; i < deal.length; i++) {
-					var s_r = deal[i].split('');
+				var last_suit = SPADES;
+				// $('.card').css('display', 'none');
+				for (var i = 0; i < hand.length; i++) {
+					var s_r = hand[i].split('');
 					var s = SUIT_CHARS.indexOf(s_r[0]);
 					var r = RANK_CHARS.indexOf(s_r[1]);
 					var card = CARDS[s][r];
-					if (last_suit || 0 === last_suit) {
-						if (last_suit === s) {
-						} else {
-							x++;
+					if (last_suit === s) {
+					} else {
+						x++;
+						if (MOVE_SUIT_Y[player]) {
+							y++;
+							x = 0;
 						}
 					}
-					var xx = MYHAND_X + x * MYHAND_X_D;
-					var yy = MYHAND_Y - y * 0;
+					var xx = HAND_X[player] + x * HAND_X_D;
+					var yy = HAND_Y[player] + y * HAND_Y_D;
 					card.css('left', xx + 'px');
 					card.css('top', yy + 'px');
 					card.css('display', 'block');
 					x++;
-					y++;
 					last_suit = s;
 				}
 			}
@@ -279,14 +388,39 @@
 				uiController('click', id);
 			}
 
+			var skipContinue = false;
+
+			function continueClicked() {
+				LOG('=continueClicked=');
+				if (skipContinue) {
+					skipContinue = false;
+					return;
+				}
+				var vis = divContinue.css('display');
+				LOG(vis);
+				if ('none' === divContinue.css('display')) {
+					return;
+				}
+				divContinue.css('display', 'none');
+				var deal = load('deal');
+				var play = deal['play'];
+				var ixPlay = deal['ixPlay'];
+				for (var i = ixPlay - 4; i < ixPlay; i++) {
+					var id = divId(play[i]);
+					LOG('HIDE: ' + play[i]);
+					$('#' + id).css('display', 'none');
+				}
+				if (1 + ixPlay > play.length) {
+					phase = PHASE_END;
+				} else {
+					phase = PHASE_PLAY;
+				}
+			}
+
 			function cardClicked() {
 				var id = $(this).attr('id');
 				uiController('click', id);
 			}
-
-			// var DEAL = [ 'SA', 'SK', 'SQ', 'SJ', 'ST', 'S9', 'S8', 'S7',
-			// 'S6', 'S2', 'H2', 'C2', 'D2' ];
-			var DEAL = 'md|3SQ92HKJ53DAQ63CKT,S4HT76DJ974CAQJ95,SAKJ653HA9DKT2C76,ST87HQ842D85C8432|sv|0|ah|Board+1|mb|1S|an|Major+suit+opening+--+5++!S;+11-21+HCP;+12-22+total+points|mb|P|mb|2N!|an|Jacoby+->+support;+balanced+--+4++!S;+13++total+points|mb|P|mb|3N|an|Balanced+submaximum+--+2++!C;+2++!D;+2++!H;+5++!S;+15-17+HCP|mb|P|mb|6N|an|4++!S;+13++total+points|mb|P|mb|P|mb|P|pc|H6|pc|H9|pc|HQ|pc|HK|pc|S2|pc|S4|pc|SA|pc|S7|pc|S3|pc|ST|pc|SQ|pc|C5|pc|S9|pc|C9|pc|SK|pc|S8|pc|HA|pc|H2|pc|H3|pc|H7|pc|D2|pc|D5|pc|DA|pc|D7|pc|HJ|pc|HT|pc|C6|pc|H4|pc|D6|pc|D9|pc|DK|pc|D8|pc|SJ|pc|C4|pc|CT|pc|CQ|pc|S6|pc|C2|pc|CK|pc|CA|pc|S5|pc|C3|pc|H5|pc|D4|pc|DT|pc|C8|pc|DQ|pc|DJ|pc|D3|pc|CJ|pc|C7|pc|H8|';
 
 			function readURL(url) {
 				url = url.replace(new RegExp('\\+\\+', 'g'), '# ');
@@ -381,22 +515,19 @@
 				return result;
 			}
 
-			function displayCards(hand) {
-				hand = orderSHCD(hand);
-				dealCards(hand);
-			}
-
 			function tst() {
-				var a = {};
-				var b = {};
-				var c = (a === b);
-				LOG("EQ: " + c);
+				// var a = "xyz";
+				// a['zz'] = 'ww';
+				// LOG(a);
+				// LOG(a['zz']);
 			}
 
 			function loadNewDeal() {
-				// tst();
+				tst();
 				var result = {}
 				phase = PHASE_BID;
+				divBiddingBox.css('display', 'block');
+				divAuction.css('display', 'block');
 				var d = parseDeal(DEAL);
 				var hands = d['md'][0];
 				var bids = d['mb'];
@@ -407,16 +538,31 @@
 				result['play'] = d['pc'];
 				result['ixBid'] = 0;
 				result['ixPlay'] = 0;
-				LOG(result);
-				var south = result['cards'][SOUTH];
-				displayCards(south);
 				var firstLead = locateCard(result['cards'], result['play'][0]);
 				var dummy = ((1 + firstLead) % 4);
 				var declarer = ((3 + firstLead) % 4);
+				LOG('DUMMY: ' + dummy);
+				if (SOUTH === dummy) {
+					dummy = WEST;
+					declarer = EAST;
+					var ss = result['cards'][SOUTH];
+					result['cards'][SOUTH] = result['cards'][EAST];
+					result['cards'][EAST] = result['cards'][NORTH];
+					result['cards'][NORTH] = result['cards'][WEST];
+					result['cards'][WEST] = ss;
+					var dealer = result['dealer'];
+					dealer = (1 + dealer) % 4;
+					result['dealer'] = dealer;
+					result['turn'] = dealer;
+				}
+				LOG(result);
+				var south = result['cards'][SOUTH];
+				displayCards(south, SOUTH);
 				result['declarer'] = declarer;
 				result['dummy'] = dummy;
 				msgAdd('DECLARER: ' + declarer);
 				msgAdd('DUMMY   : ' + dummy);
+				msgAdd('DEALER  : ' + result['dealer']);
 				return result;
 			}
 
@@ -427,6 +573,11 @@
 			}
 
 			function locateCard(cards, nextPlay) {
+				if (nextPlay) {
+					// continue;
+				} else {
+					return -1;
+				}
 				for (var i = NORTH; i <= WEST; i++) {
 					if (cards[i].includes(nextPlay)) {
 						// LOG('Found: ' + nextPlay);
@@ -437,11 +588,17 @@
 				}
 				LOG('Could not find card: ' + nextPlay);
 				LOG(cards);
+				return (-1);
 			}
 
 			function switchBidToPlay() {
 				msg('');
 				phase = PHASE_PLAY;
+				divBiddingBox.css('display', 'none');
+				var top = divBiddingBox.css('top');
+				var left = divBiddingBox.css('left');
+				divAuction.css('top', top);
+				divAuction.css('left', left);
 				var deal = load('deal');
 				var cards = deal['cards'];
 				var play = deal['play'];
@@ -452,9 +609,39 @@
 				save('deal', deal);
 			}
 
-			function showDummy() {
-				LOG('=showDummy=')
-				msgAdd('=showDummy=')
+			function showDummy(hand, player) {
+				msgAdd('=showDummy= ' + player);
+				msgAdd(hand);
+				displayCards(hand, player);
+			}
+
+			function divId(card) {
+				var tok = card.split('');
+				var s = tok[0];
+				var r = tok[1];
+				var id = 'C_' + s + '_' + r;
+				LOG('DIV_ID: ' + id);
+				return id;
+			}
+
+			function showBid(dealer, turn, ixBid, bid) {
+				LOG('showBid: ' + dealer + ' ' + turn + ' ' + ixBid + ' ' + bid);
+				var colDealer = (dealer + 1) % 4;
+				var col = (turn + 1) % 4;
+				var row = Math.floor(0.0001 + (ixBid / 4));
+				if (col < colDealer) {
+					row++;
+				}
+				LOG('R,C:' + row + ' ' + col);
+				var table = $(divAuction.find('table'));
+				var trList = $(table[0]).find('tr');
+				msgAdd('row: ' + row + ' tr: ' + trList.length);
+				if (row > trList.length - 2) {
+					msgAdd('= ADD_ROW =');
+				}
+				var tdList = $(trList[1 + row]).find('td');
+				var td = $(tdList[col]);
+				td.html(htmlBid(bid));
 			}
 
 			function advanceGame() {
@@ -462,9 +649,12 @@
 				var turn = deal['turn'];
 				if (PHASE_BID === phase) {
 					var ixBid = deal['ixBid'];
+					var bids = deal['bids'];
+					var bid = bids[ixBid];
+					var dealer = deal['dealer'];
+					showBid(dealer, turn, ixBid, bid);
 					ixBid++;
 					deal['ixBid'] = ixBid;
-					var bids = deal['bids'];
 					if (ixBid >= bids.length) {
 						LOG('= AUCTION COMPLETED =');
 						switchBidToPlay();
@@ -473,18 +663,30 @@
 					turn = ((1 + turn) % 4);
 					deal['turn'] = turn;
 				} else if (PHASE_PLAY === phase) {
+					var cards = deal['cards'];
 					var ixPlay = deal['ixPlay'];
+					var play = deal['play'];
+					var playCard = play[ixPlay];
+					msgAdd('PLAY: ' + playCard);
+					visible[playCard] = true;
+					var id = divId(playCard);
+					$('#' + id).css('display', 'block');
+					displayCard(id, turn);
+					if (0 === (ixPlay + 1) % 4) {
+						divContinue.css('display', 'block');
+						phase = PHASE_CONTINUE;
+					}
 					ixPlay++;
 					if (1 === ixPlay) {
-						showDummy();
+						var dummy = deal['dummy'];
+						showDummy(cards[dummy], dummy);
 					}
 					deal['ixPlay'] = ixPlay;
-					var play = deal['play'];
-					if (ixPlay >= play.length) {
-						phase = PHASE_END;
-						return;
-					}
-					var cards = deal['cards'];
+					// if (ixPlay >= play.length) {
+					// phase = PHASE_END;
+					// LOG('PHASE_END');
+					// return;
+					// }
 					var nextPlay = play[ixPlay];
 					turn = locateCard(cards, nextPlay);
 					deal['turn'] = turn;
@@ -531,6 +733,38 @@
 				}
 			}
 
+			function htmlBid(bid) {
+				bid = bid.replace('!', '');
+				if ('P' === bid) {
+					return 'Pass';
+				}
+				if ('X' === bid || 'D' === bid) {
+					return "<span class='red'>X</span>";
+				}
+				if ('R' === bid) {
+					return 'XX';
+				}
+				var tok = bid.split('');
+				var lvl = tok[0];
+				var denom = tok[1];
+				var result = '' + lvl + SYM_SUIT[denom];
+				if ('H' === denom || 'D' === denom) {
+					result = "<span class='red'>" + result + "</span>";
+				}
+				return result;
+			}
+
+			function htmlCard(bid) {
+				var tok = bid.split('');
+				var suit = tok[0];
+				var rank = tok[1];
+				var result = '' + SYM_SUIT[suit] + rank;
+				if ('H' === suit || 'D' === suit) {
+					result = "<span class='red'>" + result + "</span>";
+				}
+				return result;
+			}
+
 			function makeBid(p) {
 				var lvl = p[1];
 				var denom = SUIT_CHARS[Number(p[2])];
@@ -540,6 +774,7 @@
 					denom = p[2];
 				}
 				var actualBid = lvl + '' + denom;
+				actualBid = actualBid.replace('0X', 'D').replace('0P', 'P').replace('0XX', 'R');
 				// msgAdd(actualBid);
 				var deal = load('deal');
 				var bids = deal['bids'];
@@ -547,10 +782,9 @@
 				var expectedBid = deal['bids'][ixBid].replace('!', '');
 				LOG('EXPECTED: ' + expectedBid);
 				if (expectedBid === actualBid) {
-					msgAdd('YES: ' + actualBid);
 					advanceGame();
 				} else {
-					msgAdd('NOPE ' + expectedBid + ' ' + actualBid);
+					userMessage('Please bid: ' + htmlBid(expectedBid));
 				}
 			}
 
@@ -561,10 +795,10 @@
 				var expectedCard = play[ixPlay];
 				var actualCard = tok[1] + tok[2];
 				if (expectedCard === actualCard) {
-					msgAdd('YES: ' + actualCard);
+					skipContinue = true;
 					advanceGame();
 				} else {
-					msgAdd('NOPE ' + expectedCard + ' ' + actualCard);
+					userMessage('Please play ' + htmlCard(expectedCard));
 				}
 			}
 
@@ -577,6 +811,7 @@
 				} else if (PHASE_PLAY === phase && action === 'C') {
 					makePlay(tok);
 				} else {
+					msg('');
 					msgAdd('???');
 				}
 			}
@@ -607,12 +842,13 @@
 			function setup() {
 				console.clear();
 				biddingBox();
+				divContinue.click(continueClicked);
 				info.css('color', '#FFFFFF');
 				info.css('font-weight', 'bold');
 				var myhand = $('#myhand');
+				myhand.click(continueClicked);
 				for (var s = CLUBS; s <= SPADES; s++) {
 					for (var r = 2; r <= 14; r++) {
-						// myhand.append(' ' + s + ' ' + r);
 						var div = cardDiv(s, r);
 						myhand.append(div);
 						CARDS[s].push(div);
@@ -621,30 +857,29 @@
 				$('.card').click(cardClicked);
 				$('.bid').click(bidClicked);
 				$('.card').css('display', 'none');
-				// $('#myhand').click(cardClicked);
+				visible = {};
+				for (var s = CLUBS; s <= SPADES; s++) {
+					for (var r = 2; r <= 14; r++) {
+						var s_r = '' + SUIT_CHARS[s] + RANK_CHARS[r];
+						visible[s_r] = false;
+					}
+				}
 			}
 
 			$(function() {
 				info.text('-');
 				setup();
-				backside(NORTH_BACKSIDE_X, NORTH_BACKSIDE_Y, 'H');
-				backside(WEST_BACKSIDE_X, WEST_BACKSIDE_Y, 'V');
-				backside(EAST_BACKSIDE_X, EAST_BACKSIDE_Y, 'V');
+				backside(NORTH_BACK_X, NORTH_BACKSIDE_Y, 'H');
+				backside(WEST_BACK_X, WEST_BACKSIDE_Y, 'V');
+				backside(EAST_BACK_X, EAST_BACKSIDE_Y, 'V');
 
-				// dealCards(DEAL);
+				// backside(20, 500, 'H');
+				// backside(40, 480, 'V');
+				// backside(60, 500, 'H');
+				// backside(80, 500, 'H');
+				// backside(100, 480, 'V');
 
-				backside(20, 500, 'H');
-				backside(40, 480, 'V');
-				backside(60, 500, 'H');
-				backside(80, 500, 'H');
-				backside(100, 480, 'V');
-
+				setInterval(userMessageTick, 100)
 				setInterval(tick, 250);
-
-				// CARDS[2][5].css('display', 'none');
-				// var SA = CARDS[3][14];
-				// SA.css('top', (4 * 60 + 100) + 'px');
-				// SA.css('left', (15 * 20 + 35) + 'px');
-				// $('.card').css('display', 'block');
 			});
 		}));
