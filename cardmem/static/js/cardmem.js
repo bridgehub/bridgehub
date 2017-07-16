@@ -3,6 +3,17 @@
 }
 		(function($, window, document) {
 
+			// location.reload(true);
+
+			var logEnabled = true;
+			function LOG(s) {
+				if (logEnabled) {
+					if (console) {
+						console.log(JSON.stringify(s));
+					}
+				}
+			}
+
 			if (!localStorage) {
 				var txt = 'Hmmm... there seems to be a problem:<br /><br />';
 				txt += 'This application requires HTML5 localStorage.<br /><br />';
@@ -17,20 +28,11 @@
 			// var DEAL = [ 'SA', 'SK', 'SQ', 'SJ', 'ST', 'S9', 'S8', 'S7',
 			// 'S6', 'S2', 'H2', 'C2', 'D2' ];
 			var DEA2 = 'md|3SQ92HKJ53DAQ63CKT,S4HT76DJ974CAQJ95,SAKJ653HA9DKT2C76,ST87HQ842D85C8432|sv|0|ah|Board+1|mb|1S|an|Major+suit+opening+--+5++!S;+11-21+HCP;+12-22+total+points|mb|P|mb|2N!|an|Jacoby+->+support;+balanced+--+4++!S;+13++total+points|mb|P|mb|3N|an|Balanced+submaximum+--+2++!C;+2++!D;+2++!H;+5++!S;+15-17+HCP|mb|P|mb|6N|an|4++!S;+13++total+points|mb|P|mb|P|mb|P|pc|H6|pc|H9|pc|HQ|pc|HK|pc|S2|pc|S4|pc|SA|pc|S7|pc|S3|pc|ST|pc|SQ|pc|C5|pc|S9|pc|C9|pc|SK|pc|S8|pc|HA|pc|H2|pc|H3|pc|H7|pc|D2|pc|D5|pc|DA|pc|D7|pc|HJ|pc|HT|pc|C6|pc|H4|pc|D6|pc|D9|pc|DK|pc|D8|pc|SJ|pc|C4|pc|CT|pc|CQ|pc|S6|pc|C2|pc|CK|pc|CA|pc|S5|pc|C3|pc|H5|pc|D4|pc|DT|pc|C8|pc|DQ|pc|DJ|pc|D3|pc|CJ|pc|C7|pc|H8|';
-			var DEAL = 'md|2SAKT2H832DAKQ73CQ,SJ94HKQJ6D9CAJT87,S873HA754D82C9642,SQ65HT9DJT654CK53|sv|0|ah|Board+8|mb|1C|an|Minor+suit+opening+--+3++!C;+11-21+HCP;+12-22+total+points|mb|P|mb|1D|an|One+over+one+--+4++!D;+6++total+points|mb|D|an|Two+suit+takeout+--+5-+!C;+5-+!D;+4++!H;+4++!S;+12++total+points|mb|1H|an|3++!C;+4++!H;+11++HCP;+12-18+total+points|mb|P|mb|1N|an|Balanced+minimum+--+2-3+!C;+4++!D;+2-3+!H;+2-3+!S;+6-10+HCP|mb|2D|an|5-+!C;+5-+!D;+4++!H;+4++!S;+24++HCP;+25++total+points;+forcing+to+3N|mb|P|mb|2S|an|4++!S;+8-+total+points;+forcing+to+3N|mb|P|mb|4S|an|5-+!C;+5-+!D;+4++!H;+4++!S;+24++HCP;+25-27+total+points|mb|P|mb|5H|an|Cue+bid+--+1++!C;+1++!D;+4++!S;+no+!CA;+no+!DA;+!HA;+7-8+total+points;+forcing|mb|P|mb|6S|an|5-+!C;+5-+!D;+4++!H;+4++!S;+24++HCP;+25-27+total+points|mb|P|mb|P|mb|P|pc|HT|pc|H2|pc|H6|pc|HA|pc|S3|pc|S6|pc|SK|pc|S4|pc|SA|pc|S9|pc|S7|pc|S5|pc|DA|pc|D9|pc|D8|pc|D4|pc|DK|pc|SJ|pc|D2|pc|D6|pc|HK|pc|H4|pc|H9|pc|H3|pc|HQ|pc|H5|pc|C3|pc|H8|pc|C8|pc|C2|pc|CK|pc|CQ|pc|SQ|pc|S2|pc|C7|pc|S8|pc|DJ|pc|DQ|pc|HJ|pc|C4|pc|D7|pc|CA|pc|C6|pc|DT|pc|C5|pc|ST|pc|CJ|pc|C9|pc|D3|pc|CT|pc|H7|pc|D5|';
+			var DEA3 = 'md|2SAKT2H832DAKQ73CQ,SJ94HKQJ6D9CAJT87,S873HA754D82C9642,SQ65HT9DJT654CK53|sv|0|ah|Board+8|mb|1C|an|Minor+suit+opening+--+3++!C;+11-21+HCP;+12-22+total+points|mb|P|mb|1D|an|One+over+one+--+4++!D;+6++total+points|mb|D|an|Two+suit+takeout+--+5-+!C;+5-+!D;+4++!H;+4++!S;+12++total+points|mb|1H|an|3++!C;+4++!H;+11++HCP;+12-18+total+points|mb|P|mb|1N|an|Balanced+minimum+--+2-3+!C;+4++!D;+2-3+!H;+2-3+!S;+6-10+HCP|mb|2D|an|5-+!C;+5-+!D;+4++!H;+4++!S;+24++HCP;+25++total+points;+forcing+to+3N|mb|P|mb|2S|an|4++!S;+8-+total+points;+forcing+to+3N|mb|P|mb|4S|an|5-+!C;+5-+!D;+4++!H;+4++!S;+24++HCP;+25-27+total+points|mb|P|mb|5H|an|Cue+bid+--+1++!C;+1++!D;+4++!S;+no+!CA;+no+!DA;+!HA;+7-8+total+points;+forcing|mb|P|mb|6S|an|5-+!C;+5-+!D;+4++!H;+4++!S;+24++HCP;+25-27+total+points|mb|P|mb|P|mb|P|pc|HT|pc|H2|pc|H6|pc|HA|pc|S3|pc|S6|pc|SK|pc|S4|pc|SA|pc|S9|pc|S7|pc|S5|pc|DA|pc|D9|pc|D8|pc|D4|pc|DK|pc|SJ|pc|D2|pc|D6|pc|HK|pc|H4|pc|H9|pc|H3|pc|HQ|pc|H5|pc|C3|pc|H8|pc|C8|pc|C2|pc|CK|pc|CQ|pc|SQ|pc|S2|pc|C7|pc|S8|pc|DJ|pc|DQ|pc|HJ|pc|C4|pc|D7|pc|CA|pc|C6|pc|DT|pc|C5|pc|ST|pc|CJ|pc|C9|pc|D3|pc|CT|pc|H7|pc|D5|';
 			var DEA4 = 'md|4SKT92HAQJ82DJ2CKJ,SAJ64HT7DA83CQ874,S75HK95DKQT94CA63,SQ83H643D765CT952|sv|E|ah|Board+6|mb|P|mb|1H|an|Major+suit+opening+--+5++!H;+11-21+HCP;+12-22+total+points|mb|D|an|Takeout+double+--+3-5+!C;+3-5+!D;+2-+!H;+3-4+!S;+12++total+points|mb|2N!|an|Truscott+(Jordan)+--+3++!H;+11++total+points|mb|P|mb|4H|an|5++!H;+13++HCP;+14-19+total+points|mb|P|mb|P|mb|P|pc|HT|pc|HK|pc|H4|pc|H2|pc|H9|pc|H6|pc|H8|pc|H7|pc|D4|pc|D5|pc|DJ|pc|D3|pc|D2|pc|DA|pc|D9|pc|D7|pc|D8|pc|DK|pc|D6|pc|S2|pc|H5|pc|H3|pc|HA|pc|C8|pc|CK|pc|C4|pc|C3|pc|CT|pc|CJ|pc|CQ|pc|CA|pc|C5|pc|DQ|pc|S3|pc|S9|pc|S6|pc|DT|pc|C9|pc|ST|pc|S4|pc|S5|pc|S8|pc|SK|pc|SA|pc|C7|pc|C6|pc|C2|pc|HJ|pc|HQ|pc|SJ|pc|S7|pc|SQ|';
-			var DEA5 = 'md|1SQ83H643D765CT952,SKT92HAQJ82DJ2CKJ,SAJ64HT7DA83CQ874,S75HK95DKQT94CA63|sv|E|ah|Board+6|mb|P|mb|1H|an|Major+suit+opening+--+5++!H;+11-21+HCP;+12-22+total+points|mb|D|an|Takeout+double+--+3-5+!C;+3-5+!D;+2-+!H;+3-4+!S;+12++total+points|mb|2N!|an|Truscott+(Jordan)+--+3++!H;+11++total+points|mb|P|mb|4H|an|5++!H;+13++HCP;+14-19+total+points|mb|P|mb|P|mb|P|pc|HT|pc|HK|pc|H4|pc|H2|pc|H9|pc|H6|pc|H8|pc|H7|pc|D4|pc|D5|pc|DJ|pc|D3|pc|D2|pc|DA|pc|D9|pc|D7|pc|D8|pc|DK|pc|D6|pc|S2|pc|H5|pc|H3|pc|HA|pc|C8|pc|CK|pc|C4|pc|C3|pc|CT|pc|CJ|pc|CQ|pc|CA|pc|C5|pc|DQ|pc|S3|pc|S9|pc|S6|pc|DT|pc|C9|pc|ST|pc|S4|pc|S5|pc|S8|pc|SK|pc|SA|pc|C7|pc|C6|pc|C2|pc|HJ|pc|HQ|pc|SJ|pc|S7|pc|SQ|';
+			var DEAL = 'md|1SQ83H643D765CT952,SKT92HAQJ82DJ2CKJ,SAJ64HT7DA83CQ874,S75HK95DKQT94CA63|sv|E|ah|Board+6|mb|P|mb|1H|an|Major+suit+opening+--+5++!H;+11-21+HCP;+12-22+total+points|mb|D|an|Takeout+double+--+3-5+!C;+3-5+!D;+2-+!H;+3-4+!S;+12++total+points|mb|2N!|an|Truscott+(Jordan)+--+3++!H;+11++total+points|mb|P|mb|4H|an|5++!H;+13++HCP;+14-19+total+points|mb|P|mb|P|mb|P|pc|HT|pc|HK|pc|H4|pc|H2|pc|H9|pc|H6|pc|H8|pc|H7|pc|D4|pc|D5|pc|DJ|pc|D3|pc|D2|pc|DA|pc|D9|pc|D7|pc|D8|pc|DK|pc|D6|pc|S2|pc|H5|pc|H3|pc|HA|pc|C8|pc|CK|pc|C4|pc|C3|pc|CT|pc|CJ|pc|CQ|pc|CA|pc|C5|pc|DQ|pc|S3|pc|S9|pc|S6|pc|DT|pc|C9|pc|ST|pc|S4|pc|S5|pc|S8|pc|SK|pc|SA|pc|C7|pc|C6|pc|C2|pc|HJ|pc|HQ|pc|SJ|pc|S7|pc|SQ|';
 
 			// =============================================
-
-			var logEnabled = true;
-			function LOG(s) {
-				if (logEnabled) {
-					if (console) {
-						console.log(JSON.stringify(s));
-					}
-				}
-			}
 
 			// =============================================
 
@@ -51,11 +53,20 @@
 			// =============================================
 
 			var message = $('#message');
+			var hint = $('#hint');
 
 			var messageCounter = -1;
 
 			function userMessageTick() {
-				if (messageCounter < 0) {
+				if (messageCounter <= -200) {
+					messageCounter = -(messageCounter) - 200;
+					message.css('display', 'block');
+					return;
+				} else if (messageCounter <= -100) {
+					message.css('display', 'none');
+					messageCounter -= 100;
+					return;
+				} else if (messageCounter < 0) {
 					return;
 				}
 				if (messageCounter == 0) {
@@ -64,10 +75,14 @@
 				messageCounter--;
 			}
 
-			function userMessage(txt) {
+			function userMessage(txt, interval) {
+				message.css('display', 'none');
 				message.html('&nbsp;' + txt + '&nbsp;');
-				message.css('display', 'block');
-				messageCounter = 15;
+				if (interval) {
+					messageCounter = -100 - interval;
+				} else {
+					messageCounter = -100 - 10;
+				}
 			}
 
 			// =============================================
@@ -137,11 +152,14 @@
 			var HAND_X_D = 15;
 			var HAND_Y_D = 30;
 
-			var MESSAGE_Y_D = 110;
 			var CONTINUE_X = MID_X + 1.5 * CARD_WI;
 			var CONTINUE_Y = SOUTH_Y - 0.5 * CARD_HE;
 
-			message.css('top', '' + (SOUTH_Y + MESSAGE_Y_D) + 'px');
+			message.css('top', '' + (SOUTH_Y - 22) + 'px');
+			message.css('left', '' + (NORTH_DUMMY_X + 10) + 'px');
+
+			hint.css('top', '' + (SOUTH_Y) + 'px');
+			hint.css('left', '' + (10) + 'px');
 
 			var BIDDINGBOX_X = 450;
 			var BIDDINGBOX_Y = SOUTH_Y;
@@ -407,6 +425,35 @@
 			var SCORE = 3;
 			var MEMORY_SCORE = 0;
 
+			function expectedBid(deal) {
+				var ixBid = deal['ixBid'];
+				var bids = deal['bids'];
+				return bids[ixBid].replace('!', '');
+			}
+
+			function expectedCard(deal) {
+				var ixPlay = deal['ixPlay'];
+				var play = deal['play'];
+				return play[ixPlay];
+			}
+
+			function showHint() {
+				var deal = load('deal');
+				var turn = deal['turn'];
+				if (SOUTH === turn || (NORTH === turn && SOUTH === deal['declarer'])) {
+					hint.css('display', 'block');
+					if (PHASE_BID === phase) {
+						hint.html('&nbsp;Bid: ' + htmlBid(expectedBid(deal)) + '&nbsp;');
+					} else if (PHASE_PLAY === phase) {
+						hint.html('&nbsp;Play: ' + htmlCard(expectedCard(deal)) + '&nbsp;');
+					} else {
+						hint.css('display', 'none');
+					}
+				} else {
+					hint.css('display', 'none');
+				}
+			}
+
 			function answerClicked() {
 				var id = $(this).attr('id');
 				LOG('answerClicked: ' + id);
@@ -420,6 +467,7 @@
 				if ('S' === typ) {
 					$('.answer').css('background-color', 'white');
 					$('#' + id).css('background-color', 'yellow');
+					divAnswerRank.css('display', 'block');
 					ANSWER_SUIT = tok[2];
 					LOG('A_S: ' + ANSWER_SUIT);
 				} else if ('R' === typ) {
@@ -427,6 +475,7 @@
 					var answer = ANSWER_SUIT + rank;
 					LOG('?: ' + CORRECT_ANSWER + ' ' + answer);
 					if (CORRECT_ANSWER === answer) {
+						userMessage('Correct!', 5);
 						MEMORY_SCORE += SCORE;
 						msgAdd('MEMORY_SCORE: ' + MEMORY_SCORE);
 						divAnswerRank.css('display', 'none');
@@ -435,8 +484,12 @@
 						phase = PHASE_PLAY;
 					} else {
 						SCORE--;
+						$('.answer').css('background-color', 'white');
+						divAnswerRank.css('display', 'none');
 						if (SCORE >= 1) {
+							userMessage('Not that card, try again!');
 						} else {
+							userMessage("No, but let's continue.");
 							divAnswerRank.css('display', 'none');
 							divAnswerSuit.css('display', 'none');
 							divQuestion.css('display', 'none');
@@ -465,11 +518,12 @@
 					LOG('r: ' + r + ' ' + ((4 * trick) + r) + ' ' + c);
 					var player = locateCard(deal['cards'], c);
 					LOG('Q: ' + ixPlay + ' ' + c + ' ' + player);
-					var declarer = deal[declarer];
+					var declarer = deal['declarer'];
 					if (SOUTH === player || (NORTH === player && SOUTH === declarer)) {
 						// dont ask player's own cards or dummy's cards
 						continue;
 					}
+					LOG('PLAYER: ' + player + ', DECLAR: ' + declarer);
 					var name = NAMES[player];
 					var question = ' Which card did ' + name + ' just play? ';
 					divQuestion.text(question);
@@ -480,7 +534,7 @@
 					SCORE = 3;
 					// msgAdd('A: ' + CORRECT_ANSWER);
 					phase = PHASE_ASK;
-					divAnswerRank.css('display', 'block');
+					divAnswerRank.css('display', 'none');
 					divAnswerSuit.css('display', 'block');
 					divQuestion.css('display', 'block');
 					return;
@@ -667,6 +721,7 @@
 			var info = $('#info');
 
 			function tick() {
+				showHint();
 				uiController('tick');
 			}
 
@@ -939,6 +994,10 @@
 			function setup() {
 				LOG('== setup ==');
 				biddingBox();
+
+				$('#btnRewind').click(function() {
+					location.reload(true);
+				});
 
 				divQuestion.css('top', SOUTH_Y + 2.3 * CARD_HE);
 				divAnswerSuit.css('top', SOUTH_Y + 2.70 * CARD_HE);

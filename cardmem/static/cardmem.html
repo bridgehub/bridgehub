@@ -84,9 +84,17 @@
 	position: absolute;
 	font-family: sans-serif;
 	font-size: 13px;
-	font-weight: bold; #
-	top: 400px;
-	left: 50px;
+	font-weight: bold;
+	display: none;
+}
+
+.hint {
+	background-color: #CCCCCC;
+	color: #000000;
+	position: absolute;
+	font-family: sans-serif;
+	font-size: 10px;
+	font-weight: bold;
 	display: none;
 }
 
@@ -100,6 +108,7 @@ table {
 	left: 140px;
 	top: 130px;
 	text-align: center;
+	display: none;
 }
 
 .abid {
@@ -174,7 +183,15 @@ table {
 <body
 	style='font-family: Consolas, monospace; background-color: #AAFFAA'>
 	<div id='myhand'>
-		<div id='info'>INFO</div>
+		<table id='buttons' style='position: absolute; left: 380px'>
+			<tr>
+				<td style='color: white;'>Deal:&nbsp;</td>
+				<td><button id='btnPrev'>Prev</button></td>
+				<td><button id='btnRewind'>Rewind</button></td>
+				<td><button id='btnNext'>Next</button></td>
+			</tr>
+		</table>
+		<div id='info'></div>
 		<div id='auction' class='auction'>
 			<table class='auctionTable'>
 				<tr>
@@ -253,7 +270,8 @@ table {
 			</table>
 		</div>
 		<div id='continue' class='continue'>&nbsp;Continue...&nbsp;</div>
-		<div id='message' class='message'>.</div>
+		<div id='message' class='message'></div>
+		<div id='hint' class='hint'>xxx</div>
 	</div>
 	<pre id='msg'>-</pre>
 	<!-- 	<div id='D_C_3'> -->
