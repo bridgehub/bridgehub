@@ -456,7 +456,7 @@
 
 			function answerClicked() {
 				var id = $(this).attr('id');
-				LOG('answerClicked: ' + id);
+				// LOG('answerClicked: ' + id);
 				if (PHASE_ASK === phase) {
 					// ok, continue
 				} else {
@@ -469,11 +469,11 @@
 					$('#' + id).css('background-color', 'yellow');
 					divAnswerRank.css('display', 'block');
 					ANSWER_SUIT = tok[2];
-					LOG('A_S: ' + ANSWER_SUIT);
+					// LOG('A_S: ' + ANSWER_SUIT);
 				} else if ('R' === typ) {
 					var rank = tok[2];
 					var answer = ANSWER_SUIT + rank;
-					LOG('?: ' + CORRECT_ANSWER + ' ' + answer);
+					// LOG('?: ' + CORRECT_ANSWER + ' ' + answer);
 					if (CORRECT_ANSWER === answer) {
 						userMessage('Correct!', 5);
 						MEMORY_SCORE += SCORE;
@@ -509,21 +509,21 @@
 			function setupQuestion(deal) {
 				var ixPlay = deal['ixPlay'];
 				var play = deal['play'];
-				LOG(play);
+				// LOG(play);
 				var trick = int((ixPlay - 1) / 4);
-				LOG('trick: ' + trick);
+				// LOG('trick: ' + trick);
 				while (true) {
 					var r = randomInt(0, 3);
 					var c = play[(4 * trick) + r];
-					LOG('r: ' + r + ' ' + ((4 * trick) + r) + ' ' + c);
+					// LOG('r: ' + r + ' ' + ((4 * trick) + r) + ' ' + c);
 					var player = locateCard(deal['cards'], c);
-					LOG('Q: ' + ixPlay + ' ' + c + ' ' + player);
+					// LOG('Q: ' + ixPlay + ' ' + c + ' ' + player);
 					var declarer = deal['declarer'];
 					if (SOUTH === player || (NORTH === player && SOUTH === declarer)) {
 						// dont ask player's own cards or dummy's cards
 						continue;
 					}
-					LOG('PLAYER: ' + player + ', DECLAR: ' + declarer);
+					// LOG('PLAYER: ' + player + ', DECLAR: ' + declarer);
 					var name = NAMES[player];
 					var question = ' Which card did ' + name + ' just play? ';
 					divQuestion.text(question);
@@ -544,7 +544,6 @@
 			var skipContinue = false;
 
 			function continueClicked() {
-				LOG('=continueClicked=');
 				if (skipContinue) {
 					skipContinue = false;
 					return;
@@ -636,12 +635,9 @@
 				var dealer = dealConvert[Number(hands.substring(0, 1)) - 1];
 				hands = hands.substring(1).split(',');
 				var cards = [];
-				// LOG(dealer);
-				// LOG(hands);
 				for (var p = NORTH; p <= WEST; p++) {
 					var hand = parseHand(hands[dealConvert[p]]);
 					cards.push(hand);
-					// LOG(hand);
 				}
 				result['dealer'] = dealer;
 				result['turn'] = dealer;
@@ -693,7 +689,7 @@
 				var firstLead = locateCard(result['cards'], result['play'][0]);
 				var dummy = ((1 + firstLead) % 4);
 				var declarer = ((3 + firstLead) % 4);
-				LOG('DUMMY: ' + dummy);
+				// LOG('DUMMY: ' + dummy);
 				if (SOUTH === dummy) {
 					dummy = WEST;
 					declarer = EAST;
@@ -707,7 +703,7 @@
 					result['dealer'] = dealer;
 					result['turn'] = dealer;
 				}
-				LOG(result);
+				// LOG(result);
 				var south = result['cards'][SOUTH];
 				displayCards(south, SOUTH);
 				result['declarer'] = declarer;
@@ -763,8 +759,6 @@
 			}
 
 			function showDummy(hand, player) {
-				// msgAdd('=showDummy= ' + player);
-				// msgAdd(hand);
 				displayCards(hand, player);
 			}
 
@@ -773,19 +767,20 @@
 				var s = tok[0];
 				var r = tok[1];
 				var id = 'C_' + s + '_' + r;
-				LOG('DIV_ID: ' + id);
+				// LOG('DIV_ID: ' + id);
 				return id;
 			}
 
 			function showBid(dealer, turn, ixBid, bid) {
-				LOG('showBid: ' + dealer + ' ' + turn + ' ' + ixBid + ' ' + bid);
+				// LOG('showBid: ' + dealer + ' ' + turn + ' ' + ixBid + ' ' +
+				// bid);
 				var colDealer = (dealer + 1) % 4;
 				var col = (turn + 1) % 4;
 				var row = int(ixBid / 4);
 				if (col < colDealer) {
 					row++;
 				}
-				LOG('R,C:' + row + ' ' + col);
+				// LOG('R,C:' + row + ' ' + col);
 				var table = $(divAuction.find('table'));
 				var trList = $(table[0]).find('tr');
 				// msgAdd('row: ' + row + ' tr: ' + trList.length);
@@ -933,7 +928,7 @@
 				var bids = deal['bids'];
 				var ixBid = deal['ixBid'];
 				var expectedBid = deal['bids'][ixBid].replace('!', '');
-				LOG('EXPECTED: ' + expectedBid);
+				// LOG('EXPECTED: ' + expectedBid);
 				if (expectedBid === actualBid) {
 					advanceGame();
 				} else {
@@ -956,7 +951,7 @@
 			}
 
 			function handleClick(p) {
-				LOG('CLICK: ' + p);
+				// LOG('CLICK: ' + p);
 				var tok = p.split('_');
 				var action = tok[0];
 				if (PHASE_BID === phase && action === 'B') {
@@ -992,7 +987,6 @@
 			}
 
 			function setup() {
-				LOG('== setup ==');
 				biddingBox();
 
 				$('#btnRewind').click(function() {
