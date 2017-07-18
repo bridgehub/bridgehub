@@ -3,17 +3,6 @@
 }
 		(function($, window, document) {
 
-			// location.reload(true);
-
-			var logEnabled = true;
-			function LOG(s) {
-				if (logEnabled) {
-					if (console) {
-						console.log(JSON.stringify(s));
-					}
-				}
-			}
-
 			if (!localStorage) {
 				var txt = 'Hmmm... there seems to be a problem:<br /><br />';
 				txt += 'This application requires HTML5 localStorage.<br /><br />';
@@ -23,6 +12,19 @@
 				txt += 'If you think you have disabled localStorage and <br />want to enable it, google: enable localStorage';
 				$('body').html(txt);
 				return;
+			}
+
+			// location.reload(true);
+
+			var SERIES = './ser001/';
+
+			var logEnabled = true;
+			function LOG(s) {
+				if (logEnabled) {
+					if (console) {
+						console.log(JSON.stringify(s));
+					}
+				}
 			}
 
 			// var DEAL = [ 'SA', 'SK', 'SQ', 'SJ', 'ST', 'S9', 'S8', 'S7',
