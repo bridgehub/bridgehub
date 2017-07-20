@@ -14,7 +14,8 @@
 				return;
 			}
 
-			var SERIES = './ser001/';
+			var SERIES = './ser001';
+			var DEAL_MAX = 1262;
 
 			var logEnabled = true;
 			function LOG(s) {
@@ -555,6 +556,7 @@
 					SCORE = 3;
 					// msgAdd('A: ' + CORRECT_ANSWER);
 					phase = PHASE_ASK;
+					$('.answer').css('background-color', 'white');
 					divAnswerRank.css('display', 'none');
 					divAnswerSuit.css('display', 'block');
 					divQuestion.css('display', 'block');
@@ -734,6 +736,12 @@
 				msgAdd('DECLARER: ' + declarer);
 				msgAdd('DUMMY   : ' + dummy);
 				msgAdd('DEALER  : ' + result['dealer']);
+				var dealer = result['dealer'];
+				var state = load('state');
+				var dealNext = state['dealNext'];
+				var dealSequence = state['dealSequence'];
+				var dealId = dealSequence[dealNext];
+				boardNumber(dealNext, dealId, PLAYER_TEXT[dealer]);
 				phase = PHASE_BID;
 				return result;
 			}
@@ -795,7 +803,7 @@
 				return id;
 			}
 
-			function showBid(dealer, turn, ixBid, bid) {
+			function showBid(dealer, turn, ixBid, bid, explText) {
 				// LOG('showBid: ' + dealer + ' ' + turn + ' ' + ixBid + ' ' +
 				// bid);
 				var colDealer = (dealer + 1) % 4;
@@ -814,6 +822,9 @@
 				var tdList = $(trList[1 + row]).find('td');
 				var td = $(tdList[col]);
 				td.html(htmlBid(bid));
+				if (explText.length > 3) {
+					alert(bid + ': ' + explText);
+				}
 			}
 
 			function advanceGame() {
@@ -822,9 +833,12 @@
 				if (PHASE_BID === phase) {
 					var ixBid = deal['ixBid'];
 					var bids = deal['bids'];
+					var expl = deal['expl'];
 					var bid = bids[ixBid];
+					var explText = expl[ixBid];
 					var dealer = deal['dealer'];
-					showBid(dealer, turn, ixBid, bid);
+					msgAdd('EXPL: ' + explText);
+					showBid(dealer, turn, ixBid, bid, explText);
 					ixBid++;
 					deal['ixBid'] = ixBid;
 					if (ixBid >= bids.length) {
@@ -912,8 +926,8 @@
 					}
 				}
 				LOG('=re-Init=');
-				dealNext = 1;
-				dealMax = 800;
+				dealNext = 0;
+				dealMax = DEAL_MAX;
 				var dealSequence = [];
 				for (var i = 0; i < dealMax; i++) {
 					dealSequence.push(formatId(i));
@@ -935,15 +949,15 @@
 
 			function formatId(id) {
 				var result = '' + id;
-				while (result.length < 3) {
+				while (result.length < 5) {
 					result = '0' + result;
 				}
 				return result;
 			}
 
-			function boardNumber(dealNext, dealId) {
+			function boardNumber(dealNext, dealId, dealer) {
 				info.css('font-weight', 'normal');
-				info.text('Deal#' + dealNext + ' (' + dealId + ')');
+				info.html('Deal#' + (1 + dealNext) + ' (' + dealId + ')<br />Dealer: ' + dealer);
 			}
 
 			function loadNewDealAsynch() {
@@ -958,11 +972,10 @@
 				var dealNext = state['dealNext'];
 				LOG('dealNext: ' + dealNext);
 				var dealId = dealSequence[dealNext];
-				boardNumber(dealNext, dealId);
 				// LOG('dealNext:');
 				// LOG(dealNext);
 				$.ajax({
-					url : './ser001/deal_' + dealId + '.json',
+					url : SERIES + '/deal_' + dealId + '.json',
 					type : 'get',
 					async : true,
 					cache : false,
