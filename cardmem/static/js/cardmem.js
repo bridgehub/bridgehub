@@ -14,8 +14,6 @@
 				return;
 			}
 
-			// location.reload(true);
-
 			var SERIES = './ser001/';
 
 			var logEnabled = true;
@@ -32,7 +30,9 @@
 			var DEA2 = 'md|3SQ92HKJ53DAQ63CKT,S4HT76DJ974CAQJ95,SAKJ653HA9DKT2C76,ST87HQ842D85C8432|sv|0|ah|Board+1|mb|1S|an|Major+suit+opening+--+5++!S;+11-21+HCP;+12-22+total+points|mb|P|mb|2N!|an|Jacoby+->+support;+balanced+--+4++!S;+13++total+points|mb|P|mb|3N|an|Balanced+submaximum+--+2++!C;+2++!D;+2++!H;+5++!S;+15-17+HCP|mb|P|mb|6N|an|4++!S;+13++total+points|mb|P|mb|P|mb|P|pc|H6|pc|H9|pc|HQ|pc|HK|pc|S2|pc|S4|pc|SA|pc|S7|pc|S3|pc|ST|pc|SQ|pc|C5|pc|S9|pc|C9|pc|SK|pc|S8|pc|HA|pc|H2|pc|H3|pc|H7|pc|D2|pc|D5|pc|DA|pc|D7|pc|HJ|pc|HT|pc|C6|pc|H4|pc|D6|pc|D9|pc|DK|pc|D8|pc|SJ|pc|C4|pc|CT|pc|CQ|pc|S6|pc|C2|pc|CK|pc|CA|pc|S5|pc|C3|pc|H5|pc|D4|pc|DT|pc|C8|pc|DQ|pc|DJ|pc|D3|pc|CJ|pc|C7|pc|H8|';
 			var DEA3 = 'md|2SAKT2H832DAKQ73CQ,SJ94HKQJ6D9CAJT87,S873HA754D82C9642,SQ65HT9DJT654CK53|sv|0|ah|Board+8|mb|1C|an|Minor+suit+opening+--+3++!C;+11-21+HCP;+12-22+total+points|mb|P|mb|1D|an|One+over+one+--+4++!D;+6++total+points|mb|D|an|Two+suit+takeout+--+5-+!C;+5-+!D;+4++!H;+4++!S;+12++total+points|mb|1H|an|3++!C;+4++!H;+11++HCP;+12-18+total+points|mb|P|mb|1N|an|Balanced+minimum+--+2-3+!C;+4++!D;+2-3+!H;+2-3+!S;+6-10+HCP|mb|2D|an|5-+!C;+5-+!D;+4++!H;+4++!S;+24++HCP;+25++total+points;+forcing+to+3N|mb|P|mb|2S|an|4++!S;+8-+total+points;+forcing+to+3N|mb|P|mb|4S|an|5-+!C;+5-+!D;+4++!H;+4++!S;+24++HCP;+25-27+total+points|mb|P|mb|5H|an|Cue+bid+--+1++!C;+1++!D;+4++!S;+no+!CA;+no+!DA;+!HA;+7-8+total+points;+forcing|mb|P|mb|6S|an|5-+!C;+5-+!D;+4++!H;+4++!S;+24++HCP;+25-27+total+points|mb|P|mb|P|mb|P|pc|HT|pc|H2|pc|H6|pc|HA|pc|S3|pc|S6|pc|SK|pc|S4|pc|SA|pc|S9|pc|S7|pc|S5|pc|DA|pc|D9|pc|D8|pc|D4|pc|DK|pc|SJ|pc|D2|pc|D6|pc|HK|pc|H4|pc|H9|pc|H3|pc|HQ|pc|H5|pc|C3|pc|H8|pc|C8|pc|C2|pc|CK|pc|CQ|pc|SQ|pc|S2|pc|C7|pc|S8|pc|DJ|pc|DQ|pc|HJ|pc|C4|pc|D7|pc|CA|pc|C6|pc|DT|pc|C5|pc|ST|pc|CJ|pc|C9|pc|D3|pc|CT|pc|H7|pc|D5|';
 			var DEA4 = 'md|4SKT92HAQJ82DJ2CKJ,SAJ64HT7DA83CQ874,S75HK95DKQT94CA63,SQ83H643D765CT952|sv|E|ah|Board+6|mb|P|mb|1H|an|Major+suit+opening+--+5++!H;+11-21+HCP;+12-22+total+points|mb|D|an|Takeout+double+--+3-5+!C;+3-5+!D;+2-+!H;+3-4+!S;+12++total+points|mb|2N!|an|Truscott+(Jordan)+--+3++!H;+11++total+points|mb|P|mb|4H|an|5++!H;+13++HCP;+14-19+total+points|mb|P|mb|P|mb|P|pc|HT|pc|HK|pc|H4|pc|H2|pc|H9|pc|H6|pc|H8|pc|H7|pc|D4|pc|D5|pc|DJ|pc|D3|pc|D2|pc|DA|pc|D9|pc|D7|pc|D8|pc|DK|pc|D6|pc|S2|pc|H5|pc|H3|pc|HA|pc|C8|pc|CK|pc|C4|pc|C3|pc|CT|pc|CJ|pc|CQ|pc|CA|pc|C5|pc|DQ|pc|S3|pc|S9|pc|S6|pc|DT|pc|C9|pc|ST|pc|S4|pc|S5|pc|S8|pc|SK|pc|SA|pc|C7|pc|C6|pc|C2|pc|HJ|pc|HQ|pc|SJ|pc|S7|pc|SQ|';
-			var DEAL = 'md|1SQ83H643D765CT952,SKT92HAQJ82DJ2CKJ,SAJ64HT7DA83CQ874,S75HK95DKQT94CA63|sv|E|ah|Board+6|mb|P|mb|1H|an|Major+suit+opening+--+5++!H;+11-21+HCP;+12-22+total+points|mb|D|an|Takeout+double+--+3-5+!C;+3-5+!D;+2-+!H;+3-4+!S;+12++total+points|mb|2N!|an|Truscott+(Jordan)+--+3++!H;+11++total+points|mb|P|mb|4H|an|5++!H;+13++HCP;+14-19+total+points|mb|P|mb|P|mb|P|pc|HT|pc|HK|pc|H4|pc|H2|pc|H9|pc|H6|pc|H8|pc|H7|pc|D4|pc|D5|pc|DJ|pc|D3|pc|D2|pc|DA|pc|D9|pc|D7|pc|D8|pc|DK|pc|D6|pc|S2|pc|H5|pc|H3|pc|HA|pc|C8|pc|CK|pc|C4|pc|C3|pc|CT|pc|CJ|pc|CQ|pc|CA|pc|C5|pc|DQ|pc|S3|pc|S9|pc|S6|pc|DT|pc|C9|pc|ST|pc|S4|pc|S5|pc|S8|pc|SK|pc|SA|pc|C7|pc|C6|pc|C2|pc|HJ|pc|HQ|pc|SJ|pc|S7|pc|SQ|';
+			// var DEAL =
+			// 'md|1SQ83H643D765CT952,SKT92HAQJ82DJ2CKJ,SAJ64HT7DA83CQ874,S75HK95DKQT94CA63|sv|E|ah|Board+6|mb|P|mb|1H|an|Major+suit+opening+--+5++!H;+11-21+HCP;+12-22+total+points|mb|D|an|Takeout+double+--+3-5+!C;+3-5+!D;+2-+!H;+3-4+!S;+12++total+points|mb|2N!|an|Truscott+(Jordan)+--+3++!H;+11++total+points|mb|P|mb|4H|an|5++!H;+13++HCP;+14-19+total+points|mb|P|mb|P|mb|P|pc|HT|pc|HK|pc|H4|pc|H2|pc|H9|pc|H6|pc|H8|pc|H7|pc|D4|pc|D5|pc|DJ|pc|D3|pc|D2|pc|DA|pc|D9|pc|D7|pc|D8|pc|DK|pc|D6|pc|S2|pc|H5|pc|H3|pc|HA|pc|C8|pc|CK|pc|C4|pc|C3|pc|CT|pc|CJ|pc|CQ|pc|CA|pc|C5|pc|DQ|pc|S3|pc|S9|pc|S6|pc|DT|pc|C9|pc|ST|pc|S4|pc|S5|pc|S8|pc|SK|pc|SA|pc|C7|pc|C6|pc|C2|pc|HJ|pc|HQ|pc|SJ|pc|S7|pc|SQ|';
+			var DEAL;
 
 			// =============================================
 
@@ -89,13 +89,28 @@
 
 			// =============================================
 
+			var DEAL;
+
 			function load(id) {
+				if ('deal' === id) {
+					return DEAL;
+				}
 				var json = localStorage.getItem(id);
 				var obj = JSON.parse(json);
 				return obj;
 			}
 
+			function loadNumber(id) {
+				var json = localStorage.getItem(id);
+				var obj = JSON.parse(json);
+				return Number('' + obj);
+			}
+
 			function save(id, obj) {
+				if ('deal' === id) {
+					DEAL = obj;
+					return;
+				}
 				if (obj) {
 					var json = JSON.stringify(obj);
 					localStorage.setItem(id, json);
@@ -103,6 +118,8 @@
 					localStorage.removeItem(id);
 				}
 			}
+
+			// save('state', null);
 
 			var CARD_WI = 35;
 			var CARD_HE = 47;
@@ -441,6 +458,9 @@
 
 			function showHint() {
 				var deal = load('deal');
+				if (!deal) {
+					return;
+				}
 				var turn = deal['turn'];
 				if (SOUTH === turn || (NORTH === turn && SOUTH === deal['declarer'])) {
 					hint.css('display', 'block');
@@ -458,7 +478,6 @@
 
 			function answerClicked() {
 				var id = $(this).attr('id');
-				// LOG('answerClicked: ' + id);
 				if (PHASE_ASK === phase) {
 					// ok, continue
 				} else {
@@ -586,8 +605,8 @@
 				// res = res.replace(new RegExp('%3B', 'g'), ';');
 			}
 
-			function parseDeal(deal) {
-				deal = readURL(deal);
+			function parseDeal(url) {
+				deal = readURL(url);
 				var tok = deal.split('|');
 				var result = {};
 				for (var i = 0; i < tok.length; i += 2) {
@@ -666,19 +685,21 @@
 			}
 
 			function tst() {
-				// var a = "xyz";
-				// a['zz'] = 'ww';
-				// LOG(a);
-				// LOG(a['zz']);
+				var x = '5';
+				alert(typeof (x));
+				var y = JSON.stringify(x);
+				localStorage['valu'] = y;
+				var z = JSON.parse(localStorage['valu']);
+				alert(typeof (z));
+				alert('valu[' + z + ']');
 			}
 
-			function loadNewDeal() {
-				tst();
+			function loadNewDeal(url) {
+				// tst();
 				var result = {}
-				phase = PHASE_BID;
 				divBiddingBox.css('display', 'block');
 				divAuction.css('display', 'block');
-				var d = parseDeal(DEAL);
+				var d = parseDeal(url);
 				var hands = d['md'][0];
 				var bids = d['mb'];
 				var expl = d['an'];
@@ -713,6 +734,7 @@
 				msgAdd('DECLARER: ' + declarer);
 				msgAdd('DUMMY   : ' + dummy);
 				msgAdd('DEALER  : ' + result['dealer']);
+				phase = PHASE_BID;
 				return result;
 			}
 
@@ -868,11 +890,99 @@
 				advanceGame();
 			}
 
+			function initDealSequence() {
+				var state = load('state');
+				if (state) {
+					var dealNext = state['dealNext'];
+					var dealMax = state['dealMax'];
+					var dealSequence = state['dealSequence'];
+					LOG('LOADED:');
+					LOG(dealNext);
+					LOG(dealMax);
+					// LOG(dealSequence);
+					if (dealSequence) {
+						LOG('> seq OK');
+						if (dealMax && (dealMax > 1)) {
+							LOG('> max OK');
+							if ((0 === dealNext) || (dealNext && (dealNext >= 1) && (dealNext < dealMax))) {
+								LOG('> next OK');
+								return;
+							}
+						}
+					}
+				}
+				LOG('=re-Init=');
+				dealNext = 1;
+				dealMax = 800;
+				var dealSequence = [];
+				for (var i = 0; i < dealMax; i++) {
+					dealSequence.push(formatId(i));
+				}
+				for (var i = 0; i < dealMax; i++) {
+					var r = randomInt(0, 800);
+					var t = dealSequence[r];
+					dealSequence[r] = dealSequence[i];
+					dealSequence[i] = t;
+				}
+				LOG('=SAVING:=');
+				state = {};
+				state['dealMax'] = dealMax;
+				state['dealNext'] = dealNext;
+				state['dealSequence'] = dealSequence;
+				save('state', state);
+				LOG(dealSequence);
+			}
+
+			function formatId(id) {
+				var result = '' + id;
+				while (result.length < 3) {
+					result = '0' + result;
+				}
+				return result;
+			}
+
+			function boardNumber(dealNext, dealId) {
+				info.css('font-weight', 'normal');
+				info.text('Deal#' + dealNext + ' (' + dealId + ')');
+			}
+
+			function loadNewDealAsynch() {
+				// LOG('=localStorage=');
+				// LOG(localStorage);
+				initDealSequence();
+				$.ajaxSetup({
+					cache : false
+				});
+				var state = load('state');
+				var dealSequence = state['dealSequence'];
+				var dealNext = state['dealNext'];
+				LOG('dealNext: ' + dealNext);
+				var dealId = dealSequence[dealNext];
+				boardNumber(dealNext, dealId);
+				// LOG('dealNext:');
+				// LOG(dealNext);
+				$.ajax({
+					url : './ser001/deal_' + dealId + '.json',
+					type : 'get',
+					async : true,
+					cache : false,
+					dataType : 'text',
+					success : function(js) {
+						var json = JSON.parse(js);
+						var url = json['hand'];
+						var d = loadNewDeal(url);
+						save('deal', d)
+						phase = PHASE_BID;
+					}
+				});
+			}
+
 			function handleTick(p) {
 				if (PHASE_INIT === phase) {
-					var deal = loadNewDeal();
-					save('deal', deal);
-					phase = PHASE_BID;
+					loadNewDealAsynch();
+					// var deal = loadNewDeal();
+					// save('deal', deal);
+					// phase = PHASE_BID;
 					return;
 				}
 				if (PHASE_BID === phase) {
@@ -968,16 +1078,19 @@
 
 			function uiController(t, p) {
 				var tag = info.text();
-				if ('=' === tag) {
-					info.text(':');
-				} else {
-					info.text('=');
-				}
+				// if ('=' === tag) {
+				// info.text(':');
+				// } else {
+				// info.text('=');
+				// }
 				if (PHASE_INIT === phase) {
 					handleTick(p);
 					return;
 				}
 				var deal = load('deal');
+				if (!deal) {
+					return;
+				}
 				var turn = deal['turn'];
 				var declarer = deal['declarer'];
 				var manualDummyPlay = (PHASE_PLAY === phase && turn === NORTH && declarer === SOUTH);
@@ -988,12 +1101,40 @@
 				}
 			}
 
+			function dealStep(delta) {
+				var state = load('state');
+				var dealNext = state['dealNext'];
+				var dealMax = state['dealMax'];
+				var dealSequence = state['dealSequence'];
+				dealNext = dealNext + delta;
+				if (dealNext < 0) {
+					dealNext = dealMax - 1;
+				} else if (dealNext >= dealMax) {
+					dealNext = 0;
+				}
+				state['dealNext'] = dealNext;
+				save('state', state);
+				reload();
+			}
+
+			function nextClicked() {
+				dealStep(1);
+			}
+
+			function prevClicked() {
+				dealStep(-1);
+			}
+
+			function reload() {
+				location.reload(true);
+			}
+
 			function setup() {
 				biddingBox();
 
-				$('#btnRewind').click(function() {
-					location.reload(true);
-				});
+				$('#btnRewind').click(reload);
+				$('#btnPrev').click(prevClicked);
+				$('#btnNext').click(nextClicked);
 
 				divQuestion.css('top', SOUTH_Y + 2.3 * CARD_HE);
 				divAnswerSuit.css('top', SOUTH_Y + 2.70 * CARD_HE);
@@ -1019,6 +1160,9 @@
 						CARDS[s].push(div);
 					}
 				}
+
+				$('.card').click(cardClicked);
+
 				$('.card').click(cardClicked);
 				$('.bid').click(bidClicked);
 				$('.answer').click(answerClicked);
