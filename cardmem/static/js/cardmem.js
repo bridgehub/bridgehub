@@ -45,10 +45,12 @@
 			var divAnswerRank = $('#answerRank');
 
 			function msg(s) {
+				return;
 				divMsg.text(s);
 			}
 
 			function msgAdd(s) {
+				return;
 				var txt = divMsg.text() + '\n' + s;
 				msg(txt);
 			}
@@ -823,7 +825,7 @@
 				var td = $(tdList[col]);
 				td.html(htmlBid(bid));
 				if (explText.length > 3) {
-					alert(bid + ': ' + explText);
+					// alert(bid + ': ' + explText);
 				}
 			}
 
@@ -837,7 +839,7 @@
 					var bid = bids[ixBid];
 					var explText = expl[ixBid];
 					var dealer = deal['dealer'];
-					msgAdd('EXPL: ' + explText);
+					// msgAdd('EXPL: ' + explText);
 					showBid(dealer, turn, ixBid, bid, explText);
 					ixBid++;
 					deal['ixBid'] = ixBid;
