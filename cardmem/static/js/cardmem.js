@@ -14,10 +14,13 @@
 				return;
 			}
 
+			var VERSION = '20170721A';
 			var SERIES = './ser001';
 			var DEAL_MAX = 1262;
 
-			var logEnabled = true;
+			var LEVEL = 0;
+
+			var logEnabled = false;
 			function LOG(s) {
 				if (logEnabled) {
 					if (console) {
@@ -37,12 +40,32 @@
 
 			// =============================================
 
-			// =============================================
+			// HTML Elements
 
 			var divMsg = $('#msg');
 			var divQuestion = $('#question');
 			var divAnswerSuit = $('#answerSuit');
 			var divAnswerRank = $('#answerRank');
+
+			var divInfo = $('#info');
+			var divBiddingBox = $('#biddingBox');
+			var divAuction = $('#auction');
+
+			var message = $('#message');
+			var hint = $('#hint');
+
+			var divContinue = $('#continue');
+
+			var myhand = $('#myhand');
+			var myhand = $('#myhand');
+
+			var info = $('#info');
+
+			var north = $('#north');
+			var east = $('#east');
+			var south = $('#south');
+			var west = $('#west');
+			var deck = $('#deck');
 
 			function msg(s) {
 				return;
@@ -55,10 +78,13 @@
 				msg(txt);
 			}
 
-			// =============================================
+			function msgAdd2(s) {
+				return;
+				var txt = divMsg.text() + '\n' + s;
+				divMsg.text(txt);
+			}
 
-			var message = $('#message');
-			var hint = $('#hint');
+			// =============================================
 
 			var messageCounter = -1;
 
@@ -121,6 +147,8 @@
 					localStorage.removeItem(id);
 				}
 			}
+
+			save('VERSION', VERSION);
 
 			// save('state', null);
 
@@ -237,24 +265,11 @@
 
 			var phase = PHASE_INIT;
 
-			var north = $("#north");
-			var east = $("#east");
-			var south = $("#south");
-			var west = $("#west");
-			var deck = $("#deck");
-
-			var hrefNewURL = $("#hrefNewURL");
-			// var msg = $("#msg");
-
 			var card_html = "<span class='card' id='{id}'>&nbsp;</span>";
 			var card_id = "C_{hand}_{suit}_{ix}";
 
-			var divInfo = $('#info');
-			var divBiddingBox = $('#biddingBox');
-			var divAuction = $('#auction');
 			divAuction.css('left', (MID_X - AUCTION_WI) + 'px');
 			divAuction.css('top', (NORTH_Y + 2 * CARD_HE) + 'px');
-			var divContinue = $('#continue');
 			divContinue.css('left', CONTINUE_X + 'px');
 			divContinue.css('top', CONTINUE_Y + 'px');
 
@@ -269,7 +284,6 @@
 			var CARDS = [ [ 0, 0 ], [ 0, 0 ], [ 0, 0 ], [ 0, 0 ] ];
 
 			function backside(x, y, d) {
-				var myhand = $('#myhand');
 
 				var div = $($.parseHTML('<div />'));
 				div.addClass('backside');
@@ -462,10 +476,11 @@
 			function showHint() {
 				var deal = load('deal');
 				if (!deal) {
+					hint.css('display', 'none');
 					return;
 				}
 				var turn = deal['turn'];
-				if (SOUTH === turn || (NORTH === turn && SOUTH === deal['declarer'])) {
+				if (SOUTH === turn || (NORTH === turn && SOUTH === deal['declarer'] && PHASE_PLAY === phase)) {
 					hint.css('display', 'block');
 					if (PHASE_BID === phase) {
 						hint.html('&nbsp;Bid: ' + htmlBid(expectedBid(deal)) + '&nbsp;');
@@ -489,6 +504,14 @@
 				var tok = id.split('_');
 				var typ = tok[1];
 				if ('S' === typ) {
+					if ('K' === tok[2]) {
+						divAnswerRank.css('display', 'none');
+						divAnswerSuit.css('display', 'none');
+						divQuestion.css('display', 'none');
+						phase = PHASE_PLAY;
+						userMessage("OK, skipping...");
+						return;
+					}
 					$('.answer').css('background-color', 'white');
 					$('#' + id).css('background-color', 'yellow');
 					divAnswerRank.css('display', 'block');
@@ -568,6 +591,18 @@
 
 			var skipContinue = false;
 
+			function markWinner(deal, ixPlay) {
+				var winners = deal['winners'];
+				var w = int((ixPlay - 1) / 4);
+				var win = winners[w];
+				if (win === 0 | win === 1) {
+					var d = (win === 0 ? 'V' : 'H');
+					var x = (NORTH_X + w * 10);
+					var y = (SOUTH_Y + 3.5 * CARD_HE) + win * 10;
+					backside(x, y, d);
+				}
+			}
+
 			function continueClicked() {
 				if (skipContinue) {
 					skipContinue = false;
@@ -585,6 +620,7 @@
 					var id = divId(play[i]);
 					$('#' + id).css('display', 'none');
 				}
+				markWinner(deal, ixPlay);
 				setupQuestion(deal);
 				// if (1 + ixPlay > play.length) {
 				// phase = PHASE_END;
@@ -698,57 +734,88 @@
 				alert('valu[' + z + ']');
 			}
 
-			function loadNewDeal(url) {
+			function rotateRight(deal) {
+				var dealer = deal['dealer'];
+				var declarer = deal['declarer'];
+				var dummy = deal['dummy'];
+				var score = deal['score'];
+
+				var ss = deal['cards'][SOUTH];
+				deal['cards'][SOUTH] = deal['cards'][EAST];
+				deal['cards'][EAST] = deal['cards'][NORTH];
+				deal['cards'][NORTH] = deal['cards'][WEST];
+				deal['cards'][WEST] = ss;
+
+				dummy = ((dummy + 1) % 4)
+				declarer = ((declarer + 1) % 4)
+				dealer = ((dealer + 1) % 4)
+				score = (-score);
+
+				deal['dealer'] = dealer;
+				deal['turn'] = dealer;
+				deal['declarer'] = declarer;
+				deal['dummy'] = dummy;
+				deal['score'] = score;
+			}
+
+			function loadNewDeal(url, score) {
 				// tst();
-				var result = {}
+				var deal = {}
+				LOG('SCORE: ' + score);
 				divBiddingBox.css('display', 'block');
 				divAuction.css('display', 'block');
 				var d = parseDeal(url);
 				var hands = d['md'][0];
 				var bids = d['mb'];
 				var expl = d['an'];
-				parseHands(result, hands);
-				result['bids'] = bids;
-				result['expl'] = expl;
-				result['play'] = d['pc'];
-				result['ixBid'] = 0;
-				result['ixPlay'] = 0;
-				var firstLead = locateCard(result['cards'], result['play'][0]);
+				parseHands(deal, hands);
+				deal['bids'] = bids;
+				deal['expl'] = expl;
+				deal['play'] = d['pc'];
+				deal['ixBid'] = 0;
+				deal['ixPlay'] = 0;
+				deal['score'] = score;
+				var firstLead = locateCard(deal['cards'], deal['play'][0]);
 				var dummy = ((1 + firstLead) % 4);
 				var declarer = ((3 + firstLead) % 4);
+				deal['dummy'] = dummy;
+				deal['declarer'] = declarer;
 				// LOG('DUMMY: ' + dummy);
-				if (SOUTH === dummy) {
-					dummy = WEST;
-					declarer = EAST;
-					var ss = result['cards'][SOUTH];
-					result['cards'][SOUTH] = result['cards'][EAST];
-					result['cards'][EAST] = result['cards'][NORTH];
-					result['cards'][NORTH] = result['cards'][WEST];
-					result['cards'][WEST] = ss;
-					var dealer = result['dealer'];
-					dealer = (1 + dealer) % 4;
-					result['dealer'] = dealer;
-					result['turn'] = dealer;
+				if (score < 0) {
+					LOG('ROTATE*1...');
+					rotateRight(deal);
 				}
-				// LOG(result);
-				var south = result['cards'][SOUTH];
+				if (SOUTH === dummy) {
+					LOG('ROTATE*2...');
+					rotateRight(deal);
+					rotateRight(deal);
+				}
+				// LOG(deal);
+				LOG('NEW SCORE: ' + deal['score']);
+				var south = deal['cards'][SOUTH];
 				displayCards(south, SOUTH);
-				result['declarer'] = declarer;
-				result['dummy'] = dummy;
-				msgAdd('DECLARER: ' + declarer);
-				msgAdd('DUMMY   : ' + dummy);
-				msgAdd('DEALER  : ' + result['dealer']);
-				var dealer = result['dealer'];
+				var dealer = deal['dealer'];
 				var state = load('state');
 				var dealNext = state['dealNext'];
 				var dealSequence = state['dealSequence'];
 				var dealId = dealSequence[dealNext];
 				boardNumber(dealNext, dealId, PLAYER_TEXT[dealer]);
 				phase = PHASE_BID;
-				return result;
+				var cards = deal['cards'];
+				var winners = [];
+				var sWinner = "";
+				var play = deal['play'];
+				for (var w = 1; w < 13; w++) {
+					var wc = 4 * w;
+					var p = locateCard(cards, play[wc]);
+					sWinner = sWinner + (p % 2);
+					winners.push(p % 2);
+				}
+				msgAdd2('WINNERS:' + sWinner);
+				msgAdd2('WINNERS:' + JSON.stringify(winners));
+				deal['winners'] = winners;
+				return deal;
 			}
-
-			var info = $('#info');
 
 			function tick() {
 				showHint();
@@ -854,6 +921,11 @@
 					var cards = deal['cards'];
 					var ixPlay = deal['ixPlay'];
 					var play = deal['play'];
+					if (ixPlay >= play.length) {
+						phase = PHASE_END;
+						userMessage("Click 'Next >' button above to continue...", 200);
+						return;
+					}
 					var playCard = play[ixPlay];
 					// msgAdd('PLAY: ' + playCard);
 					visible[playCard] = true;
@@ -985,7 +1057,8 @@
 					success : function(js) {
 						var json = JSON.parse(js);
 						var url = json['hand'];
-						var d = loadNewDeal(url);
+						var score = json['score'];
+						var d = loadNewDeal(url, score);
 						save('deal', d)
 						phase = PHASE_BID;
 					}
@@ -1166,7 +1239,7 @@
 				// divContinue.click(continueClicked);
 				info.css('color', '#FFFFFF');
 				info.css('font-weight', 'bold');
-				var myhand = $('#myhand');
+
 				myhand.click(continueClicked);
 				for (var s = CLUBS; s <= SPADES; s++) {
 					for (var r = 2; r <= 14; r++) {
