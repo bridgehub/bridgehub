@@ -183,12 +183,35 @@ table {
 <body
 	style='font-family: Consolas, monospace; background-color: #AAFFAA'>
 	<div id='myhand'>
-		<table id='buttons' style='position: absolute; left: 380px'>
+		<table id='buttons'
+			style='position: absolute; left: 380px; color: white;'>
 			<tr>
-				<td style='color: white;'>Deal:&nbsp;</td>
+				<td style='color: white;'>Deal:&nbsp;&nbsp;&nbsp;</td>
 				<td><button id='btnPrev'>&lt; Prev</button></td>
-				<td><button id='btnRewind'>Rewind</button></td>
+				<td><button id='btnRewind'>Replay</button></td>
 				<td><button id='btnNext'>Next &gt;</button></td>
+			</tr>
+			<tr>
+				<td colspan="2">Difficulty:</td>
+				<td><select id='selectDifficulty'>
+						<option value="0">0</option>
+						<option value="1" selected>1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+				</select></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td colspan="2">Memory Points:</td>
+				<td id="memoryPoints">0</td>
+			</tr>
 			</tr>
 		</table>
 		<div id='info'></div>
@@ -283,6 +306,7 @@ table {
 	<!-- 		<img id='I_D_K' src='img/cards.png'> -->
 	<!-- 	</div> -->
 	<script src="js/jquery-3.2.1.js"></script>
+	<script src="js/modernizr-objectfit.js"></script>
 	<script src="js/cardmem.js" charset="UTF-8"></script>
 </body>
 </html>

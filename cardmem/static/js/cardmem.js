@@ -14,13 +14,21 @@
 				return;
 			}
 
+			if (!Modernizr.objectfit) {
+				var txt = 'Hmmm... there seems to be a problem:<br /><br />';
+				txt += 'This application requires the HTML5 object-fit feature.<br />';
+				txt += 'and it seems your browser does not support this.<br /><br />'
+				txt += 'Please try visit this web-app with an up-to-date <br />';
+				txt += 'version of Chrome or Firefox browsers.<br /><br />';
+				$('body').html(txt);
+				return;
+			}
+
 			var VERSION = '20170721A';
 			var SERIES = './ser001';
 			var DEAL_MAX = 1262;
 
-			var LEVEL = 0;
-
-			var logEnabled = false;
+			var logEnabled = true;
 			function LOG(s) {
 				if (logEnabled) {
 					if (console) {
@@ -66,6 +74,11 @@
 			var south = $('#south');
 			var west = $('#west');
 			var deck = $('#deck');
+
+			var selectDifficulty = $('#selectDifficulty');
+
+			var LEVEL;
+			var POINTS = 0;
 
 			function msg(s) {
 				return;
@@ -458,8 +471,8 @@
 
 			var CORRECT_ANSWER = '';
 			var ANSWER_SUIT = '';
-			var SCORE = 3;
-			var MEMORY_SCORE = 0;
+			var ATTEMPT = 0;
+			var MEMORY_POINTS = 0;
 
 			function expectedBid(deal) {
 				var ixBid = deal['ixBid'];
@@ -523,17 +536,22 @@
 					// LOG('?: ' + CORRECT_ANSWER + ' ' + answer);
 					if (CORRECT_ANSWER === answer) {
 						userMessage('Correct!', 5);
-						MEMORY_SCORE += SCORE;
-						msgAdd('MEMORY_SCORE: ' + MEMORY_SCORE);
+						LOG('ATTEMPT: ' + ATTEMPT);
+						LOG('LEVEL: ' + LEVEL);
+						var THIS_POINTS = (3 - ATTEMPT) + int(LEVEL / (ATTEMPT + 1) + 1);
+						LOG('THIS_POINTS: ' + THIS_POINTS);
+						MEMORY_POINTS += THIS_POINTS;
+						LOG('MEMORY_POINTS: ' + MEMORY_POINTS);
+						$('#memoryPoints').text('' + MEMORY_POINTS);
 						divAnswerRank.css('display', 'none');
 						divAnswerSuit.css('display', 'none');
 						divQuestion.css('display', 'none');
 						phase = PHASE_PLAY;
 					} else {
-						SCORE--;
+						ATTEMPT++;
 						$('.answer').css('background-color', 'white');
 						divAnswerRank.css('display', 'none');
-						if (SCORE >= 1) {
+						if (ATTEMPT <= 2) {
 							userMessage('Not that card, try again!');
 						} else {
 							userMessage("No, but let's continue.");
@@ -553,33 +571,39 @@
 
 			var NAMES = [ 'Partner', 'RHO', 'me', 'LHO' ];
 
+			var askedCards = [];
+
+			function includesElement(ar, el) {
+				for (var i = 0; i < ar.length; i++) {
+					if (el === ar[i]) {
+						return true;
+					}
+				}
+				return false;
+			}
+
 			function setupQuestion(deal) {
 				var ixPlay = deal['ixPlay'];
 				var play = deal['play'];
-				// LOG(play);
 				var trick = int((ixPlay - 1) / 4);
-				// LOG('trick: ' + trick);
 				while (true) {
 					var r = randomInt(0, 3);
 					var c = play[(4 * trick) + r];
-					// LOG('r: ' + r + ' ' + ((4 * trick) + r) + ' ' + c);
-					var player = locateCard(deal['cards'], c);
-					// LOG('Q: ' + ixPlay + ' ' + c + ' ' + player);
-					var declarer = deal['declarer'];
-					if (SOUTH === player || (NORTH === player && SOUTH === declarer)) {
-						// dont ask player's own cards or dummy's cards
+					if (includesElement(askedCards, c)) {
 						continue;
 					}
-					// LOG('PLAYER: ' + player + ', DECLAR: ' + declarer);
+					var player = locateCard(deal['cards'], c);
+					var declarer = deal['declarer'];
+					if (SOUTH === player || (NORTH === player && SOUTH === declarer)) {
+						LOG('... re-try question ...');
+						continue;
+					}
 					var name = NAMES[player];
 					var question = ' Which card did ' + name + ' just play? ';
 					divQuestion.text(question);
-					// showQuestion
-					// showSuit
-					// hideRank
 					CORRECT_ANSWER = c;
-					SCORE = 3;
-					// msgAdd('A: ' + CORRECT_ANSWER);
+					askedCards.push(c);
+					ATTEMPT = 0;
 					phase = PHASE_ASK;
 					$('.answer').css('background-color', 'white');
 					divAnswerRank.css('display', 'none');
@@ -761,7 +785,7 @@
 			function loadNewDeal(url, score) {
 				// tst();
 				var deal = {}
-				LOG('SCORE: ' + score);
+				LOG('score: ' + score);
 				divBiddingBox.css('display', 'block');
 				divAuction.css('display', 'block');
 				var d = parseDeal(url);
@@ -791,7 +815,7 @@
 					rotateRight(deal);
 				}
 				// LOG(deal);
-				LOG('NEW SCORE: ' + deal['score']);
+				LOG('new score: ' + deal['score']);
 				var south = deal['cards'][SOUTH];
 				displayCards(south, SOUTH);
 				var dealer = deal['dealer'];
@@ -923,7 +947,9 @@
 					var play = deal['play'];
 					if (ixPlay >= play.length) {
 						phase = PHASE_END;
-						userMessage("Click 'Next >' button above to continue...", 200);
+						var msg = 'You got: ' + MEMORY_POINTS + ' Memory Points :)<br />';
+						msg += "&nbsp;Click 'Next' button above to continue...";
+						userMessage(msg, 600);
 						return;
 					}
 					var playCard = play[ixPlay];
@@ -980,21 +1006,34 @@
 
 			function initDealSequence() {
 				var state = load('state');
+				var dealNext;
+				var dealMax;
+				var dealSequence;
+				var difficulty;
 				if (state) {
-					var dealNext = state['dealNext'];
-					var dealMax = state['dealMax'];
-					var dealSequence = state['dealSequence'];
+					dealNext = state['dealNext'];
+					dealMax = state['dealMax'];
+					dealSequence = state['dealSequence'];
+					dealSequence = state['dealSequence'];
+					difficulty = state['difficulty'];
+
 					LOG('LOADED:');
 					LOG(dealNext);
 					LOG(dealMax);
 					// LOG(dealSequence);
 					if (dealSequence) {
-						LOG('> seq OK');
+						// LOG('> seq OK');
 						if (dealMax && (dealMax > 1)) {
-							LOG('> max OK');
+							// LOG('> max OK');
 							if ((0 === dealNext) || (dealNext && (dealNext >= 1) && (dealNext < dealMax))) {
-								LOG('> next OK');
-								return;
+								// LOG('> next OK');
+								if (0 === difficulty || (difficulty && (difficulty >= 1))) {
+									selectDifficulty.val('' + difficulty);
+									// LOG('> difficulty OK' +
+									// selectDifficulty.val());
+									LEVEL = difficulty;
+									return;
+								}
 							}
 						}
 					}
@@ -1002,6 +1041,9 @@
 				LOG('=re-Init=');
 				dealNext = 0;
 				dealMax = DEAL_MAX;
+				dealMax = DEAL_MAX;
+				difficulty = 1;
+				LEVEL = difficulty;
 				var dealSequence = [];
 				for (var i = 0; i < dealMax; i++) {
 					dealSequence.push(formatId(i));
@@ -1017,6 +1059,8 @@
 				state['dealMax'] = dealMax;
 				state['dealNext'] = dealNext;
 				state['dealSequence'] = dealSequence;
+				state['difficulty'] = difficulty;
+				selectDifficulty.val('' + difficulty);
 				save('state', state);
 				LOG(dealSequence);
 			}
@@ -1034,10 +1078,19 @@
 				info.html('Deal#' + (1 + dealNext) + ' (' + dealId + ')<br />Dealer: ' + dealer);
 			}
 
+			function difficultyChanged() {
+				var state = load('state');
+				state['difficulty'] = Number(selectDifficulty.val());
+				save('state', state);
+				reload();
+			}
+
 			function loadNewDealAsynch() {
 				// LOG('=localStorage=');
 				// LOG(localStorage);
 				initDealSequence();
+				LOG('LEVEL: ' + LEVEL);
+				selectDifficulty.change(difficultyChanged);
 				$.ajaxSetup({
 					cache : false
 				});
