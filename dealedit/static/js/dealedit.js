@@ -664,6 +664,17 @@
 				displayDeal();
 			}
 
+			function btnReverseSuits(s1, s2) {
+				var deal = load('deal');
+				for (var h = NORTH; h <= DECK; h++) {
+					var t = deal['hands'][h][s1];
+					deal['hands'][h][s1] = deal['hands'][h][s2];
+					deal['hands'][h][s2] = t;
+				}
+				save('deal', deal);
+				displayDeal();
+			}
+
 			function btnLoadURLClicked() {
 				var inp0 = '' + $('#dealInput').val();
 				// alert('.\n.\n' + inp0.substring(0, 20) + '.\n.\n');
@@ -783,6 +794,10 @@
 				});
 				$('#rotL').click(rotateLeft);
 				$('#rotR').click(rotateRight);
+				$('#reverseSuits').click(function() {
+					btnReverseSuits(SPADES, CLUBS);
+					btnReverseSuits(HEARTS, DIAMS);
+				});
 
 				// save('deal', null);
 

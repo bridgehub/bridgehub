@@ -50,8 +50,14 @@
 }
 
 .editBtn {
-	width: 90px;
+	width: 100px;
 	text-align: left;
+}
+
+.hideBtn {
+	width: 100px;
+	text-align: left;
+	visibility: hidden;
 }
 
 .textURL {
@@ -87,15 +93,30 @@
 			<td class="hand"></td>
 			<td class="hand"><div id="north"></div></td>
 			<td class="hand"></td>
-			<td rowspan='2'><input class='editBtn' id='rotL' type='button'
-				value='Rotate Left' /><br /> <input class='editBtn' id='rotR'
-				type='button' value='Rotate Right' /><br /> <input class='editBtn'
-				id='swapNE' type='button' value='Swap N-E' /><br /> <input
-				class='editBtn' id='swapNS' type='button' value='Swap N-S' /><br />
-				<input class='editBtn' id='swapNW' type='button' value='Swap N-W' /><br />
-				<input class='editBtn' id='swapES' type='button' value='Swap E-S' /><br />
-				<input class='editBtn' id='swapEW' type='button' value='Swap E-W' /><br />
-				<input class='editBtn' id='swapSW' type='button' value='Swap S-W' /><br />
+			<td rowspan='2'>
+				<table>
+					<tr>
+						<td><input class='editBtn' id='rotL' type='button'
+							value='Rotate Left' /><br /> <input class='editBtn' id='rotR'
+							type='button' value='Rotate Right' /><br /> <input
+							class='editBtn' id='swapNE' type='button' value='Swap N-E' /><br />
+							<input class='editBtn' id='swapNS' type='button' value='Swap N-S' /><br />
+							<input class='editBtn' id='swapNW' type='button' value='Swap N-W' /><br />
+							<input class='editBtn' id='swapES' type='button' value='Swap E-S' /><br />
+							<input class='editBtn' id='swapEW' type='button' value='Swap E-W' /><br />
+							<input class='editBtn' id='swapSW' type='button' value='Swap S-W' /><br />
+						</td>
+						<td><input class='editBtn' id='reverseSuits' type='button' value='Reverse Suits' /> <br />
+						    <input class='hideBtn' id='x' type='button' value='X' /> <br />
+						    <input class='hideBtn' id='x' type='button' value='X' /> <br />
+						    <input class='hideBtn' id='x' type='button' value='X' /> <br />
+						    <input class='hideBtn' id='x' type='button' value='X' /> <br />
+						    <input class='hideBtn' id='x' type='button' value='X' /> <br />
+						    <input class='hideBtn' id='x' type='button' value='X' /> <br />
+						    <input class='hideBtn' id='x' type='button' value='X' /> <br />
+						</td>
+					</tr>
+				</table>
 			</td>
 		</tr>
 		<tr>
