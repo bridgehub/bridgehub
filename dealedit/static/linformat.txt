@@ -19,11 +19,11 @@ st = ?
 md = dealer + cards
 rh = ?
 ah = board number (text 'Board *')
-mb = one bid
-an = bid-description
-pc = played-card
-sv = ?  (o)
-
+mb* = one bid
+an* = bid-description
+pc* = played-card
+sv = ?  vuln (o=none,n=ns,e=ew,b=both)
+mc = ?
 
 http://www.bridgebase.com/tools/handviewer.html?
 sn=stefan_o

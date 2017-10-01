@@ -72,6 +72,7 @@
 				for (var h = NORTH; h <= DECK; h++) {
 					sortHand(deal[h]);
 				}
+				return deal;
 			}
 
 			function sortHand(hand) {
@@ -226,8 +227,9 @@
 				var res = url;
 				res = res.replace(new RegExp('%2C', 'g'), ',');
 				res = res.replace(new RegExp('%20', 'g'), ' ');
-				res = res.replace(new RegExp('%2!', 'g'), '!');
+				res = res.replace(new RegExp('%21', 'g'), '!');
 				res = res.replace(new RegExp('%3B', 'g'), ';');
+				res = res.replace(new RegExp('%7C', 'g'), '|');
 				return res;
 			}
 
@@ -266,7 +268,30 @@
 			}
 
 			function parseLIN(lin) {
-				LOG('LIN');
+				var result = {};
+				var tokens = lin.split('|');
+				var key;
+				var val;
+				for (var t = 0; t < tokens.length; t++) {
+					if (0 === t % 2) {
+						key = tokens[t];
+					} else {
+						val = tokens[t];
+						if (key in result) {
+							var v = result[key];
+							if ($.isArray(v)) {
+								// nothing
+							} else {
+								v = [ v ];
+							}
+							result[key] = v.concat([ val ]);
+						} else {
+							result[key] = val;
+						}
+					}
+				}
+				LOG(result);
+				return result;
 			}
 
 			function isSuit(c) {
@@ -277,6 +302,75 @@
 				return (SUIT_CHARS.indexOf(c));
 			}
 
+			function completeDeal(deal) {
+				LOG('completeDeal:');
+				LOG(deal);
+				var deck = fullDeck();
+				var hands = deal['hands'];
+
+				var ix = 0;
+				for (var p = 0; p <= 3; p++) {
+					var hand = hands[p];
+					for (var s = 0; s <= 3; s++) {
+						if (ix < tok.length) {
+							var suit = tok[ix++];
+							if (suit != '-') {
+								var cards = suit.split('');
+								for (var c = 0; c < cards.length; c++) {
+									if (removeCard(deck, s, cards[c])) {
+										hands[p][s].push(cards[c]);
+									}
+								}
+							}
+						}
+					}
+				}
+				hands[DECK] = deck;
+
+				LOG(deck);
+				return deal;
+			}
+
+			function parseFromLINParams(params) {
+				var deal = initDeal();
+				var deck = fullDeck();
+				var md = params['md'];
+				var hands = md.split(',');
+				var south = hands[0];
+				var dealer = south.substring(0, 1);
+				south = south.substring(1);
+				hands[0] = south;
+				var ixPlayer = [ SOUTH, WEST, NORTH, EAST ];
+				var suit;
+				for (var p = 0; p <= 3; p++) {
+					var pl = ixPlayer[p];
+					var hand = hands[p];
+					var suits = [ [], [], [], [] ];
+					if (hand) {
+						var tok = Array.from(hand);
+						for (var i = 0; i < tok.length; i++) {
+							var c = tok[i];
+							if (isSuit(c)) {
+								suit = ixSuit(c);
+							} else {
+								if (removeCard(deck, suit, c)) {
+									suits[suit].push(c);
+								}
+							}
+						}
+					}
+					deal['hands'][pl] = suits;
+				}
+				if ((0 === countCardsHand(deal['hands'][EAST])) && (13 == countCardsHand(deck))) {
+					deal['hands'][EAST] = deck;
+				} else {
+					deal['hands'][DECK] = deck;
+				}
+				// completeDeal(deal);
+				// sortDeal(deal);
+				return deal;
+			}
+
 			function parseFromParams(params) {
 				var deal = initDeal();
 				var players = Array.from('nesw');
@@ -284,9 +378,9 @@
 					var pl = players[p];
 					var hand = params[pl];
 					var suits = [ [], [], [], [] ];
-					var suit;
 					if (hand) {
 						var tok = Array.from(hand);
+						var suit;
 						for (var i = 0; i < tok.length; i++) {
 							var c = tok[i];
 							if (isSuit(c)) {
@@ -298,6 +392,8 @@
 					}
 					deal['hands'][p] = suits;
 				}
+				// completeDeal(deal);
+				// sortDeal(deal);
 				return deal;
 			}
 
@@ -404,14 +500,14 @@
 				displayActiveHand();
 			}
 
-			function isSuit(s) {
-				s = s.replace('E', 'A');
-				s = s.replace('D', 'Q');
-				s = s.replace('kn', 'J');
-				s = s.replace('Kn', 'J');
-				s = s.replace('10', 'T');
-				// LOG(s);
-			}
+			// function isSuit(s) {
+			// s = s.replace('E', 'A');
+			// s = s.replace('D', 'Q');
+			// s = s.replace('kn', 'J');
+			// s = s.replace('Kn', 'J');
+			// s = s.replace('10', 'T');
+			// // LOG(s);
+			// }
 
 			function cntSuits(lines) {
 				("LEN:" + lines.filter(isSuit).length);
@@ -430,9 +526,11 @@
 				// msg.text(JSON.stringify(urlParams));
 
 				if (urlParams['lin']) {
-					deal = parseLIN(urlParams['lin']);
+					deal = parseFromLINParams(parseLIN(urlParams['lin']));
+					LOG(deal);
 				} else {
 					deal = parseFromParams(urlParams);
+					LOG(deal);
 				}
 
 				// msg.text(JSON.stringify(deal));
@@ -677,10 +775,13 @@
 
 			function btnLoadURLClicked() {
 				var inp0 = '' + $('#dealInput').val();
-				// alert('.\n.\n' + inp0.substring(0, 20) + '.\n.\n');
-				var inp = decodeURL(inp0);
-				// alert('.\n.\n' + inp.substring(0, 20) + '.\n.\n');
-				var deal = parseBBOURL(inp);
+				var deal
+				if (inp0.indexOf('http://www.bridgebase.com/') >= 0) {
+					var inp = decodeURL(inp0);
+					deal = parseBBOURL(inp);
+				} else {
+					deal = parseDeal(inp0);
+				}
 				save('deal', deal);
 				displayDeal();
 			}
