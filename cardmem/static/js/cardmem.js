@@ -582,12 +582,22 @@
 				return false;
 			}
 
+			function qTrick(trickMax, level) {
+				var trickMin = trickMax - level;
+				if (trickMin < 0) {
+					trickMin = 0;
+				}
+				var trick = randomInt(trickMin, trickMax + 1);
+				return trick;
+			}
+
 			function setupQuestion(deal) {
 				var ixPlay = deal['ixPlay'];
 				var play = deal['play'];
-				var trick = int((ixPlay - 1) / 4);
 				while (true) {
-					var r = randomInt(0, 3);
+					var trickMax = int((ixPlay - 1) / 4);
+					var trick = qTrick(trickMax, LEVEL);
+					var r = randomInt(0, 4);
 					var c = play[(4 * trick) + r];
 					if (includesElement(askedCards, c)) {
 						continue;
@@ -599,7 +609,12 @@
 						continue;
 					}
 					var name = NAMES[player];
-					var question = ' Which card did ' + name + ' just play? ';
+					var question;
+					if (trickMax === trick) {
+						question = ' Which card did ' + name + ' just play? ';
+					} else {
+						question = ' Which card did ' + name + ' play to trick ' + (1 + trick) + '? ';
+					}
 					divQuestion.text(question);
 					CORRECT_ANSWER = c;
 					askedCards.push(c);
@@ -621,7 +636,7 @@
 				var win = winners[w];
 				if (win === 0 | win === 1) {
 					var d = (win === 0 ? 'V' : 'H');
-					var x = (NORTH_X + w * 10);
+					var x = (NORTH_X + w * 18);
 					var y = (SOUTH_Y + 3.5 * CARD_HE) + win * 10;
 					backside(x, y, d);
 				}
@@ -749,13 +764,16 @@
 			}
 
 			function tst() {
-				var x = '5';
-				alert(typeof (x));
-				var y = JSON.stringify(x);
-				localStorage['valu'] = y;
-				var z = JSON.parse(localStorage['valu']);
-				alert(typeof (z));
-				alert('valu[' + z + ']');
+				for (var i = 0; i < 10; i++) {
+					LOG('QTRICK: ' + qTrick(2, 99));
+				}
+				// var x = '5';
+				// alert(typeof (x));
+				// var y = JSON.stringify(x);
+				// localStorage['valu'] = y;
+				// var z = JSON.parse(localStorage['valu']);
+				// alert(typeof (z));
+				// alert('valu[' + z + ']');
 			}
 
 			function rotateRight(deal) {
@@ -1041,7 +1059,6 @@
 				LOG('=re-Init=');
 				dealNext = 0;
 				dealMax = DEAL_MAX;
-				dealMax = DEAL_MAX;
 				difficulty = 1;
 				LEVEL = difficulty;
 				var dealSequence = [];
@@ -1049,7 +1066,7 @@
 					dealSequence.push(formatId(i));
 				}
 				for (var i = 0; i < dealMax; i++) {
-					var r = randomInt(0, 800);
+					var r = randomInt(0, DEAL_MAX);
 					var t = dealSequence[r];
 					dealSequence[r] = dealSequence[i];
 					dealSequence[i] = t;
