@@ -8,6 +8,7 @@
 		p { margin-bottom: 0.25cm; line-height: 120% }
 		pre.cjk { font-family: "NSimSun", monospace }
 		a:link { so-language: zxx }
+        .bold { font-weight: bold; }
         .yellow { background-color: #FFFF00; }
         .orange { background-color: #FFCC00; }
         .red { color: #880000; font-weight: bold; }
@@ -29,6 +30,7 @@ RU-SO
   <a href="#1NT">1NT-öppning</a>
   <a href="#SMOLEN">1NT/2NT => Smolen</a>
   <a href="#2CLUB">2KL-öppning</a>
+  <a href="#MUPPET">2NT-3KL Muppet</a>
   <a href="#WEAK_2">2RU-Multi / Svaga-2</a>
   <a href="#PREEMPT">Spärrbud</a>
   <a href="#RKC">Störd RKC</a>
@@ -36,7 +38,7 @@ RU-SO
   <a href="#SER_3NT">Serious 3NT i competition</a>
   <a href="#ROMEX">ROMEX inviter</a>
   <a href="#BALANCE">Balansering 4e hand</a>
-  <a href="#NT_DEF2">Mot 1NT: Mixed DONT</a>
+  <a href="#NT_DEF2">Mot 1NT: Mixed DONT / Landy</a>
   <a href="#MIXED_RAISE">Mixed Raise</a>
   <a href="#LEAPING">Leaping Michaels</a>
   <a href="#LEB">Lebensohl / Transfer-Lebensohl</a>
@@ -67,7 +69,6 @@ Svar 1NT = Normalt okrav, men kan vara 11hp.
 4e färg  = UK
 XY-NT
 XYZ (efter 1KL-1RU-1SP och 1RU-1HJ-1SP)
-3KL = Puppet efter: 2NT(22-23), 2KL-2RU-2NT(20-21), 2KL-2RU-2HJ-2SP-2NT(24+).
 Romex inviter (1 steg = ngn singelton)
 
 Hopp till 4NT är KVANTITATIVT om inte trumf redan spikats.
@@ -346,6 +347,25 @@ Specialsekvenser:
   2KL - 3SP = Minst 5-5 i hö, UK.</span>
 </pre>
 
+
+<h2 id="MUPPET"><u>2NT-3KL Muppet</u></h2>
+
+<pre>
+Efter sekvenserna: 2NT(22-23), 2KL-2RU-2NT(20-21), 2KL-2RU-2HJ-2SP-2NT(24+) är 3KL = Muppet.
+
+Snarlikt Puppet, men vi hittar alltid 4korts hö-anpassning även när SH har 5sp+4hj.
+
+ÖH svarar som vanligt 3RU med minst en 4korts hö, men <u>även</u> med bara <u>3korts</u> sp.
+Efter 3RU-svaret:
+- Om SH har 4-4 i hö, bjuder han 4RU=avlägg i hö, eller 4KL=slamintresse, dvs identiskt med Puppet.
+- Om SH 4hj återkommer han med 3SP, dvs identiskt med Puppet.
+<span class="yellow">- Om SH återkommer med 3HJ har han <u>antingen</u> 4sp+ej 4hj <u>eller</u> 5sp+4hj. ÖH svarar:
+    1. Med 4sp, bjud på 4-läget.
+    2. Med 4hj + ej 4sp, bjud 3NT. SH kan nu bjuda 4HJ med 5sp+4hj, annars PASS.
+    3. Med 3sp + ej 4hj, bjud 3SP. SH kan nu bjuda 4SP med 5sp+4hj, annars 3NT.</span>
+</pre>
+
+
 <h2 id="WEAK_2"><u>2RU-Multi / Svaga-2</u></h2>
 
 <pre>
@@ -517,17 +537,26 @@ måste man bjuda den som en överstark hand 18hp,
 alltså normalt inleda med UD följt av färg-återbud.
 </pre>
 
-<h2 id="NT_DEF2"><u>Mot 1NT: Mixed DONT</u></h2>
+<h2 id="NT_DEF2"><u>Mot 1NT: Mixed DONT / Landy</u></h2>
 
 <pre>
-2RU/2HJ/2SP = Äkta
-2KL = Kl + högre färg
-X   = A) Klöver-inkliv B) 2-färgshand utan kl.
+Om 1NT <span class="orange bold">kan innehålla 16 hp eller mer,</span> spelar vi <span class="bold">Mixed DONT</span>:
+
+  2RU/2HJ/2SP = Äkta
+  2KL = Kl + högre färg
+  X   = A) Klöver-inkliv B) 2-färgshand utan kl.
   
 Efter inkliven 2KL och Dubbelt:
   Om mellanhanden bjuder ngt, så är Dubbelt från partner EJ straff-X, 
     utan ett "go ahead, visa din hand".
   Man passar alltså ENDAST om man har fi's färg.
+  
+Om 1NT <span class="orange bold">är begränsat till max 15 hp,</span> spelar vi <span class="bold">Landy</span>:
+
+  2RU/2HJ/2SP = Äkta
+  2KL = Båda hö, normalt minst 5-4/4-5.   -2RU frågar efter längsta/bästa.
+  X   = 14+hp.
+
 </pre>
 
 <h2 id="MIXED_RAISE"><u>Mixed Raise</u></h2>
