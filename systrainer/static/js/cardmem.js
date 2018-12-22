@@ -1197,7 +1197,6 @@
 				for(var i = 0; i<52; i++) {
 					d.push(i);
 				}
-				LOG(d);
 				return d;
 			}
 			
@@ -1226,15 +1225,76 @@
 				return "AK 865 J865 QT32;Q643 K9732 KT32 K";
 			}
 			
+			function toRank(r){
+				return RANK_CHARS[2+r];
+			}
+			
+			function cards(deck, h){
+				var result = "";
+				var suit = [];
+				for(var i = 0; i<4; i++) {
+					suit[i] = [];
+				}
+				for(var i = h; i<(h+13); i++) {
+					var c = deck[i];
+					var s = Math.floor(c/13);
+					var r = c%13;
+					suit[s].push(r);
+				}
+				for(var i=0; i<4; i++){
+					suit[i].sort((a, b) => b - a);
+				}
+				for(var s = 0; s<4; s++){
+					for(var r = 0; r<suit[s].length; r++){
+						result += ""+toRank(suit[s][r])+"";
+					}
+					if(s<3) {
+						result += " ";
+					}
+				}
+				return result;
+			}
+			
+			var SUIT_HTML = ["<span style='color:lightgreen;'>&clubs;</span>","<span style='color:red;'>&diams;</span>","<span style='color:red;'>&hearts;</span>","<span style='color:lightgreen;'>&spades;</span>"];
+			
 			function newDealClicked(){
 				var deck = shuffle();
-//				var west = cards(deck, 0);
-//				var east = cards(deck, 26);
+				LOG('shuffled:');
 				LOG(deck);
-				var deal0 = deal(deck, 10,20, 10,20);
-				var hands = deal0.split(';');
-				$('#west').html('&diams; '+hands[0].split(' ').join('<br />&hearts; '));
-				$('#east').html('&spades; '+hands[1].split(' ').join('<br />&clubs; '));
+				var west = cards(deck, 0);
+				var east = cards(deck, 26);
+				
+// LOG(deck);
+// var deal0 = deal(deck, 10,20, 10,20);
+// var hands = deal0.split(';');
+				deal = west+";"+east;
+				var hands = deal.split(';');
+				
+				LOG('hands:');
+				LOG(hands);
+				
+				var h = [];
+				h[0] = "";
+				h[1] = "";
+				
+				LOG('h:');
+				LOG(h);
+				
+				for(var hh=0; hh<2; hh++) {
+					for(var s = 3; s>=0; s--) {
+						h[hh] += SUIT_HTML[s]+" ";
+						h[hh] += hands[hh].split(' ')[s];
+						if(s>0) {
+							h[hh] += "<br />";
+						}
+					}
+				}
+				
+				$('#west').html(h[0]);
+				$('#east').html(h[1]);
+				
+//				$('#west').html('&diams; '+hands[0].split(' ').join('<br />&hearts; '));
+//				$('#east').html('&spades; '+hands[1].split(' ').join('<br />&clubs; '));
 			}
 
 			function setup() {
@@ -1262,5 +1322,6 @@
 			$(function() {
 				info.text('');
 				setup();
+				newDealClicked();
 			});
 		}));
