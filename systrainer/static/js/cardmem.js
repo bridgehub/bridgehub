@@ -81,18 +81,15 @@
 			var POINTS = 0;
 
 			function msg(s) {
-				return;
 				divMsg.text(s);
 			}
 
 			function msgAdd(s) {
-				return;
 				var txt = divMsg.text() + '\n' + s;
 				msg(txt);
 			}
 
 			function msgAdd2(s) {
-				return;
 				var txt = divMsg.text() + '\n' + s;
 				divMsg.text(txt);
 			}
@@ -223,9 +220,6 @@
 
 			hint.css('top', '' + (SOUTH_Y) + 'px');
 			hint.css('left', '' + (10) + 'px');
-
-			var BIDDINGBOX_X = 220;
-			var BIDDINGBOX_Y = 300;
 
 			var BR = '<br />';
 			var NL = '\n';
@@ -411,10 +405,6 @@
 				tr.append(dbl);
 				bb.append(tr);
 
-				divBiddingBox.css('position', 'absolute');
-				divBiddingBox.css('width', '200px');
-				divBiddingBox.css('left', BIDDINGBOX_X + 'px');
-				divBiddingBox.css('top', BIDDINGBOX_Y + 'px');
 				divBiddingBox.append(bb);
 			}
 
@@ -507,65 +497,9 @@
 				}
 			}
 
-			function answerClicked() {
-				var id = $(this).attr('id');
-				if (PHASE_ASK === phase) {
-					// ok, continue
-				} else {
-					return;
-				}
-				var tok = id.split('_');
-				var typ = tok[1];
-				if ('S' === typ) {
-					if ('K' === tok[2]) {
-						divAnswerRank.css('display', 'none');
-						divAnswerSuit.css('display', 'none');
-						divQuestion.css('display', 'none');
-						phase = PHASE_PLAY;
-						userMessage("OK, skipping...");
-						return;
-					}
-					$('.answer').css('background-color', 'white');
-					$('#' + id).css('background-color', 'yellow');
-					divAnswerRank.css('display', 'block');
-					ANSWER_SUIT = tok[2];
-					// LOG('A_S: ' + ANSWER_SUIT);
-				} else if ('R' === typ) {
-					var rank = tok[2];
-					var answer = ANSWER_SUIT + rank;
-					// LOG('?: ' + CORRECT_ANSWER + ' ' + answer);
-					if (CORRECT_ANSWER === answer) {
-						userMessage('Correct!', 5);
-						LOG('ATTEMPT: ' + ATTEMPT);
-						LOG('LEVEL: ' + LEVEL);
-						var THIS_POINTS = (3 - ATTEMPT) + int(LEVEL / (ATTEMPT + 1) + 1);
-						LOG('THIS_POINTS: ' + THIS_POINTS);
-						MEMORY_POINTS += THIS_POINTS;
-						LOG('MEMORY_POINTS: ' + MEMORY_POINTS);
-						$('#memoryPoints').text('' + MEMORY_POINTS);
-						divAnswerRank.css('display', 'none');
-						divAnswerSuit.css('display', 'none');
-						divQuestion.css('display', 'none');
-						phase = PHASE_PLAY;
-					} else {
-						ATTEMPT++;
-						$('.answer').css('background-color', 'white');
-						divAnswerRank.css('display', 'none');
-						if (ATTEMPT <= 2) {
-							userMessage('Not that card, try again!');
-						} else {
-							userMessage("No, but let's continue.");
-							divAnswerRank.css('display', 'none');
-							divAnswerSuit.css('display', 'none');
-							divQuestion.css('display', 'none');
-							phase = PHASE_PLAY;
-						}
-					}
-				}
-			}
-
 			function bidClicked() {
 				var id = $(this).attr('id');
+				alert('id:'+id);
 				uiController('click', id);
 			}
 
@@ -640,37 +574,6 @@
 					var y = (SOUTH_Y + 3.5 * CARD_HE) + win * 10;
 					backside(x, y, d);
 				}
-			}
-
-			function continueClicked() {
-				if (skipContinue) {
-					skipContinue = false;
-					return;
-				}
-				var vis = divContinue.css('display');
-				if ('none' === divContinue.css('display')) {
-					return;
-				}
-				divContinue.css('display', 'none');
-				var deal = load('deal');
-				var play = deal['play'];
-				var ixPlay = deal['ixPlay'];
-				for (var i = ixPlay - 4; i < ixPlay; i++) {
-					var id = divId(play[i]);
-					$('#' + id).css('display', 'none');
-				}
-				markWinner(deal, ixPlay);
-				setupQuestion(deal);
-				// if (1 + ixPlay > play.length) {
-				// phase = PHASE_END;
-				// } else {
-				// phase = PHASE_PLAY;
-				// }
-			}
-
-			function cardClicked() {
-				var id = $(this).attr('id');
-				uiController('click', id);
 			}
 
 			function readURL(url) {
@@ -1286,31 +1189,57 @@
 			function reload() {
 				location.reload(true);
 			}
+			
+			var DATA = {};
+			
+			function initDeal() {
+				var d = [];
+				for(var i = 0; i<52; i++) {
+					d.push(i);
+				}
+				LOG(d);
+				return d;
+			}
+			
+			function getRandomInt(max) {
+				  return Math.floor(Math.random() * Math.floor(max));
+			}
+				
+			function shuffle() {
+				var d;
+				if(DATA.deal){
+					d = DATA.deal;
+				}else{
+					d = initDeal();
+				}
+				for(var i = 0; i<52; i++){
+					var r = getRandomInt(52);
+					var t = d[r];
+					d[r] = d[i];
+					d[i] = t;
+				}
+				DATA.deal = d;
+				return d;
+			}
+			
+			function deal() {
+				return "AK 865 J865 QT32;Q643 K9732 KT32 K";
+			}
+			
+			function newDealClicked(){
+				var deck = shuffle();
+//				var west = cards(deck, 0);
+//				var east = cards(deck, 26);
+				LOG(deck);
+				var deal0 = deal(deck, 10,20, 10,20);
+				var hands = deal0.split(';');
+				$('#west').html('&diams; '+hands[0].split(' ').join('<br />&hearts; '));
+				$('#east').html('&spades; '+hands[1].split(' ').join('<br />&clubs; '));
+			}
 
 			function setup() {
+				LOG('setup');
 				biddingBox();
-
-//				$('#btnRewind').click(reload);
-//				$('#btnPrev').click(prevClicked);
-//				$('#btnNext').click(nextClicked);
-
-//				divQuestion.css('top', SOUTH_Y + 2.3 * CARD_HE);
-//				divAnswerSuit.css('top', SOUTH_Y + 2.70 * CARD_HE);
-//				divAnswerRank.css('top', SOUTH_Y + 3.21 * CARD_HE);
-
-//				divQuestion.css('left', CARD_WI + 'px');
-//				divAnswerSuit.css('left', (5 + CARD_WI) + 'px');
-//				divAnswerRank.css('left', (5 + CARD_WI) + 'px');
-
-//				divAnswerRank.css('display', 'none');
-//				divAnswerSuit.css('display', 'none');
-//				divQuestion.css('display', 'none');
-
-				// divContinue.click(continueClicked);
-//				info.css('color', '#FFFFFF');
-//				info.css('font-weight', 'bold');
-
-				myhand.click(continueClicked);
 				for (var s = CLUBS; s <= SPADES; s++) {
 					for (var r = 2; r <= 14; r++) {
 						var div = cardDiv(s, r);
@@ -1318,12 +1247,7 @@
 						CARDS[s].push(div);
 					}
 				}
-
-				$('.card').click(cardClicked);
-
-				$('.card').click(cardClicked);
 				$('.bid').click(bidClicked);
-				$('.answer').click(answerClicked);
 				$('.card').css('display', 'none');
 				visible = {};
 				for (var s = CLUBS; s <= SPADES; s++) {
@@ -1332,22 +1256,11 @@
 						visible[s_r] = false;
 					}
 				}
+				$('#btnNewDeal').click(newDealClicked);
 			}
 
 			$(function() {
 				info.text('');
 				setup();
-				// backside(NORTH_BACK_X, NORTH_BACKSIDE_Y, 'H');
-				// backside(WEST_BACK_X, WEST_BACKSIDE_Y, 'V');
-				// backside(EAST_BACK_X, EAST_BACKSIDE_Y, 'V');
-
-				// backside(20, 500, 'H');
-				// backside(40, 480, 'V');
-				// backside(60, 500, 'H');
-				// backside(80, 500, 'H');
-				// backside(100, 480, 'V');
-
-				// setInterval(userMessageTick, 100)
-				// setInterval(tick, 250);
 			});
 		}));
