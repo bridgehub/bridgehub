@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
-<html>
-<title>CardMemory</title>
+<html lang=''>
+<title>System-Trainer</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- <link rel="stylesheet" type="text/css" href="css/dealedit.css"> -->
@@ -104,11 +104,11 @@ table {
 
 .auction {
 	 background-color: #EEEEBB;
-	# position: absolute;
+	#position: absolute;
 	left: 140px;
 	top: 130px;
 	text-align: center;
-	# display: none;
+	#display: none;
 }
 
 .abid {
@@ -186,7 +186,7 @@ table {
 </style>
 <body
 	style='font-family: Consolas, monospace; font-size: 12px; background-color: #007700; color: black;'>
-	<div id='myhand'>
+	<div id='myhand' style='border:1px solid white'>
 	<br />
 		<div class='white'>
 		West hcp: <input type='text' size='1' maxlength='2' value='10' />-<input type='text' size='1' maxlength='2' value='40'/>&nbsp;&nbsp;&nbsp;<input type='checkbox' /> North overcalls<br />
@@ -195,9 +195,14 @@ table {
 		<div style='display:none;' id='info' class='white'>Info-text</div>
 		<table id='deal'>
 		<tr>
-		<td><div id='west' style='width:200px; height:150px;'>west west west west west west west west west west west west west west west west west west west west west west west west west west west west west west west west</div></td>
+		<td><div id='west' style='width:200px; height:200px;'>west</div></td>
+        <td>&nbsp;&nbsp;</td>
+        <td><div id='east' style='width:200px; height:200px;'>east</div></td>
+        </tr>
+        <tr>
         <td>
 		<div id='auction' class='auction'>
+          <table><tr><td>
 			<table class='auctionTable'>
 				<tr>
 					<th class='abid'>WEST</th>
@@ -242,15 +247,14 @@ table {
 					<td class='abid'>&nbsp;</td>
 				</tr>
 			</table>
-		</div>
-        <td><div id='east' style='width:200px;'>east east east east east east east east east east east east east east east east east east east east east east east east east east east east east </div></td>
-		</tr>
-		</table>
-		<div id='biddingBox'></div>
+          </td></tr>
+          <tr><td><div id='biddingBox'></div></td></tr>
+          </table>
+		</div></td><td>&nbsp;&nbsp;</td><td></td></tr></table>
+		
 		<div id='continue' class='continue'>&nbsp;Continue...&nbsp;</div>
 		<div id='message' class='message'></div>
 		<div id='hint' class='hint'>xxx</div>
-	</div>
 	<pre id='msg'></pre>
 	<!-- 	<div id='D_C_3'> -->
 	<!-- 		<img id='I_C_3' src='img/cards.png'> -->
@@ -260,6 +264,7 @@ table {
 	<!-- 	</div> -->
 	<script src="js/jquery-3.2.1.js"></script>
 	<script src="js/modernizr-objectfit.js"></script>
-	<script src="js/cardmem.js" charset="UTF-8"></script>
+	<script src="js/cardmem.js"></script>
+    </div>
 </body>
 </html>
