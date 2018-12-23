@@ -1262,7 +1262,7 @@
 				return result;
 			}
 			
-			var SUIT_HTML = ["<span style='color:lightgreen;'>&clubs;</span>","<span style='color:red;'>&diams;</span>","<span style='color:red;'>&hearts;</span>","<span style='color:lightgreen;'>&spades;</span>"];
+			var SUIT_HTML = ["<span style='color:lightblue;'>&clubs;</span>","<span style='color:red;'>&diams;</span>","<span style='color:red;'>&hearts;</span>","<span style='color:lightblue;'>&spades;</span>"];
 			
 			function newDealClicked() { 
 				reload();
