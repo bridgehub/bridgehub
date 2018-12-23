@@ -50,6 +50,11 @@
 
 			// HTML Elements
 
+			var hcpWestMin = $('#hcpWestMin');
+			var hcpWestMax = $('#hcpWestMax');
+			var hcpEastMin = $('#hcpEastMin');
+			var hcpEastMax = $('#hcpEastMax');
+			
 			var divMsg = $('#msg');
 			var divQuestion = $('#question');
 			var divAnswerSuit = $('#answerSuit');
@@ -1226,12 +1231,17 @@
 				return d;
 			}
 			
-			function deal() {
-				return "AK 865 J865 QT32;Q643 K9732 KT32 K";
-			}
-			
 			function toRank(r){
 				return RANK_CHARS[2+r];
+			}
+			
+			function hcp(deck, c0) {
+				var result = 0;
+				for(var i = c0; i<c0+13; i++){
+					var rank = deck[i]%13;
+					if(rank>=9) {result += rank-8;}
+				}
+				return result;
 			}
 			
 			function cards(deck, h){
@@ -1263,13 +1273,57 @@
 			var SUIT_HTML = ["<span style='color:lightblue;'>&clubs;</span>","<span style='color:red;'>&diams;</span>","<span style='color:red;'>&hearts;</span>","<span style='color:lightblue;'>&spades;</span>"];
 			
 			function newDealClicked() { 
-				reload();
+				initNewDeal();
 			}
 			
 			function initNewDeal(){
-				var deck = shuffle();
-				LOG('shuffled:');
-				LOG(deck);
+				var westMin = parseInt(hcpWestMin.val());
+				var westMax = parseInt(hcpWestMax.val());
+				var eastMin = parseInt(hcpEastMin.val());
+				var eastMax = parseInt(hcpEastMax.val());
+				if("number" === typeof(westMin) && 
+						"number" === typeof(westMax) &&
+						"number" === typeof(eastMin) &&
+						"number" === typeof(eastMax) 
+						){
+					// OK
+				}else{
+					alert('Invalid hcp-range');
+					return;
+				}
+				if(isNaN(westMin) || 
+						isNaN(westMax) ||
+						isNaN(eastMin) ||
+						isNaN(eastMax) 
+						){
+					alert('Invalid hcp-range');
+					return;
+				}else{
+					// OK
+				}
+				hcpWestMin.val(westMin);
+				hcpWestMax.val(westMax);
+				hcpEastMin.val(eastMin);
+				hcpEastMax.val(eastMax);
+				LOG('hcp:');
+				LOG(westMin);
+				LOG(typeof(westMin))
+				var deck;
+				var done = false;
+				var tries = 0;
+				while(!done){
+					deck = shuffle();
+					var hcpWest = hcp(deck, 0);
+					var hcpEast = hcp(deck, 26);
+//					LOG('hcpWest: '+hcpWest);
+//					LOG('hcpEast: '+hcpEast);
+					if(hcpWest >= westMin && hcpWest<=westMax && hcpEast >= eastMin && hcpEast<=eastMax) {
+						done = true;
+					}
+					tries++;
+					if(tries>1000000){ alert('Cannot generate such hcp combination, sorry.'); return; }
+				}
+				LOG('tries: ' + tries);
 				var west = cards(deck, 0);
 				var east = cards(deck, 26);
 				DATA = {};
@@ -1287,15 +1341,9 @@
 				deal = west+";"+east;
 				var hands = deal.split(';');
 				
-				LOG('hands:');
-				LOG(hands);
-				
 				var h = [];
 				h[0] = "";
 				h[1] = "";
-				
-				LOG('h:');
-				LOG(h);
 				
 				for(var hh=0; hh<2; hh++) {
 					for(var s = 3; s>=0; s--) {
