@@ -497,10 +497,21 @@
 				}
 			}
 
+			var DATA = {};
+			
 			function bidClicked() {
 				var id = $(this).attr('id');
-				alert('id:'+id);
-				uiController('click', id);
+				var tok = id.split('_');
+				var level = tok[1];
+				var denom = tok[2];
+				var bid = ''+level+denom;
+				bid = bid.replace('0XX', 'R').replace('0X', 'D').replace('0P', 'P');
+				showBid(DATA.dealer, DATA.turn, DATA.ixBid, bid, '');
+				DATA.turn++;
+				DATA.ixBid++;
+				showBid(DATA.dealer, DATA.turn, DATA.ixBid, 'P', '');
+				DATA.turn++;
+				DATA.ixBid++;
 			}
 
 			var NAMES = [ 'Partner', 'RHO', 'me', 'LHO' ];
@@ -703,16 +714,19 @@
 				deal['score'] = score;
 			}
 
-			function loadNewDeal(url, score) {
+			function xloadNewDeal(url, score) {
 				// tst();
 				var deal = {}
 				LOG('score: ' + score);
 				divBiddingBox.css('display', 'block');
 				divAuction.css('display', 'block');
-				var d = parseDeal(url);
+				// var d = parseDeal(url);
 				var hands = d['md'][0];
 				var bids = d['mb'];
 				var expl = d['an'];
+				
+				return;
+				
 				parseHands(deal, hands);
 				deal['bids'] = bids;
 				deal['expl'] = expl;
@@ -1138,20 +1152,13 @@
 			}
 
 			function uiController(t, p) {
-				var tag = info.text();
-				// if ('=' === tag) {
-				// info.text(':');
-				// } else {
-				// info.text('=');
-				// }
-				if (PHASE_INIT === phase) {
-					handleTick(p);
-					return;
-				}
-				var deal = load('deal');
-				if (!deal) {
-					return;
-				}
+				var tok = p.split('_');
+				makeBid(tok);
+				return;
+// var deal = load('deal');
+// if (!deal) {
+// return;
+// }
 				var turn = deal['turn'];
 				var declarer = deal['declarer'];
 				var manualDummyPlay = (PHASE_PLAY === phase && turn === NORTH && declarer === SOUTH);
@@ -1257,12 +1264,24 @@
 			
 			var SUIT_HTML = ["<span style='color:lightgreen;'>&clubs;</span>","<span style='color:red;'>&diams;</span>","<span style='color:red;'>&hearts;</span>","<span style='color:lightgreen;'>&spades;</span>"];
 			
-			function newDealClicked(){
+			function newDealClicked() { 
+				reload();
+			}
+			
+			function initNewDeal(){
 				var deck = shuffle();
 				LOG('shuffled:');
 				LOG(deck);
 				var west = cards(deck, 0);
 				var east = cards(deck, 26);
+				DATA = {};
+				DATA.deck = deck;
+				DATA.dealer = WEST;
+				DATA.turn = WEST;
+				DATA.ixBid = 0;
+				DATA.deck = deck;
+				DATA.west = west;
+				DATA.east = east;
 				
 // LOG(deck);
 // var deal0 = deal(deck, 10,20, 10,20);
@@ -1293,8 +1312,10 @@
 				$('#west').html(h[0]);
 				$('#east').html(h[1]);
 				
-//				$('#west').html('&diams; '+hands[0].split(' ').join('<br />&hearts; '));
-//				$('#east').html('&spades; '+hands[1].split(' ').join('<br />&clubs; '));
+				// loadNewDeal();
+				
+// $('#west').html('&diams; '+hands[0].split(' ').join('<br />&hearts; '));
+// $('#east').html('&spades; '+hands[1].split(' ').join('<br />&clubs; '));
 			}
 
 			function setup() {
@@ -1322,6 +1343,6 @@
 			$(function() {
 				info.text('');
 				setup();
-				newDealClicked();
+				initNewDeal();
 			});
 		}));
