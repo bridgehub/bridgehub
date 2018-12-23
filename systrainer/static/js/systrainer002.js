@@ -502,8 +502,6 @@
 				}
 			}
 
-			var DATA = {};
-			
 			function bidClicked() {
 				var id = $(this).attr('id');
 				var tok = id.split('_');
@@ -511,6 +509,7 @@
 				var denom = tok[2];
 				var bid = ''+level+denom;
 				bid = bid.replace('0XX', 'R').replace('0X', 'D').replace('0P', 'P');
+				var DATA = load('DATA')
 				showBid(DATA.dealer, DATA.turn, DATA.ixBid, bid, '');
 				DATA.turn++;
 				DATA.ixBid++;
@@ -518,6 +517,7 @@
 				DATA.turn++;
 				DATA.ixBid++;
 				$('#whoBids').html(PLAYER_TEXT[DATA.turn%4]+"'s bid:");
+				save('DATA', DATA);
 			}
 
 			var NAMES = [ 'Partner', 'RHO', 'me', 'LHO' ];
@@ -1200,8 +1200,6 @@
 				location.reload(true);
 			}
 			
-			var DATA = {};
-			
 			function initDeal() {
 				var d = [];
 				for(var i = 0; i<52; i++) {
@@ -1216,6 +1214,7 @@
 				
 			function shuffle() {
 				var d;
+				var DATA = load('DATA');
 				if(DATA.deal){
 					d = DATA.deal;
 				}else{
@@ -1229,6 +1228,7 @@
 				}
 				DATA.deal = d;
 				return d;
+				save('DATA',DATA);
 			}
 			
 			function toRank(r){
@@ -1272,10 +1272,50 @@
 			
 			var SUIT_HTML = ["<span style='color:lightblue;'>&clubs;</span>","<span style='color:red;'>&diams;</span>","<span style='color:red;'>&hearts;</span>","<span style='color:lightblue;'>&spades;</span>"];
 			
-			function newDealClicked() { 
+			function saveHcpParams(){
+				var westMin = parseInt(hcpWestMin.val());
+				var westMax = parseInt(hcpWestMax.val());
+				var eastMin = parseInt(hcpEastMin.val());
+				var eastMax = parseInt(hcpEastMax.val());
+				if("number" === typeof(westMin) && 
+						"number" === typeof(westMax) &&
+						"number" === typeof(eastMin) &&
+						"number" === typeof(eastMax) 
+						){
+					// OK
+				}else{
+					alert('Invalid hcp-range');
+					return false;
+				}
+				if(isNaN(westMin) || 
+						isNaN(westMax) ||
+						isNaN(eastMin) ||
+						isNaN(eastMax) 
+						){
+					alert('Invalid hcp-range');
+					return false;
+				}else{
+					// OK
+				}
+				hcpWestMin.val(westMin);
+				hcpWestMax.val(westMax);
+				hcpEastMin.val(eastMin);
+				hcpEastMax.val(eastMax);
+				var DATA = load('DATA');
+				DATA.westMin = westMin;
+				DATA.westMax = westMax;
+				DATA.eastMin = eastMin;
+				DATA.eastMax = eastMax;
+				save('DATA', DATA);
+				return true;
+			}
+			
+			function newDealClicked() {
+				if(!saveHcpParams()) {return;}
 				$('#btnNewDeal').prop('disabled', true);
-				initNewDeal();
+				// initNewDeal();
 				$('#btnNewDeal').prop('disabled', false);
+				reload();
 			}
 			
 			function initNewDeal(){
@@ -1334,7 +1374,6 @@
 				LOG('tries: ' + tries);
 				var west = cards(deck, 0);
 				var east = cards(deck, 26);
-				DATA = {};
 				DATA.deck = deck;
 				DATA.dealer = WEST;
 				DATA.turn = WEST;
@@ -1342,6 +1381,7 @@
 				DATA.deck = deck;
 				DATA.west = west;
 				DATA.east = east;
+				save('DATA', DATA);
 				
 // LOG(deck);
 // var deal0 = deal(deck, 10,20, 10,20);
