@@ -512,6 +512,7 @@
 				showBid(DATA.dealer, DATA.turn, DATA.ixBid, 'P', '');
 				DATA.turn++;
 				DATA.ixBid++;
+				$('#whoBids').html(PLAYER_TEXT[DATA.turn%4]+"'s bid:");
 			}
 
 			var NAMES = [ 'Partner', 'RHO', 'me', 'LHO' ];
@@ -844,9 +845,6 @@
 				var table = $(divAuction.find('table'));
 				var trList = $(table[0]).find('tr');
 				// msgAdd('row: ' + row + ' tr: ' + trList.length);
-				if (row > trList.length - 2) {
-					msgAdd('= ADD_ROW =');
-				}
 				var tdList = $(trList[1 + row]).find('td');
 				var td = $(tdList[col]);
 				td.html(htmlBid(bid));
@@ -1311,6 +1309,7 @@
 				
 				$('#west').html(h[0]);
 				$('#east').html(h[1]);
+				$('#whoBids').html(PLAYER_TEXT[DATA.turn%4]+"'s bid:");
 				
 				// loadNewDeal();
 				
