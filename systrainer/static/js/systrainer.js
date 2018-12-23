@@ -1274,10 +1274,8 @@
 			
 			function newDealClicked() { 
 				$('#btnNewDeal').prop('disabled', true);
-				$('#btnNewDeal').css('color', 'red');
 				initNewDeal();
 				$('#btnNewDeal').prop('disabled', false);
-				$('#btnNewDeal').css('color', 'black');
 			}
 			
 			function initNewDeal(){
@@ -1319,18 +1317,20 @@
 					deck = shuffle();
 					var hcpWest = hcp(deck, 0);
 					var hcpEast = hcp(deck, 26);
-//					LOG('hcpWest: '+hcpWest);
-//					LOG('hcpEast: '+hcpEast);
+// LOG('hcpWest: '+hcpWest);
+// LOG('hcpEast: '+hcpEast);
 					if(hcpWest >= westMin && hcpWest<=westMax && hcpEast >= eastMin && hcpEast<=eastMax) {
 						done = true;
 					}
 					tries++;
-					if(tries>500000){ alert('Could not generate such hcp combination, sorry.'); return; }
+					if(tries>=1000000){ alert('Could not generate such hcp combination, sorry.\n\n('+tries+')'); return; }
 				}
+				var DATA = load('DATA');
 				DATA.westMin = westMin;
 				DATA.westMax = westMax;
 				DATA.eastMin = eastMin;
 				DATA.eastMax = eastMax;
+				save('DATA', DATA);
 				LOG('tries: ' + tries);
 				var west = cards(deck, 0);
 				var east = cards(deck, 26);
@@ -1393,6 +1393,19 @@
 					}
 				}
 				$('#btnNewDeal').click(newDealClicked);
+				var DATA = load('DATA');
+				if(DATA){
+					// OK
+				}else{
+					DATA={};
+				}
+				if(DATA.westMin || 0===DATA.westMin){
+					hcpWestMin.val(DATA.westMin);
+					hcpWestMax.val(DATA.westMax);
+					hcpEastMin.val(DATA.eastMin);
+					hcpEastMax.val(DATA.eastMax);
+				}
+				save('DATA',DATA);
 			}
 
 			$(function() {
