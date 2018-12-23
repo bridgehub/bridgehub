@@ -1273,7 +1273,11 @@
 			var SUIT_HTML = ["<span style='color:lightblue;'>&clubs;</span>","<span style='color:red;'>&diams;</span>","<span style='color:red;'>&hearts;</span>","<span style='color:lightblue;'>&spades;</span>"];
 			
 			function newDealClicked() { 
+				$('#btnNewDeal').prop('disabled', true);
+				$('#btnNewDeal').css('color', 'red');
 				initNewDeal();
+				$('#btnNewDeal').prop('disabled', false);
+				$('#btnNewDeal').css('color', 'black');
 			}
 			
 			function initNewDeal(){
@@ -1307,7 +1311,7 @@
 				hcpEastMax.val(eastMax);
 				LOG('hcp:');
 				LOG(westMin);
-				LOG(typeof(westMin))
+				LOG(typeof(westMin));
 				var deck;
 				var done = false;
 				var tries = 0;
@@ -1321,8 +1325,12 @@
 						done = true;
 					}
 					tries++;
-					if(tries>1000000){ alert('Cannot generate such hcp combination, sorry.'); return; }
+					if(tries>500000){ alert('Could not generate such hcp combination, sorry.'); return; }
 				}
+				DATA.westMin = westMin;
+				DATA.westMax = westMax;
+				DATA.eastMin = eastMin;
+				DATA.eastMax = eastMax;
 				LOG('tries: ' + tries);
 				var west = cards(deck, 0);
 				var east = cards(deck, 26);
