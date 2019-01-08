@@ -501,6 +501,103 @@
 					hint.css('display', 'none');
 				}
 			}
+            
+            function allPass(bids) {
+                for(var i = 0; i<bids.length; i++) {
+                    if('P'!==bids[i]) { return false; }
+                }
+                return true;
+            }
+            
+            var NOT_LEGAL = 'That bid is not legal here. Try another.';
+            var COMPLETED = 'Bidding is completed.\nClick button: New Deal';
+            var PROGRAM_BUD = 'Hmmm... there seems to be a bug in this webapp.\nPlease take a screendump of the auction and email to the site-administrator :)';
+            
+            function legalBid(bids, bid) {
+            	var result;
+                LOG('legalBid:');
+                LOG(bids);
+                LOG(bid);
+                var len = bids.length;
+                var _isAllPass = allPass(bids);
+                if(len === 4 && _isAllPass) { 
+                  alert(COMPLETED); return false; 
+                }
+                if(len >= 4 && allPass(bids.slice(len-3, len))) {
+                  alert(COMPLETED); return false; 
+                }
+                LOG('bid: '+bid);
+                if('P'===bid) { return true; }
+                var _isContractBid    = isContractBid(bid);
+                LOG('isContractBid: '+_isContractBid);
+                var _lastContractBid  = lastContractBid(bids);
+                var _lastContractSide = lastContractSide(bids);
+                var _isDoubled = isDoubled(bids);
+                var _isRedoubled = isRedoubled(bids);
+                LOG('lastContractBid: '+_lastContractBid);
+                LOG('lastContractSide: '+_lastContractSide);
+                LOG('isDoubled: '+_isDoubled);
+                LOG('isRedoubled: '+_isRedoubled);
+                if(_isContractBid && _isAllPass) { return true; }
+                if(_isContractBid){
+                	result = (bid > _lastContractBid);
+                	if(!result){
+                		alert(NOT_LEGAL);
+                	}
+                	return result;
+                }
+                if('D'===bid){ 
+                	result = ('they'===_lastContractSide && (!_isDoubled) && (!_isRedoubled));
+                	if(!result){
+                		alert(NOT_LEGAL);
+                	}
+                	return result;
+                }
+                if('R'===bid){
+                	result = ('we'===_lastContractSide && _isDoubled && (!_isRedoubled));
+                	if(!result){
+                		alert(NOT_LEGAL);
+                	}
+                	return result;
+                }
+                alert(PROGRAM_BUG);
+            }
+            
+            function isContractBid(bid){ return !isNaN(bid); }
+            
+            function lastContractBid(bids){
+            	for(var i = bids.length-1; i>=0; i--){
+            		var bid = bids[i];
+            		if(isContractBid(bid)) {return bid;}
+            	}
+            	return '';
+            }
+            
+            function isDoubled(bids){
+            	for(var i = bids.length-1; i>=0; i--){
+            		if('D'===bids[i]){return true;}
+            		if(isContractBid(bids[i])){return false;}
+            	}
+            	return false;
+            }
+            
+            function isRedoubled(bids){
+            	for(var i = bids.length-1; i>=0; i--){
+            		if('R'===bids[i]){return true;}
+            		if(isContractBid(bids[i]) || 'D'===bids[i]){return false;}
+            	}
+            	return false;
+            }
+            
+            function lastContractSide(bids){
+            	var side = -1;
+            	for(var i = bids.length-1; i>=0; i--){
+            		var bid = bids[i];
+            		if(isContractBid(bids[i])) {return (side>=1?'we':'they');}
+            		side = (-side);
+            	}
+            	return 'none';
+            }
 
 			function bidClicked() {
 				var id = $(this).attr('id');
@@ -509,15 +606,23 @@
 				var denom = tok[2];
 				var bid = ''+level+denom;
 				bid = bid.replace('0XX', 'R').replace('0X', 'D').replace('0P', 'P');
-				var DATA = load('DATA')
+				var DATA = load('DATA');
+                var BIDS = load('BIDS');
+                if(!legalBid(BIDS, bid)) {
+                    return;
+                }
 				showBid(DATA.dealer, DATA.turn, DATA.ixBid, bid, '');
+                BIDS.push(bid);
 				DATA.turn++;
 				DATA.ixBid++;
+                // var oppBid = oppBid();
 				showBid(DATA.dealer, DATA.turn, DATA.ixBid, 'P', '');
+                BIDS.push('P');
 				DATA.turn++;
 				DATA.ixBid++;
 				$('#whoBids').html(PLAYER_TEXT[DATA.turn%4]+"'s bid:");
 				save('DATA', DATA);
+				save('BIDS', BIDS);
 			}
 
 			var NAMES = [ 'Partner', 'RHO', 'me', 'LHO' ];
@@ -1446,6 +1551,8 @@
 					hcpEastMax.val(DATA.eastMax);
 				}
 				save('DATA',DATA);
+                var BIDS = new Array(0);
+				save('BIDS',BIDS);
 			}
 
 			$(function() {
