@@ -1420,6 +1420,7 @@
 				$('#btnNewDeal').prop('disabled', true);
 				// initNewDeal();
 				$('#btnNewDeal').prop('disabled', false);
+				save('DECK', null);
 				reload();
 			}
 			
@@ -1455,21 +1456,27 @@
 				LOG('hcp:');
 				LOG(westMin);
 				LOG(typeof(westMin));
-				var deck;
+				var deck = load('DECK');
 				var done = false;
 				var tries = 0;
-				while(!done){
-					deck = shuffle();
-					var hcpWest = hcp(deck, 0);
-					var hcpEast = hcp(deck, 26);
+				if(!deck){
+					while(!done){
+						deck = shuffle();
+						var hcpWest = hcp(deck, 0);
+						var hcpEast = hcp(deck, 26);
 // LOG('hcpWest: '+hcpWest);
 // LOG('hcpEast: '+hcpEast);
-					if(hcpWest >= westMin && hcpWest<=westMax && hcpEast >= eastMin && hcpEast<=eastMax) {
-						done = true;
+						if(hcpWest >= westMin && hcpWest<=westMax && hcpEast >= eastMin && hcpEast<=eastMax) {
+							done = true;
+						}
+						tries++;
+						if(tries>=1000000){ 
+							alert('Could not generate such hcp combination, sorry.\n\nTry wider hcp-intervals.\n\n('+tries+')'); 
+							return; 
+						}
 					}
-					tries++;
-					if(tries>=1000000){ alert('Could not generate such hcp combination, sorry.\n\n('+tries+')'); return; }
 				}
+				save('DECK', deck);
 				var DATA = load('DATA');
 				DATA.westMin = westMin;
 				DATA.westMax = westMax;
