@@ -1424,6 +1424,10 @@
 				reload();
 			}
 			
+			function undoBidsClicked() {
+				reload();
+			}
+			
 			function initNewDeal(){
 				var westMin = parseInt(hcpWestMin.val());
 				var westMax = parseInt(hcpWestMax.val());
@@ -1545,6 +1549,7 @@
 					}
 				}
 				$('#btnNewDeal').click(newDealClicked);
+				$('#btnUndoBids').click(undoBidsClicked);
 				var DATA = load('DATA');
 				if(DATA){
 					// OK
