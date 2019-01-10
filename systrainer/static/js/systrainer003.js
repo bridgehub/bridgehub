@@ -509,9 +509,9 @@
                 return true;
             }
             
-            var NOT_LEGAL = 'That bid is not legal here. Try another.';
-            var COMPLETED = 'Bidding is completed.\nClick button: New Deal';
-            var PROGRAM_BUD = 'Hmmm... there seems to be a bug in this webapp.\nPlease take a screendump of the auction and email to the site-administrator :)';
+            var NOT_LEGAL = 'That bid is not legal here.\n\nTry another.';
+            var COMPLETED = 'Bidding is completed.\n\nClick button: New Deal';
+            var PROGRAM_BUD = 'Hmmm... there seems to be a bug in this webapp, sorry.\n\nPlease take a screendump of the auction and email to the site-administrator :)';
             
             function legalBid(bids, bid) {
             	var result;
