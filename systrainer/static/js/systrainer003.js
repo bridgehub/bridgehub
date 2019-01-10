@@ -1474,7 +1474,7 @@
 							done = true;
 						}
 						tries++;
-						if(tries>=1000000){ 
+						if(tries>=500000){ 
 							alert('Could not generate such hcp combination, sorry.\n\nTry wider hcp-intervals.\n\n('+tries+')'); 
 							return; 
 						}
