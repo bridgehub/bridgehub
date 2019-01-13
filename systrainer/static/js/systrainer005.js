@@ -28,11 +28,19 @@
 			var SERIES = './ser001';
 			var DEAL_MAX = 1262;
 
-			var logEnabled = true;
+			var logEnabled = false;
 			function LOG(s) {
 				if (logEnabled) {
 					if (console) {
 						console.log(JSON.stringify(s));
+					}
+				}
+			}
+
+			function LOG2(s,t) {
+				if (logEnabled) {
+					if (console) {
+						console.log(JSON.stringify(s)+', '+JSON.stringify(t));
 					}
 				}
 			}
@@ -513,19 +521,16 @@
             var COMPLETED = 'Bidding is completed.\n\nClick button: New Deal';
             var PROGRAM_BUD = 'Hmmm... there seems to be a bug in this webapp, sorry.\n\nPlease take a screendump of the auction and email to the site-administrator :)';
             
-            function legalBid(bids, bid) {
+            function legalBid(bids, bid, silent) {
             	var result;
                 LOG('legalBid:');
                 LOG(bids);
                 LOG(bid);
                 var len = bids.length;
+                if(isCompleted(bids)) { 
+                  alert(COMPLETED); return false; 
+                }
                 var _isAllPass = allPass(bids);
-                if(len === 4 && _isAllPass) { 
-                  alert(COMPLETED); return false; 
-                }
-                if(len >= 4 && allPass(bids.slice(len-3, len))) {
-                  alert(COMPLETED); return false; 
-                }
                 LOG('bid: '+bid);
                 if('P'===bid) { return true; }
                 var _isContractBid    = isContractBid(bid);
@@ -541,8 +546,10 @@
                 if(_isContractBid && _isAllPass) { return true; }
                 if(_isContractBid){
                 	result = (bid > _lastContractBid);
-                	if(!result){
-                		alert(NOT_LEGAL);
+                	if(!result) {
+                		if(1 !== silent) {
+                			alert(NOT_LEGAL);
+                		}
                 	}
                 	return result;
                 }
@@ -561,6 +568,11 @@
                 	return result;
                 }
                 alert(PROGRAM_BUG);
+            }
+            
+            function isCompleted(bids){
+            	var len = bids.length;
+            	return (len === 4 && allPass(bids)) || (len >= 4 && allPass(bids.slice(len-3, len)));
             }
             
             function isContractBid(bid){ return !isNaN(bid); }
@@ -615,14 +627,133 @@
                 BIDS.push(bid);
 				DATA.turn++;
 				DATA.ixBid++;
-                // var oppBid = oppBid();
-				showBid(DATA.dealer, DATA.turn, DATA.ixBid, 'P', '');
-                BIDS.push('P');
-				DATA.turn++;
-				DATA.ixBid++;
-				$('#whoBids').html(PLAYER_TEXT[DATA.turn%4]+"'s bid:");
+				if(isCompleted(BIDS)){
+					$('#whoBids').html('Completed.&nbsp;');
+				}else{
+	                var oppBid = oppoBid(BIDS);
+					showBid(DATA.dealer, DATA.turn, DATA.ixBid, oppBid, '');
+	                BIDS.push(oppBid);
+					DATA.turn++;
+					DATA.ixBid++;
+					$('#whoBids').html(PLAYER_TEXT[DATA.turn%4]+"'s bid:");
+				}
+				if(isCompleted(BIDS)){
+					$('#whoBids').html('Completed.&nbsp;');
+				}
 				save('DATA', DATA);
 				save('BIDS', BIDS);
+			}
+			
+			function oppoBid(bids) {
+				if(isCompleted(bids)) { return '';  }
+				if('silent'===opposition()) { return 'P'; }
+				if(bids.length===1) return northBid(bids);
+				if(bids.length===3) return southBid(bids);
+				return 'P';
+			}
+			
+			function southBid(bids) {
+				LOG2('southBid', bids);
+				if('P'===bids[1]){return 'P';}
+				var deck = load('DECK');
+				var suitlen = checkSuitLen(deck,bids);
+				LOG2('suitlen', suitlen);
+				var ourLevel;
+				var ourSuit;
+				var ourLen;
+				LOG2('bids[1]', bids[1]);
+				if('D'===bids[1]) {
+					var ourSuit = suitlen[0].suit;
+					var ourLen = suitlen[0].len;
+					LOG2('suitlen', suitlen);
+					if(ourLen<=0){ return 'P'; }
+					LOG2('ourSuit', ourSuit);
+					LOG2('ourLen', ourLen);
+					if(ourLen<=6) {return'P';}
+					if(ourLen===7 && bids[2]!=='P') { return 'P'; }
+					ourLevel = parseInt(bids[0].split("")[0]);
+				} else {
+					ourSuit  = parseInt(bids[1].split("")[1]);
+					ourLevel = parseInt(bids[1].split("")[0]);
+					LOG2('ourSuit',ourSuit);
+					LOG2('ourLevel',ourLevel);
+					var suitInfo = suitlen.filter(function(e){return ourSuit===e.suit;});
+					ourLen   = (suitInfo.length>=1)?suitInfo[0].len:0;
+					LOG2('ourLen',ourLen);
+					if(ourLen<=7) { return 'P'; }
+				}
+				LOG2('ourLen', ourLen);
+				LOG2('ourLevel.1', ourLevel);
+				if(ourLen>=9  && ourLevel<=1) {ourLevel++;}
+				LOG2('ourLevel.2', ourLevel);
+				if(ourLen>=10 && ourLevel<=2) {ourLevel++;}
+				LOG2('ourLevel.3', ourLevel);
+				var bid = ''+(ourLevel+1)+''+ourSuit;
+				var silent = 1;
+				if(legalBid(bids, bid, silent)) { return bid; }
+				var bid2 = ''+(ourLevel+2)+''+ourSuit;
+				if(ourLen>=9 && legalBid(bids, bid2, silent)) { return bid2; }
+				return 'P';
+			}
+			
+			function northBid(bids) {
+				if('P'===bids[0]){ return 'P'; }
+				var oppo = opposition();
+				if('takeout'===oppo)  { return 'D'; }
+				if('overcall'!==oppo) { return 'P'; }
+				var deck = load('DECK');
+				var openlevel = parseInt(bids[0].split("")[0]);
+				var opensuit  = parseInt(bids[0].split("")[1]);
+				var suit = oppoSuit(deck, bids);
+				if(suit<0){return 'P';}
+				var level = (suit>opensuit)?(openlevel):(openlevel+1);
+				return ''+level+''+suit;
+			}
+			
+			function checkSuitLen(deck,bids) {
+				var north = deck.slice(NORTH*13, 13+NORTH*13);
+				var south = deck.slice(SOUTH*13, 13+SOUTH*13);
+				var ns = north.concat(south);
+				LOG2('ns',ns);
+				var suitlen = [{},{},{},{}];
+				for(var i=CLUBS; i<=SPADES; i++) { suitlen[i].suit=i; suitlen[i].len=0; }
+				for (var i = 0; i<26; i++) {
+					var c = ns[i];
+					var s = Math.floor(c/13);
+					suitlen[s].len += 1;
+				}
+				var opensuit = parseInt((bids[0].split(""))[1]);
+				if(opensuit<=SPADES){suitlen[opensuit].len = 0;}
+				if(0==getRandomInt(2)) { suitlen = suitlen.reverse(); }
+				if(0==getRandomInt(2)) { suitlen = suitlen.reverse(); }
+				LOG2('before.sort', suitlen);
+				suitlen = suitlen.sort(function(a,b){return(b.len-a.len);});
+				LOG2('after .sort', suitlen);
+				return suitlen;
+			}
+
+			function oppoSuit(deck,bids) {
+				var suitlen = checkSuitLen(deck,bids);
+				LOG2('suitlen',suitlen);
+				LOG2('suitlen.length-1',suitlen.length-1);
+				LOG2('suitlen[suitlen.length-1].len',suitlen[suitlen.length-1].len);
+				LOG2('cond',suitlen[suitlen.length-1].len<=6);
+				while((suitlen.length>=1) && (suitlen[suitlen.length-1].len<=6)){LOG2('pop',suitlen.pop());}
+				LOG2('suitlen',suitlen);
+				if(suitlen.length<=0){ return (-1); }
+				if(suitlen.length<=1){ return suitlen[0].suit; }
+				if(suitlen[0].len>=suitlen[1].len+2){ return suitlen[0].suit; }
+				if(0==getRandomInt(2)){ 
+					return suitlen[1].suit; 
+				} else {
+					return suitlen[0].suit; 
+				}
+			}
+			
+			function opposition() {
+				if($('#chkboxOvercall').prop('checked')){ return 'overcall'; }
+				if($('#chkboxTakeout').prop('checked')){ return 'takeout'; }
+				return 'silent';
 			}
 
 			var NAMES = [ 'Partner', 'RHO', 'me', 'LHO' ];
@@ -1181,11 +1312,11 @@
 				if ('P' === bid) {
 					return 'Pass';
 				}
-				if ('X' === bid || 'D' === bid) {
+				if ('D' === bid) {
 					return "<span class='red'>X</span>";
 				}
 				if ('R' === bid) {
-					return 'XX';
+					return "<span class='blue'>XX</span>";
 				}
 				var tok = bid.split('');
 				var lvl = tok[0];
@@ -1411,20 +1542,35 @@
 				DATA.westMax = westMax;
 				DATA.eastMin = eastMin;
 				DATA.eastMax = eastMax;
+				DATA.overcall = $('#chkboxOvercall').prop('checked');
+				DATA.takeout = $('#chkboxTakeout').prop('checked');
 				save('DATA', DATA);
 				return true;
 			}
 			
+			function overcallClicked() {
+				var val = $('#chkboxOvercall').prop('checked');
+				if(val) { $('#chkboxTakeout').prop('checked', false); }
+				LOG2('overcallClicked', val);
+			}
+			
+			function takeoutClicked() {
+				var val = $('#chkboxTakeout').prop('checked');
+				if(val) { $('#chkboxOvercall').prop('checked', false); }
+				LOG2('takeoutClicked', val);
+			}
+			
 			function newDealClicked() {
 				if(!saveHcpParams()) {return;}
-				$('#btnNewDeal').prop('disabled', true);
-				// initNewDeal();
-				$('#btnNewDeal').prop('disabled', false);
+// $('#btnNewDeal').prop('disabled', true);
+// // initNewDeal();
+// $('#btnNewDeal').prop('disabled', false);
 				save('DECK', null);
 				reload();
 			}
 			
 			function undoBidsClicked() {
+				if(!saveHcpParams()) {return;}
 				reload();
 			}
 			
@@ -1466,8 +1612,8 @@
 				if(!deck){
 					while(!done){
 						deck = shuffle();
-						var hcpWest = hcp(deck, 0);
-						var hcpEast = hcp(deck, 26);
+						var hcpWest = hcp(deck, WEST*13);
+						var hcpEast = hcp(deck, EAST*13);
 // LOG('hcpWest: '+hcpWest);
 // LOG('hcpEast: '+hcpEast);
 						if(hcpWest >= westMin && hcpWest<=westMax && hcpEast >= eastMin && hcpEast<=eastMax) {
@@ -1486,10 +1632,12 @@
 				DATA.westMax = westMax;
 				DATA.eastMin = eastMin;
 				DATA.eastMax = eastMax;
+				$('#chkboxOvercall').prop('checked', DATA.overcall);
+				$('#chkboxTakeout').prop('checked', DATA.takeout);
 				save('DATA', DATA);
 				LOG('tries: ' + tries);
-				var west = cards(deck, 0);
-				var east = cards(deck, 26);
+				var west = cards(deck, WEST*13);
+				var east = cards(deck, EAST*13);
 				DATA.deck = deck;
 				DATA.dealer = WEST;
 				DATA.turn = WEST;
@@ -1550,6 +1698,8 @@
 				}
 				$('#btnNewDeal').click(newDealClicked);
 				$('#btnUndoBids').click(undoBidsClicked);
+				$('#chkboxOvercall').click(overcallClicked);
+				$('#chkboxTakeout').click(takeoutClicked);
 				var DATA = load('DATA');
 				if(DATA){
 					// OK
