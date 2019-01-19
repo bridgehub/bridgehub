@@ -520,6 +520,8 @@
             var NOT_LEGAL = 'That bid is not legal here.\n\nTry another.';
             var COMPLETED = 'Bidding is completed.\n\nClick button: New Deal';
             var PROGRAM_BUD = 'Hmmm... there seems to be a bug in this webapp, sorry.\n\nPlease take a screendump of the auction and email to the site-administrator :)';
+            var INVALID_HCP = 'Invalid hcp-range.\n\nPlease correct hcp-parameters.';
+            var EXTREME_HCP = 'Could not generate such hcp combination, sorry.\n\nTry wider hcp-intervals.';
             
             function legalBid(bids, bid, silent) {
             	var result;
@@ -1520,7 +1522,7 @@
 						){
 					// OK
 				}else{
-					alert('Invalid hcp-range');
+					alert(INVALID_HCP);
 					return false;
 				}
 				if(isNaN(westMin) || 
@@ -1528,11 +1530,24 @@
 						isNaN(eastMin) ||
 						isNaN(eastMax) 
 						){
-					alert('Invalid hcp-range');
+					alert(INVALID_HCP);
 					return false;
 				}else{
 					// OK
 				}
+                if((westMin<0) ||
+                   (eastMin<0) ||
+                   (westMax>40) ||
+                   (eastMax>40) ||
+                   (westMin>westMax) ||
+                   (eastMin>eastMax)) {
+					alert(INVALID_HCP);
+					return false;
+                }
+                if(westMax+eastMax<=4 || westMin+eastMin>=36) {
+					alert(EXTREME_HCP);
+					return false;
+                }
 				hcpWestMin.val(westMin);
 				hcpWestMax.val(westMax);
 				hcpEastMin.val(eastMin);
@@ -1586,7 +1601,7 @@
 						){
 					// OK
 				}else{
-					alert('Invalid hcp-range');
+					alert(INVALID_HCP);
 					return;
 				}
 				if(isNaN(westMin) || 
@@ -1594,7 +1609,7 @@
 						isNaN(eastMin) ||
 						isNaN(eastMax) 
 						){
-					alert('Invalid hcp-range');
+					alert(INVALID_HCP);
 					return;
 				}else{
 					// OK
