@@ -171,7 +171,7 @@ table {
 }
 
 #myhand {
-	width: 325px;
+	width: 330px;
 	background-color: #007700;
 	position: relative;
 }
@@ -223,13 +223,18 @@ input[type=text] {
   width: 24px;
   text-align: center;
 }
+
+td {
+  white-space: nowrap;
+}
+
 </style>
 </head>
 <body style='font-family: Consolas, monospace; font-size: 12px; background-color: #007700; color: white;'>
     <div id='myhand'><button id='btnCriteria' style='color: black'>+ Specify hands</button>
         <div style='display: none;' id='info' class='white'>Info-text</div>
         <div class='white graybg' id='criteria' style='display:none'><hr /><div style='font-size:5px'>&nbsp;</div><div>&nbsp;&nbsp;&nbsp;Opps:&nbsp;&nbsp;<input id='chkboxOvercall' type='checkbox' />Overcall&nbsp;&nbsp;<input id='chkboxTakeout' type='checkbox' />Takeout-X</div><div style='font-size:3px'>&nbsp;</div>
-            <table width="315">
+            <table>
               <tr> <th>&nbsp;</th>         <th>West&nbsp;&nbsp;&nbsp;</th> 
                                            <th>East&nbsp;&nbsp;&nbsp;</th> 
                                            <th>W+E&nbsp;&nbsp;&nbsp;</th> </tr>
