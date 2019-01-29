@@ -171,7 +171,7 @@ table {
 }
 
 #myhand {
-	width: 320px;
+	width: 325px;
 	background-color: #007700;
 	position: relative;
 }
@@ -229,20 +229,20 @@ input[type=text] {
     <div id='myhand'><button id='btnCriteria' style='color: black'>+ Specify hands</button>
         <div style='display: none;' id='info' class='white'>Info-text</div>
         <div class='white graybg' id='criteria' style='display:none'><hr /><div style='font-size:5px'>&nbsp;</div><div>&nbsp;&nbsp;&nbsp;Opps:&nbsp;&nbsp;<input id='chkboxOvercall' type='checkbox' />Overcall&nbsp;&nbsp;<input id='chkboxTakeout' type='checkbox' />Takeout-X</div><div style='font-size:3px'>&nbsp;</div>
-            <table>
-              <tr> <th>&nbsp;</th>         <th>&nbsp;West&nbsp;&nbsp;</th> 
-                                           <th>&nbsp;East&nbsp;&nbsp;&nbsp;</th> 
-                                           <th>&nbsp;W+E&nbsp;&nbsp;&nbsp;</th> </tr>
+            <table width="315">
+              <tr> <th>&nbsp;</th>         <th>West&nbsp;&nbsp;&nbsp;</th> 
+                                           <th>East&nbsp;&nbsp;&nbsp;</th> 
+                                           <th>W+E&nbsp;&nbsp;&nbsp;</th> </tr>
               <tr> <th>Hcp:</th>           <td><input class='num' id='iWestHcpMin'     type='text' size='2' maxlength='2' value='10' />-<input class='num' id='iWestHcpMax'     type='text' size='2' maxlength='2' value='40' />&nbsp;</td>
                                            <td><input class='num' id='iEastHcpMin'     type='text' size='2' maxlength='2' value='10' />-<input class='num' id='iEastHcpMax'     type='text' size='2' maxlength='2' value='40' />&nbsp;</td>
                                            <td><input class='num' id='iWEHcpMin'       type='text' size='2' maxlength='2' value='0'  />-<input class='num' id='iWEHcpMax'       type='text' size='2' maxlength='2' value='40' /></td> </tr>
                                            <tr><td colspan="3"><div style='font-size: 5px'>&nbsp;</div></td></tr>
               <tr> <th>&nbsp;Balanced:</th><td            >&nbsp;&nbsp;<input id='cWestBal'     class='btnPatternWest' type='checkbox' checked='checked' /></td>
-                                           <td colspan="2">&nbsp;&nbsp;<input id='cEastBal'     class='btnPatternEast' type='checkbox' checked='checked' />&nbsp;&nbsp;&nbsp;4333&nbsp;4432&nbsp;5332</td></tr>
+                                           <td colspan="2">&nbsp;&nbsp;<input id='cEastBal'     class='btnPatternEast' type='checkbox' checked='checked' />&nbsp;&nbsp;4333&nbsp;4432&nbsp;5332</td></tr>
               <tr> <th>&nbsp;Semibal:</th> <td            >&nbsp;&nbsp;<input id='cWestSemibal' class='btnPatternWest' type='checkbox' checked='checked' /></td>
-                                           <td colspan="2">&nbsp;&nbsp;<input id='cEastSemibal' class='btnPatternEast' type='checkbox' checked='checked' />&nbsp;&nbsp;&nbsp;5422&nbsp;6322&nbsp;7222</td></tr>
+                                           <td colspan="2">&nbsp;&nbsp;<input id='cEastSemibal' class='btnPatternEast' type='checkbox' checked='checked' />&nbsp;&nbsp;5422&nbsp;6322&nbsp;7222</td></tr>
               <tr> <th>&nbsp;Unbal:</th>   <td            >&nbsp;&nbsp;<input id='cWestUnbal'   class='btnPatternWest' type='checkbox' checked='checked' /></td>
-                                           <td colspan="2">&nbsp;&nbsp;<input id='cEastUnbal'   class='btnPatternEast' type='checkbox' checked='checked' />&nbsp;&nbsp;&nbsp;single&nbsp;or&nbsp;void</td></tr>
+                                           <td colspan="2">&nbsp;&nbsp;<input id='cEastUnbal'   class='btnPatternEast' type='checkbox' checked='checked' />&nbsp;&nbsp;single&nbsp;or&nbsp;void</td></tr>
                                            <tr><td colspan="3"><div style='font-size: 5px'>&nbsp;</div></td></tr>
               <tr> <th><span style='color:lightblue; font-size:18px;'>&spades;</span> :</th>      <td><input class='num' id='iWestSMin'       type='text' size='2' maxlength='2' value='0'  />-<input class='num' id='iWestSMax'       type='text' size='2' maxlength='2' value='13' /></td>
                                            <td><input class='num' id='iEastSMin'       type='text' size='2' maxlength='2' value='0'  />-<input class='num' id='iEastSMax'       type='text' size='2' maxlength='2' value='13' /></td>
