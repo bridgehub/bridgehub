@@ -851,6 +851,8 @@
 				}
 				return result;
 			}
+            
+            function sortOrder(a,b){return(b-a);}
 			
 			function cards(deck, h){
 				var result = "";
@@ -865,7 +867,8 @@
 					suit[s].push(r);
 				}
 				for(var i=0; i<4; i++){
-					suit[i].sort((a, b) => b - a);
+					// suit[i].sort((a, b) => b - a);
+					suit[i].sort(sortOrder);
 				}
 				for(var s = 0; s<4; s++){
 					for(var r = 0; r<suit[s].length; r++){
