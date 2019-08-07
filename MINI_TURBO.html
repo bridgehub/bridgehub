@@ -16,6 +16,7 @@
         .violet { background-color: #FFDDFF; }
         .blue { background-color: #CCCCFF; }
         .red { color: #880000; font-weight: bold; }
+        .blue2 { color: #0000AA; font-weight: bold; }
         .bt { color: #0000CC; font-weight: bold; font-size: 16px; }
         .rt { color: #CC0000; font-weight: bold; font-size: 16px; }
         .ot { color: #AA3300; font-weight: bold; font-size: 16px; }
@@ -220,6 +221,7 @@ Efter öppning 1KL finns dock <u>inga</u> support-dubblingar.
        -3HJ = 5sp+5hj, 16-19.
 
 1KL-1RU-1HJ-1SP-2KL = Utg-krav, 23+bal el ca 22+obal. Forts enl "Kokish", dvs:
+                    -2HÖ/3LÅ = "Drop"-bud, nat med 5+färg och max 1hp.
                     -2RU = Relä.
                          -2NT = 23-24 bal.
                          -2HJ = 25+bal UK, eller 5+hj obal.
@@ -488,22 +490,43 @@ Efter <b>1KL-2KL-2SP</b> (fastställer sp-trumf), samma skala fast ett steg hög
 1KL-(1RU)-PASS = 0-4hp.
          -X    = SYSTEM-ON 1RU, men lovar 5+hp.
          -1HJ+ = SYSTEM-ON, som ostört.
-
-1KL-(1HJ)-PASS = Exakt samma som 1RU i ostörd budgivning, 0-8.
-                   så visar X samma som 1KL-1RU-1HJ ostört (dvs. 18+bal el 20+obal).
-                   Sedan SYSTEM-ON, dvs SHs 1SP vilande bud, etc.
-         -X    = SYSTEM-ON, som 1KL-1HJ ostört (alltså UK förnekar 4hj)
-         -1SP+ = SYSTEM-ON.
-
-1KL-(1SP)-PASS = 0-4 eller UK med 5+spader (återbud 2SP). Kravpass alltså.
-         -X    = "Mellanstyrka", (5)6-7 hp.
-         -1NT  = UK, nat. Typiskt dubbelhåll eller Hxxx i inklivsfärgen.
-         -2KL  = UK, men ej 5hj eller god 5korts lå.
-               -2RU = Frågar efter 4hj.  -2HJ förnekar.
-               -2HJ = 5+hj.
+<span class="red">
+1KL-(1HJ)-PASS = Alla 0-4p, och även 5-7 om man <u>saknar</u> <u>både</u> 4+sp <u>och</u> 5+lå att överföra till.
+                 Passa även om man vill straffdubbla 1HJ.
+                 Pass är alltså KRAV (om inte ÖH själv har längd i hj).
+         -1NT  = UK med bra håll i inklivsfärgen.
+         - X   = 4sp ca 5+p obegränsat, och även 5+sp under UK-styrka (5-7).
+         -1SP  = Förnekar 4sp:
+                   a) Primärt 5+klöver, 5+p.
+                   b) UK-hand där annat bud saknas (ganska balanserad).
+                 Båda spelarna kan sedan fastställa UK med cuebid(2HJ; inklivsfärgen).
+                   SH kan även fastställa UK med 2SP(förnekad färg).
+                 ÖHs återbud 1NT/2KL och 2RU/2SP(5+färg) är okrav till svaga handen.
+                 ÖHs hoppande återbud 2NT och 3RU/3SP(6+färg) är UK.
+         -2KL  = 5+ruter, ej 4sp. 5+p.
+                 Samma principer som på 1SP ovan. ÖHs återbud 2NT är nu okrav till minimal-SH.
+         -2RU  = 5+spader, UK.
+               -2SP = Accept av sp.
+               -2HJ = Vilande utan 3+stöd.
+         -2HJ  = UK med singel-hj, ej 4sp, minst 9kort i kl+ru.
+                 Här kan ev lå-utgång vara intressant om ÖH saknar tillräckligt håll i inklivsfärgen.</span>
+<span class="blue2">
+1KL-(1SP)-PASS = Alla 0-4p, och även 5-7 om man <u>saknar</u> <u>både</u> 4+sp <u>och</u> 5+ru att överföra till.
+                 Finns inga svaga överföringar till klöver efter 1SP-inkliv, utan man får passa så länge.
+                 Passa även om man vill straffdubbla 1SP.
+                 Pass är alltså KRAV (om inte ÖH själv har längd i sp).
+         -1NT  = UK med bra håll i inklivsfärgen.
+         - X   = 4hj ca 5+p obegränsat, och även 5+hj under UK-styrka (5-7).
+         -2KL  = UK-hand utan 4hj eller god 5korts lå (ganska balanserad).
+                   a) Primärt 5+ruter, 5+p.
+                   b) UK-hand där annat bud saknas (ganska balanserad).
+                 Samma principer som efter 1KL-(1HJ)-1SP/2KL ovan.
          -2RU  = UK med 5+hj.
-         -2HJ  = UK med 5+kl.
-         -2SP  = UK med 5+ru.
+               -2HJ = Accept av hj.
+               -2SP = Vilande utan 3+hj.
+         <span class="yellow red">-2HJ  = *LEDIGT BUD; ANVÄNDS EJ* (undvik wrong-siding om ÖH har 5+hj).</span>
+         -2SP  = UK med singel-sp, ej 4hj, minst 9kort i kl+ru.
+                 Här kan ev lå-utgång vara intressant om ÖH saknar tillräckligt håll i inklivsfärgen.</span>
 
 1KL-(2BUD)-FÄRGBUD = Alla färgbud (på 2/3-läget) är UK transfer, 5+ i närmast högre färg.
           -NT      = UK, naturligt. Typiskt dubbelhåll eller Hxxx i inklivsfärgen.
@@ -639,9 +662,16 @@ Vi kör <u>canapé</u> även med 5-4 (6-4) i hö och öppnar alltså med 4kortsf
            e) Invit med 5hj+5lå. Återbjud 3LÅ.
 1SP-2HJ = Exakt 5hj, max 9hp och inget utgångsintresse. ÖH passar normalt med minst xx i hj (eller H-singel),
             eller kan föreslå annat slutbud med singel-hj.
-1HÖ-2HÖ = Naturligt med 4-stöd eller kanske Hxx med lämplig hand. Ej invit.
+1HÖ-2HÖ = Naturligt med 4-stöd eller kanske Hxx med lämplig hand. Ej inviterande.
+        -NY FÄRG = Stark invit med canapé, exakt 4hö och 5+ i bjudna.
+        <span class="red yellow">-2NT     = Stark invit med 5+öppningsfärg. Kan vara 6hö eller 5-5 i hö.</span>
 1HJ-2SP = Nat spärr utan utgångsintresse.
 1HÖ-2NT = Naturlig invit mot 10-12-öppningshand, dvs ca 13-14hp och minst 3+ahö då ÖH alltid återkommer med canapé i ahö.
+        -3LÅ = Nat okrav med minimal canapéhand.
+<span class="red yellow">        -3HJ = Canapé i ahö, minimum.
+        -3SP = Canapé i ahö, tillägg+UK.</span>
+        <span class="red">Ovanstående återbud innebär att man med 6hö bjuder 4HÖ (el 3NT),
+          och med 10-12 5hö+332 alltid bjuder PASS eller 3NT.</span>
 1HÖ-3LÅ = Nat spärr.
 1SP-3HJ = Nat spärr.
 1HÖ-3HÖ = Spärr, ej invit.
