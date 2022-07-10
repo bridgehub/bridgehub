@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="css/trainer.css">
+<link rel="shortcut icon" type="image/x-icon" href="./favicon.ico?">
+</head>
+<body
+	style='background-color: white; font-family: Verdana, arial, sans-serif; font-size: 15px; zoom: 97%'>
+	<div id="content" style="width: 360px;">
+		<div id="topMsg" style="background-color: #FF6666; color: black"></div>
+		<div id="startPage" style="display: none;">
+			Välj sektioner att budträna:
+			<hr />
+			<input type="checkbox" id="ALL" /> <b>Alla:</b><br />
+			<div id="sectionSelect"></div>
+			<hr />
+			<input type="button" id="buttonStart" value="Starta"><br />
+		</div>
+		<div id="trainPage" style="display: none;">
+			<center>
+				<input id="buttonRestart" type="button" value="Nytt urval" />
+				<hr />
+				<table border="0" cellspacing="0">
+					<tr>
+						<td>&nbsp;</td>
+						<td id="north" style="text-align: center"><span
+							style="background-color: #DDEEEE">&nbsp;North&nbsp;</span><br />
+							<br /></td>
+						<td>&nbsp;</td>
+					</tr>
+					<tr>
+						<td id="west" style="width: 10px; text-align: center"><span
+							style="background-color: #DDEEEE">&nbsp;West&nbsp;</span><br />
+							<br />
+						</td>
+						<td><table id="bidding" class="bidding" border="1"
+								cellspacing="0">
+								<tr class="bidRow">
+									<th class="bidCellHead">West&nbsp;</th>
+									<th class="bidCellHead">North</th>
+									<th class="bidCellHead">&nbsp;East&nbsp;</th>
+									<th class="bidCellHead">South</th>
+								</tr>
+								<tr class="bidRow">
+									<td class="bidCell">&nbsp;</td>
+									<td class="bidCell"></td>
+									<td class="bidCell"></td>
+									<td class="bidCell"></td>
+								</tr>
+								<tr class="bidRow">
+									<td class="bidCell">&nbsp;</td>
+									<td class="bidCell"></td>
+									<td class="bidCell"></td>
+									<td class="bidCell"></td>
+								</tr>
+								<tr class="bidRow">
+									<td class="bidCell">&nbsp;</td>
+									<td class="bidCell"></td>
+									<td class="bidCell"></td>
+									<td class="bidCell"></td>
+								</tr>
+								<tr class="bidRow">
+									<td class="bidCell">&nbsp;</td>
+									<td class="bidCell"></td>
+									<td class="bidCell"></td>
+									<td class="bidCell"></td>
+								</tr>
+								<tr class="bidRow">
+									<td class="bidCell">&nbsp;</td>
+									<td class="bidCell"></td>
+									<td class="bidCell"></td>
+									<td class="bidCell"></td>
+								</tr>
+								<tr class="bidRow">
+									<td class="bidCell">&nbsp;</td>
+									<td class="bidCell"></td>
+									<td class="bidCell"></td>
+									<td class="bidCell"></td>
+								</tr>
+								<tr class="bidRow">
+									<td class="bidCell">&nbsp;</td>
+									<td class="bidCell"></td>
+									<td class="bidCell"></td>
+									<td class="bidCell"></td>
+								</tr>
+							</table></td>
+						<td id="east" style="width: 10px; text-align: center"><span
+							style="background-color: #DDEEEE">&nbsp;East&nbsp;</span><br />
+							<br />
+						</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td class="hand"><center>
+								<table>
+									<tr>
+										<td>
+											<div id="south">
+												South<br /> <br /> <br /> <br />
+											</div>
+										</td>
+									</tr>
+								</table>
+							</center></td>
+						<td>&nbsp;</td>
+					</tr>
+				</table>
+				<hr />
+				<input id="buttonPrev" type="button" value="F&ouml;reg giv" /> <span
+					id="dealCount"
+					style="display: inline-block; width: 150px; text-align: center;">0
+					/ 0</span> <input id="buttonNext" type="button" value="N&auml;sta giv" />
+				<hr>
+				<span id="yourBid">&nbsp;Vad bjuder du?&nbsp;</span><br /> <span
+					id="errMsg">&nbsp;</span>
+				<table id="biddingBox" border="1" cellspacing="0"></table>
+				<br> <span id="errMsg"></span>
+				<div id="msg"></div>
+				<div id="msg1"></div>
+				<div id="msg2"></div>
+				<div id="msg3"></div>
+				<div id="msg4"></div>
+				<pre id="data"></pre>
+			</center>
+		</div>
+	</div>
+	<script src="js/jquery-3.1.1.min.js"></script>
+	<script src="js/trainer.js" charset="UTF-8"></script>
+</body>
+</html>
