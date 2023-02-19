@@ -77,4 +77,5 @@
 
     btnChannels.click(btnChannelsClicked);
     btnChannelsClicked();
+	$(".spinner").hide();
   }));
