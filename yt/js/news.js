@@ -4,6 +4,8 @@
   ( function($, window, document) {
 //    alert('hello');
       var btnChannels = $("#btnChannels");
+      var btnAll  = $("#btnAll");
+      var btnNone = $("#btnNone");
       var divChannels = $("#channels");
       var viewChannels = true;
 
@@ -72,10 +74,22 @@
 		}
 		$(".channel_checkbox").click(channelClicked);
 	}
+	
+	function selectAll() {
+		$(".channel_checkbox").prop("checked", true);
+		$(".item").show();
+	}
+	
+	function selectNone() {
+		$(".channel_checkbox").prop("checked", false);
+		$(".item").hide();
+	}
 
     init();
 
     btnChannels.click(btnChannelsClicked);
     btnChannelsClicked();
+	btnAll.click(selectAll);
+	btnNone.click(selectNone);
 	$(".spinner").hide();
   }));
