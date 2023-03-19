@@ -1,0 +1,16 @@
+{
+  "name": "ytcheck",
+  "short_name": "ytcheck",
+  "start_url": "ytlist.html",
+  "display": "standalone",
+  "background_color": "#660000",
+  "theme_color": "#AA7777",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "./img/icons/ytcheck.png",
+      "type": "image/png",
+      "sizes": "256x256"
+    }
+  ]
+}
