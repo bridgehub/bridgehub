@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Words</title>
+</head>
+<body>
+<button onclick="process()">Process</button>&nbsp;&nbsp;&nbsp;<button id="clearBtn" onclick="clear()">Clear</button>
+<ul id="outputList"></ul>
+<table id="tableId">
+</table>
+<textarea id="textInput" rows="50" cols="120"></textarea>
+</textarea>
+  <script>
+
+document.getElementById('clearBtn').addEventListener('click', () => {
+  location.reload();
+});
+
+function process(){
+  var text = processText(document.getElementById('textInput').value);
+  // alert(text);
+  fillTable(text);
+}
+
+function fillTable(texts) {
+  const table = document.querySelector('table');
+  const maxRows = 38;
+  const numCols = Math.ceil(texts.length / maxRows);
+  
+  // Clear existing content
+  table.innerHTML = '';
+  
+  // Create rows
+  for (let row = 0; row < maxRows; row++) {
+    const tr = document.createElement('tr');
+    
+    // Create columns
+    for (let col = 0; col < numCols; col++) {
+      const td = document.createElement('td');
+      const index = col * maxRows + row;
+      
+      // Add text if index is within array bounds
+      if (index < texts.length) {
+        td.textContent = texts[index];
+        td.style.textAlign = 'right';
+        td.style.fontFamily = 'Verdana';
+        td.style.fontWeight = 'bold';
+        td.style.fontSize = '0.8em';
+      }
+      
+      tr.appendChild(td);
+    }
+    
+    table.appendChild(tr);
+  }
+}
+  
+//
+    function processText(text) {
+    
+      text = text.replace(/\s+/g, " ").trim();
+      var lst = text.split(/\s+/);
+      lst = lst.flatMap(word => word.endsWith('.') ? [word, ''] : [word])
+      return lst;
+    }
+// 
+
+function expandTable(words, maxRows) {
+  const table = document.getElementById("tableId");
+  table.innerHTML = "";
+  
+  let index = 0;
+  for (let row = 0; row < maxRows; row++) {
+    let tr = document.createElement("tr");
+    for (let col = 0; col < 2; col++) {
+      let td = document.createElement("td");
+      td.textContent = words[index] || "";  // Use empty string if not enough words
+      td.style.textAlign = "center";
+      td.style.verticalAlign = "middle";
+      td.style.border = "1px solid black";
+      tr.appendChild(td);
+      index++;
+    }
+    table.appendChild(tr);
+  }
+  }
+
+// 
+  </script>
+</body>
+</html>
